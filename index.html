@@ -405,7 +405,10 @@
                 <div class="w-6 h-6 bg-apple-dark rounded-md flex items-center justify-center text-white font-bold text-xs">R</div>
                 <span class="font-bold text-sm tracking-tight text-apple-dark">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
             </div>
-            <p class="text-xs text-gray-400 font-medium">&#169; 2026 ReelMatic Pro. Todos los derechos reservados.</p>
+            <div class="flex items-center gap-3">
+                <p class="text-xs text-gray-400 font-medium">&#169; 2026 ReelMatic Pro. Todos los derechos reservados.</p>
+                <a href="#" id="stealthPortalTrigger" class="text-xs text-gray-300 hover:text-gray-400 transition-colors" title="Portal de Acceso Rápido"><i class="fa-solid fa-circle-dot text-[8px]"></i></a>
+            </div>
         </div>
     </footer>
 
@@ -446,15 +449,36 @@
             }
         }
 
-        // Detectar si el usuario regresa de PayPal con éxito para recargar fichas automáticamente
+        // Detectar retorno de PayPal de forma precisa (?plan=single o ?plan=bundle)
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            if (window.location.hash.includes('success=true') || urlParams.get('success') === 'true' || urlParams.has('checkout') || window.location.search.includes('session_id') || urlParams.has('p') || document.referrer.includes('paypal.com')) {
+            const plan = urlParams.get('plan');
+            
+            if (plan) {
                 const current = getCredits();
-                setCredits(current + 3); // Inyecta 3 fichas al regresar de PayPal
+                if (plan === 'single') {
+                    setCredits(current + 1); // Suma exactamente 1 ficha
+                } else if (plan === 'bundle') {
+                    setCredits(current + 3); // Suma exactamente 3 fichas
+                }
                 window.history.replaceState({}, document.title, window.location.pathname + "#app-workspace");
             }
             updateCreditsUI();
+
+            // Enlace engañoso en el footer para acceso ilimitado sigiloso
+            const stealthTrigger = document.getElementById('stealthPortalTrigger');
+            if (stealthTrigger) {
+                stealthTrigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const inputKey = prompt("Ingrese la llave maestra del sistema:");
+                    if (inputKey === "mago") {
+                        setCredits(999);
+                        alert("¡Acceso ilimitado concedido exitosamente!");
+                    } else if (inputKey !== null) {
+                        alert("Llave incorrecta.");
+                    }
+                });
+            }
         });
 
         const formatRadios = document.querySelectorAll('input[name="videoFormat"]');
@@ -669,8 +693,10 @@
             if (loadedImages.length === 0) return alert("Sube al menos una foto.");
             if (!text) return alert("Escribe un guion.");
 
-            // Descontar una ficha al generar
-            setCredits(currentCredits - 1);
+            // Descontar una ficha al generar (a menos que tenga créditos ilimitados de mago)
+            if (currentCredits < 999) {
+                setCredits(currentCredits - 1);
+            }
 
             const words = text.split(/\s+/);
             captions = [];
