@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ReelMatic Pro | Crea Shorts y Reels Virales con IA</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], },
+                    letterSpacing: { 'tighter-apple': '-0.04em', 'tight-apple': '-0.02em' },
+                    colors: {
+                        'apple-black': '#000000',
+                        'apple-dark': '#1d1d1f',
+                        'apple-gray': '#f5f5f7',
+                        'apple-blue': '#0071e3',
+                        'apple-blue-hover': '#0077ED'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; }
+        .apple-shadow { box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.04); }
+        .bento-shadow { box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08); }
+        .apple-input { border: 1px solid #e5e5ea; transition: all 0.2s ease; background-color: #ffffff; }
+        .apple-input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
+        .apple-btn-primary { background-color: #1d1d1f; color: white; transition: all 0.3s ease; }
+        .apple-btn-primary:hover { background-color: #000000; transform: scale(0.98); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .apple-btn-primary:disabled { background-color: #e5e5ea; color: #86868b; transform: scale(1); cursor: not-allowed; box-shadow: none; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .text-gradient-dark { background: linear-gradient(180deg, #1d1d1f 0%, #434345 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-gradient-light { background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="antialiased selection:bg-apple-blue selection:text-white flex flex-col min-h-screen">
+
+    <nav class="w-full bg-[#f5f5f7]/80 backdrop-blur-md border-b border-gray-200/50 fixed top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                <div class="w-7 h-7 bg-apple-dark rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-sm">R</div>
+                <span class="font-bold text-lg tracking-tight text-apple-dark">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="hidden md:inline text-xs font-semibold text-gray-500">Motor IA: Premium Studio</span>
+                <a href="#pricing" class="hidden sm:inline-block text-sm font-semibold text-gray-500 hover:text-apple-dark transition-colors mr-2">Precios</a>
+                <a href="#app-workspace" class="bg-apple-dark text-white text-xs font-bold px-4 py-1.5 rounded-full hover:bg-black transition-colors">Crear Short</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="w-full bg-black pt-32 flex flex-col items-center text-center relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-red-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+        
+        <div class="px-4 sm:px-6 w-full flex flex-col items-center z-10">
+            <div class="inline-block bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 border border-white/20 backdrop-blur-md">
+                <i class="fa-solid fa-bolt text-red-500 mr-1"></i> La era del formato corto
+            </div>
+
+            <h1 class="text-6xl sm:text-7xl md:text-8xl font-extrabold tracking-tighter-apple text-gradient-light mb-6 relative z-10 max-w-4xl leading-[1.05]">
+                Domina los Shorts.<br/>Conquista el mundo.
+            </h1>
+            <p class="text-xl sm:text-2xl text-gray-400 font-medium tracking-tight-apple max-w-2xl mb-10 relative z-10">
+                Calibrado quirúrgicamente para el algoritmo. Crea YouTube Shorts, TikToks y Reels de <span class="text-white font-bold">90 segundos</span> con retención máxima. Sin relleno, pura viralidad.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center gap-4 relative z-10">
+                <a href="#app-workspace" class="bg-white text-black font-semibold text-lg px-8 py-3.5 rounded-full hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                    Empezar a crear
+                </a>
+                <p class="text-sm text-gray-400 font-medium">Tienes <span class="text-white font-bold">3 Shorts gratis</span> hoy.</p>
+            </div>
+        </div>
+
+        <div class="mt-20 relative z-10 w-full bg-black">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBL3bBn_SW2WCnZ-EMfcfOtsupQ7zWTEwLhUZmxusqt3NBfeSFpNve_XEdgwpyfhFhTGyROLsWyQo782-VKEUWp3cA-4XftyAHUwwtfvxYfHt2SmYiDsAG9HSxrnM4hsF8p986URz15hN4NakpkJPNuNjlcIOgPbpqzcL8doR49bbwKhjmJuxdL4F0sFpH/s1600/yt.jpeg" alt="YouTube Creator Studio" class="w-full h-auto object-cover opacity-80" style="max-height: 75vh;"/>
+        </div>
+    </header>
+
+    <section class="w-full pt-16 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10 bg-[#f5f5f7]">
+        <div class="text-center mb-16 max-w-4xl mx-auto">
+            <span class="bg-red-50 text-red-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-flex items-center border border-red-200 shadow-sm">
+                <i class="fa-solid fa-stopwatch mr-1.5"></i> El fin de las líneas de tiempo
+            </span>
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-4 mb-6 leading-tight">
+                CapCut y Canva son editores.<br/>ReelMatic es un <span class="text-apple-blue">Generador.</span>
+            </h2>
+            <p class="text-lg md:text-xl text-gray-500 font-medium leading-relaxed max-w-3xl mx-auto">
+                Las herramientas tradicionales son geniales... si tienes horas para editar. Olvídate de grabar tu voz en off con el celular, de pelear para cuadrar el audio con la foto y de lidiar con complicadas líneas de tiempo en Final Cut o Premiere. 
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-[2rem] p-8 md:p-10 bento-shadow flex flex-col items-start hover:-translate-y-1 transition-transform duration-300 border border-gray-100">
+                <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-apple-dark text-xl mb-6 border border-gray-200">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <h3 class="text-2xl font-bold tracking-tight-apple mb-3 text-apple-dark">1. Carga tu materia prima.</h3>
+                <p class="text-gray-500 font-medium leading-relaxed">
+                    Solo necesitas dos cosas: subir tus fotos y pegar el texto que quieres que se escuche. Nosotros nos encargamos de todo el dolor de cabeza técnico.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-8 md:p-10 bento-shadow flex flex-col items-start hover:-translate-y-1 transition-transform duration-300 border border-gray-100">
+                <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-apple-blue text-xl mb-6 border border-blue-100">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <h3 class="text-2xl font-bold tracking-tight-apple mb-3 text-apple-dark">2. Ensamblaje Plug & Play.</h3>
+                <p class="text-gray-500 font-medium leading-relaxed">
+                    Nuestra IA locuta tu guion con voces premium, genera subtítulos de alta retención automáticamente y mezcla tus fotos con efectos cinematográficos.
+                </p>
+            </div>
+
+            <div class="bg-apple-dark text-white rounded-[2.5rem] p-8 md:p-10 bento-shadow flex flex-col items-start hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border border-gray-800">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-apple-blue/20 blur-2xl rounded-full"></div>
+                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white text-xl mb-6 backdrop-blur-md border border-white/10">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="text-2xl font-bold tracking-tight-apple mb-3">3. Listo en 90 segundos.</h3>
+                <p class="text-gray-300 font-medium leading-relaxed mb-4">
+                    Pasa de la idea al video publicado en menos de dos minutos. Paga por uso, sin ataduras, y mantén tus redes sociales alimentadas todos los días.
+                </p>
+                <div class="mt-auto inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg text-sm font-semibold backdrop-blur-md border border-white/10">
+                    <i class="fa-solid fa-check text-green-400"></i> Cero conocimiento técnico.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="w-full pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-[#f5f5f7]">
+        <div class="bg-white rounded-[3rem] bento-shadow overflow-hidden flex flex-col lg:flex-row border border-gray-100">
+            <div class="lg:w-1/2 p-10 md:p-16 flex flex-col justify-center">
+                <div class="inline-block bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 w-max border border-blue-100">
+                    Tecnología de Redes
+                </div>
+                <h2 class="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter-apple text-apple-dark mb-4 leading-[1.05]">
+                    WebM es la nueva regla.
+                </h2>
+                <p class="text-xl md:text-2xl text-gray-400 font-bold tracking-tight-apple mb-8 uppercase">
+                    El MP4 quedó en el pasado.
+                </p>
+                <p class="text-lg text-gray-500 font-medium mb-8 leading-relaxed">
+                    Si sigues exportando en MP4 pesado, el algoritmo te está castigando. ReelMatic.pro renderiza nativamente en <strong>WebM</strong>, el estándar ultraligero que TikTok, YouTube Shorts y X priorizan hoy.
+                </p>
+            </div>
+            <div class="lg:w-1/2 bg-[#fbfbfd] p-10 md:p-16 flex items-center justify-center border-l border-gray-100 relative overflow-hidden">
+                <div class="relative z-10 flex items-center justify-center gap-8">
+                    <div class="flex flex-col items-center opacity-40 grayscale">
+                        <i class="fa-regular fa-file-video text-6xl text-gray-400 mb-3"></i>
+                        <span class="font-bold text-gray-500 tracking-wider">.MP4</span>
+                        <i class="fa-solid fa-xmark text-red-500 text-2xl mt-2"></i>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-3xl text-gray-300"></i>
+                    <div class="flex flex-col items-center scale-110">
+                        <div class="w-24 h-24 bg-white rounded-2xl apple-shadow flex items-center justify-center mb-3 border border-blue-100 relative">
+                            <div class="absolute inset-0 bg-blue-400/20 blur-xl rounded-full"></div>
+                            <i class="fa-solid fa-bolt text-5xl text-apple-blue relative z-10"></i>
+                        </div>
+                        <span class="font-extrabold text-apple-dark tracking-wider text-xl mt-2">.WEBM</span>
+                        <span class="text-xs font-bold text-green-500 uppercase mt-2 bg-green-50 px-2 py-1 rounded-md border border-green-200">Nativo Redes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="w-full py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-14">
+        <div class="text-center mb-16 max-w-4xl mx-auto">
+            <span class="bg-green-50 text-green-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-flex items-center border border-green-200 shadow-sm">
+                <i class="fa-solid fa-unlock-keyhole mr-1.5"></i> Transparencia Total
+            </span>
+            <h2 class="text-4xl md:text-6xl font-extrabold tracking-tighter-apple text-apple-dark mt-4 mb-6 leading-tight">
+                La rebelión contra<br/>las suscripciones.
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 border border-gray-200 apple-shadow flex flex-col relative">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold tracking-tight-apple text-apple-dark mb-2">1 Ficha de Video</h3>
+                    <p class="text-gray-500 font-medium text-sm">Ideal para una emergencia rápida.</p>
+                </div>
+                <div class="mb-8">
+                    <span class="text-5xl font-black tracking-tighter-apple text-apple-dark">$1.99</span>
+                    <span class="text-gray-400 font-bold ml-1">USD</span>
+                </div>
+                <a href="#app-workspace" class="w-full bg-gray-100 hover:bg-gray-200 text-apple-dark font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center text-center shadow-sm">
+                    Elegir 1 Ficha
+                </a>
+            </div>
+
+            <div class="bg-apple-dark text-white rounded-[2.5rem] p-8 md:p-10 border border-gray-800 bento-shadow flex flex-col relative">
+                <div class="mb-6 relative z-10">
+                    <h3 class="text-2xl font-bold tracking-tight-apple mb-2">Paquete Creador</h3>
+                    <p class="text-gray-400 font-medium text-sm">3 fichas guardadas en tu navegador.</p>
+                </div>
+                <div class="mb-8 relative z-10 flex items-end gap-2">
+                    <div>
+                        <span class="text-5xl font-black tracking-tighter-apple">$4.99</span>
+                        <span class="text-gray-400 font-bold ml-1">USD</span>
+                    </div>
+                </div>
+                <a href="#app-workspace" class="w-full bg-white text-black font-semibold py-4 px-6 rounded-2xl transition-all hover:scale-[1.02] flex items-center justify-center text-center shadow-[0_0_20px_rgba(255,255,255,0.2)] relative z-10">
+                    Comprar Paquete
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div id="app-workspace" class="w-full bg-[#fbfbfd] border-t border-gray-200 py-20 relative scroll-mt-14">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-4">
+                El Estudio de Shorts.
+            </h2>
+        </div>
+
+        <main class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+            <div class="lg:w-1/2 space-y-6 z-10 w-full">
+                <div id="errorAlert" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-4 rounded-2xl flex items-start gap-3 text-sm font-medium shadow-sm">
+                    <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
+                    <div>
+                        <strong class="block text-red-700 mb-1">Aviso del Sistema</strong>
+                        <span id="errorMsg" class="leading-relaxed">Mensaje de error</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">1. Medios Visuales</label>
+                            <div class="flex items-center gap-3">
+                                <button id="addMorePhotosBtn" class="hidden text-xs font-bold text-apple-blue bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors border border-blue-100 shadow-sm" onclick="document.getElementById('imageInput').click()">
+                                    <i class="fa-solid fa-plus mr-1"></i> Añadir
+                                </button>
+                                <span id="photoCount" class="text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">0 / 10</span>
+                            </div>
+                        </div>
+                        <div class="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-all bg-[#fbfbfd]" id="dropZone" onclick="document.getElementById('imageInput').click()">
+                            <i class="fa-regular fa-images text-4xl text-gray-300 mb-3"></i>
+                            <p class="text-sm font-semibold text-apple-dark">Haz clic para subir fotos (PNG/JPG)</p>
+                        </div>
+                        <input type="file" id="imageInput" accept="image/*" multiple="" class="hidden"/>
+                        <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x"></div>
+                    </div>
+
+                    <div class="space-y-4 pt-6 border-t border-gray-100">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">2. Guion del Short</label>
+                            <span id="charCount" class="text-[11px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">0 / 1300 máx (~90 Seg)</span>
+                        </div>
+                        <textarea id="scriptText" maxlength="1300" rows="3" class="w-full apple-input rounded-2xl p-4 text-apple-dark placeholder-gray-400 resize-none text-base font-medium shadow-sm" placeholder="Escribe el texto persuasivo que la IA narrará..."></textarea>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Voces Premium (IA)</label>
+                                <select id="voiceSelect" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark appearance-none cursor-pointer bg-white">
+                                    <option value="Aoede">Femenina - Cálida (Aoede)</option>
+                                    <option value="Kore">Femenina - Firme (Kore)</option>
+                                    <option value="Puck">Masculina - Dinámica (Puck)</option>
+                                    <option value="Charon">Masculina - Info (Charon)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Posición Subtítulos</label>
+                                <select id="captionPosSelect" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark appearance-none cursor-pointer bg-white">
+                                    <option value="bottom">Inferior (TikTok/Reels)</option>
+                                    <option value="center">Centro (Cine)</option>
+                                    <option value="none">Sin Subtítulos</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button id="generateBtn" class="w-full apple-btn-primary font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-base shadow-lg">
+                            <i class="fa-solid fa-bolt"></i> Renderizar Video Ahora
+                        </button>
+
+                        <div id="statusBox" class="hidden mt-6 bg-[#fbfbfd] p-5 rounded-2xl border border-gray-100">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i id="statusIcon" class="fa-solid fa-circle-notch fa-spin text-gray-800"></i>
+                                <span id="statusText" class="text-sm font-semibold text-apple-dark">Iniciando Motor IA...</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                <div id="progressBar" class="bg-gray-800 h-2 rounded-full transition-all duration-300 w-0"></div>
+                            </div>
+                        </div>
+
+                        <div id="downloadContainer" class="hidden mt-6 space-y-4">
+                            <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30">
+                                <i class="fa-solid fa-download"></i> Descargar WebM (Listo para Redes)
+                            </a>
+                            <button id="resetBtn" class="w-full bg-gray-100 hover:bg-gray-200 text-apple-dark font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer border border-gray-200">
+                                <i class="fa-solid fa-rotate-right"></i> Crear Nuevo Video
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
+                <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white apple-shadow border border-gray-100 mx-auto lg:mx-0 shadow-2xl transition-all duration-500 max-w-sm w-full">
+                    <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5 transition-opacity">
+                        <div class="w-16 h-4 bg-black rounded-full"></div>
+                    </div>
+                    <div id="screenRatio" class="relative rounded-[2.2rem] overflow-hidden bg-black aspect-[9/16] w-full transition-all duration-500 flex items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+                        <div id="placeholderText" class="absolute inset-0 flex flex-col items-center justify-center text-gray-500 z-20 p-6 text-center">
+                            <i class="fa-brands fa-tiktok text-5xl mb-4 opacity-40"></i>
+                            <p class="text-sm font-medium tracking-wide">Tu video aparecerá aquí</p>
+                        </div>
+                        <canvas id="livePreviewCanvas" class="w-full h-full object-cover relative z-10 hidden"></canvas>
+                        <video id="finalVideoPlayer" class="w-full h-full object-cover relative z-20 hidden" controls="" playsinline=""></video>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="w-full bg-white border-t border-gray-200 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-apple-dark rounded-md flex items-center justify-center text-white font-bold text-xs">R</div>
+                <span class="font-bold text-sm tracking-tight text-apple-dark">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
+            </div>
+            <p class="text-xs text-gray-400 font-medium">&#169; 2026 ReelMatic Pro. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const dropZone = document.getElementById('dropZone');
+        const galleryContainer = document.getElementById('galleryContainer');
+        const addMorePhotosBtn = document.getElementById('addMorePhotosBtn');
+        const generateBtn = document.getElementById('generateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const scriptText = document.getElementById('scriptText');
+        const charCount = document.getElementById('charCount');
+        const liveCanvas = document.getElementById('livePreviewCanvas');
+        const liveCtx = liveCanvas.getContext('2d', { willReadFrequently: true });
+        const finalVideoPlayer = document.getElementById('finalVideoPlayer');
+        
+        let loadedImages = []; 
+        let captions = [];
+        let renderState = { isActive: false, startTime: 0, duration: 0 };
+        let finalCanvasW = 720; let finalCanvasH = 1280;
+
+        imageInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files).slice(0, 10 - loadedImages.length);
+            if (files.length === 0) return;
+            dropZone.classList.add('hidden'); 
+            galleryContainer.classList.remove('hidden');
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image(); img.src = event.target.result;
+                    img.onload = () => {
+                        loadedImages.push(img);
+                        document.getElementById('photoCount').textContent = `${loadedImages.length} / 10`;
+                        const div = document.createElement('div');
+                        div.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden snap-center border border-gray-200 shadow-sm relative";
+                        div.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-cover" alt="Preview"/>`;
+                        galleryContainer.appendChild(div);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        generateBtn.addEventListener('click', async () => {
+            const text = scriptText.value.trim();
+            if (loadedImages.length === 0) return alert("Sube al menos una foto.");
+            if (!text) return alert("Escribe un guion.");
+            generateBtn.disabled = true;
+            document.getElementById('statusBox').classList.remove('hidden');
+            document.getElementById('placeholderText').classList.add('hidden');
+            document.getElementById('progressBar').style.width = "100%";
+            
+            // Simulación de renderizado rápido para GitHub Pages (Modo Seguro HTML5)
+            setTimeout(() => {
+                document.getElementById('statusText').textContent = "¡Renderizado Completo!";
+                document.getElementById('downloadContainer').classList.remove('hidden');
+                generateBtn.disabled = false;
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
