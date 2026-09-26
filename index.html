@@ -177,6 +177,7 @@
         </div>
     </section>
 
+    <!-- SECCIÓN DE PRECIOS & FILOSOFÍA ANTIMENSUALIDADES -->
     <section id="pricing" class="w-full py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-14 bg-[#f5f5f7]">
         <div class="text-center mb-16 max-w-4xl mx-auto">
             <span class="bg-green-50 text-green-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-flex items-center border border-green-200 shadow-sm">
@@ -185,8 +186,8 @@
             <h2 class="text-4xl md:text-6xl font-extrabold tracking-tighter-apple text-apple-dark mt-4 mb-6 leading-tight">
                 La rebelión contra<br/>las suscripciones.
             </h2>
-            <p class="text-lg text-gray-600 font-medium max-w-2xl mx-auto mb-8">
-                Aquí no hay letras chiquitas, ni contratos forzosos, ni cargos automáticos a medianoche que nunca pediste. Cero mensualidades atadas. <strong>Pagos 100% seguros procesados por Stripe</strong> (la misma tecnología que usan Google, Amazon y Uber). Compras tus fichas cuando las necesitas y te las llevas al instante.
+            <p class="text-lg text-gray-600 font-medium max-w-3xl mx-auto mb-8 leading-relaxed">
+                Aquí no hay letras chiquitas, ni contratos forzosos, ni cargos automáticos a medianoche que nunca pediste. Cero mensualidades atadas. <strong>Pagas únicamente por video y te lo llevas al instante</strong>. Cuando tus 3 videos gratis se agoten, puedes adquirir fichas adicionales de forma individual o en paquete. Todos los cobros son procesados de forma 100% segura mediante <strong>Stripe</strong> (la misma tecnología de nivel mundial que utilizan gigantes como Google, Amazon y Uber).
             </p>
         </div>
 
@@ -194,14 +195,14 @@
             <div class="bg-white rounded-[2.5rem] p-8 md:p-10 border border-gray-200 apple-shadow flex flex-col relative">
                 <div class="mb-6">
                     <h3 class="text-2xl font-bold tracking-tight-apple text-apple-dark mb-2">1 Ficha de Video</h3>
-                    <p class="text-gray-500 font-medium text-sm">Ideal para una emergencia rápida. Pago único.</p>
+                    <p class="text-gray-500 font-medium text-sm">Ideal para una emergencia rápida. Pago único sin ataduras.</p>
                 </div>
                 <div class="mb-8">
                     <span class="text-5xl font-black tracking-tighter-apple text-apple-dark">$1.99</span>
                     <span class="text-gray-400 font-bold ml-1">USD</span>
                 </div>
-                <a id="stripeBtn1" href="https://buy.stripe.com/fZu5kD7YsdFMenD58tgUM03" class="w-full bg-gray-100 hover:bg-gray-200 text-apple-dark font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center text-center shadow-sm">
-                    Elegir 1 Ficha ($1.99)
+                <a href="https://buy.stripe.com/cNifZh6k00XNe5dbt283C00" class="w-full bg-gray-100 hover:bg-gray-200 text-apple-dark font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center text-center shadow-sm">
+                    Comprar 1 Ficha ($1.99 USD)
                 </a>
             </div>
 
@@ -216,8 +217,8 @@
                         <span class="text-gray-400 font-bold ml-1">USD</span>
                     </div>
                 </div>
-                <a id="stripeBtn3" href="https://buy.stripe.com/3cI6oH92wbxE4N3gRbgUM04" class="w-full bg-white text-black font-semibold py-4 px-6 rounded-2xl transition-all hover:scale-[1.02] flex items-center justify-center text-center shadow-[0_0_20px_rgba(255,255,255,0.2)] relative z-10">
-                    Comprar Paquete 3 Fichas ($4.99)
+                <a href="https://buy.stripe.com/5kQeVdfUA8qfgdl8gQ83C01" class="w-full bg-white text-black font-semibold py-4 px-6 rounded-2xl transition-all hover:scale-[1.02] flex items-center justify-center text-center shadow-[0_0_20px_rgba(255,255,255,0.2)] relative z-10">
+                    Comprar Paquete 3 Fichas ($4.99 USD)
                 </a>
             </div>
         </div>
@@ -242,16 +243,16 @@
 
                 <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
                     
-                    <!-- ALERTA DE FICHAS AGOTADAS (PAYWALL) -->
+                    <!-- ALERTA DE FICHAS AGOTADAS (PAYWALL CON BOTONES OFICIALES STRIPE) -->
                     <div id="paywallBox" class="hidden bg-blue-50 border border-blue-200 p-6 rounded-2xl text-center space-y-4 shadow-sm">
                         <div class="w-12 h-12 bg-apple-blue text-white rounded-2xl mx-auto flex items-center justify-center text-xl shadow-md">
                             <i class="fa-solid fa-lock"></i>
                         </div>
                         <h3 class="text-xl font-bold text-apple-dark">Tus videos gratis se han agotado</h3>
-                        <p class="text-sm text-gray-600 font-medium">Has consumido tus 3 pruebas iniciales. Adquiere fichas mediante Stripe para seguir generando contenido viral al instante.</p>
+                        <p class="text-sm text-gray-600 font-medium">Has consumido tus 3 pruebas iniciales. Adquiere fichas mediante Stripe para seguir generando contenido viral al instante, sin mensualidades ni ataduras.</p>
                         <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                            <a id="paywallBtn1" href="https://buy.stripe.com/fZu5kD7YsdFMenD58tgUM03" class="flex-1 bg-apple-dark text-white font-semibold py-3 px-4 rounded-xl text-sm hover:bg-black transition-all">Comprar 1 Ficha ($1.99)</a>
-                            <a id="paywallBtn3" href="https://buy.stripe.com/3cI6oH92wbxE4N3gRbgUM04" class="flex-1 bg-apple-blue text-white font-semibold py-3 px-4 rounded-xl text-sm hover:bg-apple-blue-hover transition-all">Paquete 3 Fichas ($4.99)</a>
+                            <a href="https://buy.stripe.com/cNifZh6k00XNe5dbt283C00" class="flex-1 bg-apple-dark text-white font-semibold py-3 px-4 rounded-xl text-sm hover:bg-black transition-all text-center">Comprar 1 Ficha ($1.99)</a>
+                            <a href="https://buy.stripe.com/5kQeVdfUA8qfgdl8gQ83C01" class="flex-1 bg-apple-blue text-white font-semibold py-3 px-4 rounded-xl text-sm hover:bg-apple-blue-hover transition-all text-center">Paquete 3 Fichas ($4.99)</a>
                         </div>
                     </div>
 
@@ -450,9 +451,9 @@
         // DETECTAR REGRESO DE STRIPE Y RECARGAR FICHAS AUTOMÁTICAMENTE
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            if (window.location.hash.includes('success=true') || urlParams.get('success') === 'true' || urlParams.has('checkout')) {
+            if (window.location.hash.includes('success=true') || urlParams.get('success') === 'true' || urlParams.has('checkout') || window.location.search.includes('session_id')) {
                 const current = getCredits();
-                setCredits(current + 3); // Otorga 3 fichas por la compra en Stripe
+                setCredits(current + 3); // Otorga fichas al regresar de Stripe
                 window.history.replaceState({}, document.title, window.location.pathname + "#app-workspace");
             }
             updateCreditsUI();
@@ -478,7 +479,7 @@
         const charCount = document.getElementById('charCount');
         const liveCanvas = document.getElementById('livePreviewCanvas');
         const liveCtx = liveCanvas.getContext('2d', { willReadFrequently: true });
-        const finalVideoPlayer = document.getElementById('finalVideoPlayer');
+        finalVideoPlayer = document.getElementById('finalVideoPlayer');
         
         const WORKER_URL = "https://reelmatic-api.esmaragdocamaz.workers.dev/";
 
