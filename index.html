@@ -28,6 +28,7 @@
             }
         }
     </script>
+    
     <style>
         body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; }
         .apple-shadow { box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.04); }
@@ -239,7 +240,7 @@
 
                 <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
                     
-                    <!-- 1. Formato de Video (Restaurado) -->
+                    <!-- 1. Formato de Video -->
                     <div class="space-y-4">
                         <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">1. Formato del Video</label>
                         <div class="grid grid-cols-2 gap-4">
@@ -262,7 +263,7 @@
                         </div>
                     </div>
 
-                    <!-- NUEVA SECCIÓN: TÍTULO Y LOGO -->
+                    <!-- 2. IDENTIDAD DE MARCA -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">2. Identidad de Marca</label>
                         <div class="flex flex-col sm:flex-row gap-4">
@@ -285,6 +286,7 @@
                         </div>
                     </div>
 
+                    <!-- 3. Medios Visuales -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Medios Visuales</label>
@@ -303,6 +305,7 @@
                         <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x"></div>
                     </div>
 
+                    <!-- 4. Guion del Short -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion del Short</label>
@@ -417,8 +420,10 @@
         const liveCtx = liveCanvas.getContext('2d', { willReadFrequently: true });
         const finalVideoPlayer = document.getElementById('finalVideoPlayer');
         
-        // Pega tu llave real entre las comillas para probarlo en GitHub
-        const GEMINI_API_KEY = "https://reelmatic-api.esmaragdocamaz.workers.dev/"; 
+        // ----------------------------------------------------------------------
+        // CONEXIÓN SEGURA A TU CLOUDFLARE WORKER (¡La Llave está a salvo!)
+        // ----------------------------------------------------------------------
+        const WORKER_URL = "https://reelmatic-api.esmaragdocamaz.workers.dev/";
 
         let loadedImages = []; 
         let loadedLogo = null;
@@ -426,6 +431,8 @@
         let finalCanvasW = 720; let finalCanvasH = 1280;
         let mediaRecorder;
         let recordedChunks = [];
+        let draggedItem = null;
+        let captions = [];
 
         function base64ToArrayBuffer(base64) {
             const binaryString = window.atob(base64);
@@ -538,7 +545,6 @@
                         const div = document.createElement('div');
                         div.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden snap-center border border-gray-200 shadow-sm relative cursor-move transition-transform";
                         
-                        // NOTA: pointer-events-none en la imagen evita que el navegador intente "descargar" la foto al arrastrarla
                         div.innerHTML = `
                             <img src="${event.target.result}" class="w-full h-full object-cover pointer-events-none" alt="Preview"/>
                             <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity pointer-events-none">
@@ -593,9 +599,8 @@
 
         generateBtn.addEventListener('click', async () => {
             const text = scriptText.value.trim();
-            const apiKey = GEMINI_API_KEY;
             
-            // ACTUALIZACIÓN: Leer el orden visual actual de las fotos por si el cliente las arrastró
+            // Leemos el orden visual en caso de que el cliente haya usado drag & drop
             const sortedGalleryItems = Array.from(galleryContainer.querySelectorAll('div[draggable="true"]'));
             if (sortedGalleryItems.length > 0) {
                 loadedImages = sortedGalleryItems.map(item => item.imageObj);
@@ -611,7 +616,6 @@
             for (let i = 0; i < words.length; i++) {
                 currentChunk.push(words[i]);
                 currentLen += words[i].length;
-                // Agrupar aprox 20 caracteres por pantalla para evitar desbordes
                 if (currentLen > 20 || i === words.length - 1) {
                     captions.push(currentChunk.join(" "));
                     currentChunk = [];
@@ -627,24 +631,22 @@
             document.getElementById('statusIcon').className = "fa-solid fa-circle-notch fa-spin text-gray-800";
 
             try {
-                // 1. Obtener Voz de Gemini
                 const voiceName = document.getElementById('voiceSelect').value;
                 const payload = {
                     contents: [{ parts: [{ text: text }] }],
                     generationConfig: {
                         responseModalities: ["AUDIO"],
                         speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } } }
-                    },
-                    model: "gemini-2.5-flash-preview-tts"
+                    }
                 };
 
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
+                const response = await fetch(WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
                 
-                if (!response.ok) throw new Error("Fallo en la API de Google (Revisa tu API Key)");
+                if (!response.ok) throw new Error("Fallo en la conexión con el servidor (Revisa tu Worker)");
                 const result = await response.json();
                 const part = result?.candidates?.[0]?.content?.parts?.[0];
                 if (!part || !part.inlineData) throw new Error("No se pudo generar el audio.");
@@ -656,16 +658,14 @@
                 const wavBlob = pcmToWav(pcm16, sampleRate);
                 const audioUrl = URL.createObjectURL(wavBlob);
 
-                // Configurar Nodos de Audio
                 const audioEl = new Audio(audioUrl);
                 audioEl.crossOrigin = "anonymous";
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const dest = audioCtx.createMediaStreamDestination();
                 const source = audioCtx.createMediaElementSource(audioEl);
                 source.connect(dest);
-                source.connect(audioCtx.destination); // Para escucharlo mientras graba
+                source.connect(audioCtx.destination); 
 
-                // 2. Preparar Canvas y Grabación
                 document.getElementById('statusText').textContent = "Renderizando y Mezclando Video...";
                 liveCanvas.width = finalCanvasW;
                 liveCanvas.height = finalCanvasH;
@@ -700,7 +700,6 @@
                     generateBtn.disabled = false;
                 };
 
-                // Esperar a que el audio esté listo para saber su duración
                 audioEl.onloadedmetadata = () => {
                     const totalDuration = audioEl.duration * 1000;
                     const durationPerImage = totalDuration / loadedImages.length;
@@ -722,7 +721,6 @@
                             return;
                         }
 
-                        // Lógica Ken Burns y Crossfade Suave
                         const imageIndex = Math.min(Math.floor(elapsed / durationPerImage), loadedImages.length - 1);
                         const imageElapsed = elapsed % durationPerImage;
                         const imgProgress = imageElapsed / durationPerImage;
@@ -730,7 +728,6 @@
                         liveCtx.fillStyle = '#000';
                         liveCtx.fillRect(0, 0, finalCanvasW, finalCanvasH);
 
-                        // Función auxiliar para dibujar y escalar
                         function drawKenBurns(img, progress, alpha) {
                             if (!img) return;
                             const scale = 1 + (progress * 0.1);
@@ -762,19 +759,16 @@
                         const crossfadeDuration = 800; // 800ms de transición suave
 
                         if (imageIndex > 0 && imageElapsed < crossfadeDuration) {
-                            // Transición: Mantenemos la imagen anterior debajo mientras se desvanece
-                            const prevProgress = (durationPerImage + imageElapsed) / durationPerImage; // Sigue escalando sutilmente
+                            const prevProgress = (durationPerImage + imageElapsed) / durationPerImage; 
                             drawKenBurns(loadedImages[imageIndex - 1], prevProgress, 1);
                             
-                            // La imagen nueva aparece gradualmente encima
                             const alpha = imageElapsed / crossfadeDuration;
                             drawKenBurns(loadedImages[imageIndex], imgProgress, alpha);
                         } else {
-                            // Sin transición, dibuja normalmente
                             drawKenBurns(loadedImages[imageIndex], imgProgress, 1);
                         }
 
-                        // Superponer Título (Arriba a la Izquierda)
+                        // TÍTULO (Izquierda Superior)
                         if(videoTitle) {
                             const titleStr = videoTitle.value.trim().toUpperCase();
                             if (titleStr) {
@@ -796,30 +790,29 @@
                             }
                         }
 
-                        // Superponer Logo (Arriba a la Derecha)
+                        // LOGO (Derecha Superior)
                         if (loadedLogo) {
                             liveCtx.drawImage(loadedLogo, finalCanvasW - 140, 40, 100, 100);
                         }
 
+                        // SUBTÍTULOS ESTILO TIKTOK
                         const captionStyle = document.getElementById('captionPosSelect').value;
                         if (captionStyle !== 'none' && captions.length > 0) {
-                            // Cálculo matemático para empatar el texto con la duración del audio
                             const captionIndex = Math.min(Math.floor((elapsed / totalDuration) * captions.length), captions.length - 1);
                             const currentCaption = captions[captionIndex].toUpperCase();
                             
-                            liveCtx.fillStyle = '#FFFFFF'; // Blanco premium
+                            liveCtx.fillStyle = '#FFFFFF'; 
                             liveCtx.font = '900 55px Inter, sans-serif';
                             liveCtx.textAlign = 'center';
-                            liveCtx.lineWidth = 12; // Contorno más grueso y profesional
+                            liveCtx.lineWidth = 12; 
                             liveCtx.strokeStyle = '#000000';
-                            liveCtx.lineJoin = 'round'; // Bordes del contorno suaves
+                            liveCtx.lineJoin = 'round'; 
                             
-                            // Ajuste dinámico de altura: Se coloca al 82% de la pantalla para encajar perfecto en Vertical u Horizontal
+                            // Ajuste dinámico de altura: 82%
                             let capY = captionStyle === 'center' ? finalCanvasH / 2 : finalCanvasH * 0.82;
                             
                             const capWords = currentCaption.split(' ');
                             if (capWords.length > 2) {
-                                // Forzar 2 líneas si el fragmento es largo
                                 const mid = Math.ceil(capWords.length / 2);
                                 const l1 = capWords.slice(0, mid).join(' ');
                                 const l2 = capWords.slice(mid).join(' ');
@@ -846,13 +839,11 @@
             }
         });
 
-        // Funcionalidad para resetear la app elegantemente sin recargar la página
         document.getElementById('resetBtn').addEventListener('click', () => {
-            // 1. Limpiar memoria de imágenes
             loadedImages = [];
             loadedLogo = null;
+            draggedItem = null;
             
-            // 2. Restaurar zona de fotos
             galleryContainer.innerHTML = '';
             galleryContainer.classList.add('hidden');
             dropZone.classList.remove('hidden');
@@ -860,7 +851,6 @@
             document.getElementById('addMorePhotosBtn').classList.add('hidden');
             imageInput.value = '';
 
-            // 3. Limpiar textos e inputs
             scriptText.value = '';
             document.getElementById('charCount').textContent = '0 / 1300 máx (~90 Seg)';
             document.getElementById('charCount').classList.remove('text-red-500');
@@ -871,7 +861,6 @@
                 document.getElementById('logoInput').value = '';
             }
 
-            // 4. Restaurar Interfaz
             document.getElementById('downloadContainer').classList.add('hidden');
             document.getElementById('statusBox').classList.add('hidden');
             document.getElementById('progressBar').style.width = "0%";
