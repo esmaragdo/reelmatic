@@ -38,8 +38,10 @@
         .apple-btn-primary { background-color: #1d1d1f; color: white; transition: all 0.3s ease; }
         .apple-btn-primary:hover { background-color: #000000; transform: scale(0.98); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .apple-btn-primary:disabled { background-color: #e5e5ea; color: #86868b; transform: scale(1); cursor: not-allowed; box-shadow: none; }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .scrollbar-custom::-webkit-scrollbar { height: 6px; }
+        .scrollbar-custom::-webkit-scrollbar-track { background: #f1f1f3; border-radius: 8px; }
+        .scrollbar-custom::-webkit-scrollbar-thumb { background: #c7c7cc; border-radius: 8px; }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: #8e8e93; }
         .text-gradient-dark { background: linear-gradient(180deg, #1d1d1f 0%, #434345 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .text-gradient-light { background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
@@ -110,7 +112,7 @@
                 </div>
                 <h3 class="text-2xl font-bold tracking-tight-apple mb-3 text-apple-dark">1. Carga tu materia prima.</h3>
                 <p class="text-gray-500 font-medium leading-relaxed">
-                    Sube hasta 10 fotos en cualquier orden, organízalas arrastrando y pega tu guion completo. Nosotros nos encargamos de todo el dolor de cabeza técnico.
+                    Sube hasta 10 fotos (puedes arrastrarlas o hacer clic), organízalas reordenando y pega tu guion completo. Nosotros nos encargamos de todo.
                 </p>
             </div>
 
@@ -309,13 +311,17 @@
                                 <span id="photoCount" class="text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">0 / 10</span>
                             </div>
                         </div>
-                        <div class="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-all bg-[#fbfbfd]" id="dropZone" onclick="document.getElementById('imageInput').click()">
-                            <i class="fa-regular fa-images text-4xl text-gray-300 mb-3"></i>
-                            <p class="text-sm font-semibold text-apple-dark">Haz clic para subir hasta 10 fotos (PNG/JPG)</p>
+                        
+                        <!-- DROPZONE CON SOPORTE COMPLETO DRAG & DROP Y CLIC -->
+                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-apple-blue hover:bg-blue-50/50 transition-all bg-[#fbfbfd]" id="dropZone" onclick="document.getElementById('imageInput').click()">
+                            <i class="fa-regular fa-images text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-sm font-semibold text-apple-dark mb-1">Haz clic o arrastra tus fotos aquí (Hasta 10)</p>
+                            <span class="text-xs text-gray-400 font-medium">Soporta PNG, JPG, WEBP</span>
                         </div>
-                        <input type="file" id="imageInput" accept="image/*" multiple="" class="hidden"/>
-                        <!-- Contenedor scrollable horizontal optimizado para ver las 10 fotos y reordenarlas cómodamente -->
-                        <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x p-1 border border-gray-100 rounded-xl bg-gray-50"></div>
+                        <input type="file" id="imageInput" accept="image/*" multiple class="hidden"/>
+                        
+                        <!-- CONTENEDOR DE GALERÍA OPTIMIZADO PARA VISUALIZAR LAS 10 FOTOS COMPLETAS Y ORDENARLAS -->
+                        <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white apple-shadow"></div>
                     </div>
 
                     <div class="space-y-4 pt-6 border-t border-gray-100">
@@ -392,7 +398,7 @@
                             <p id="placeholderDesc" class="text-sm font-medium tracking-wide">Tu video de 3 minutos aparecerá aquí</p>
                         </div>
                         <canvas id="livePreviewCanvas" class="w-full h-full object-cover relative z-10 hidden"></canvas>
-                        <video id="finalVideoPlayer" class="w-full h-full object-cover relative z-20 hidden" controls="" playsinline=""></video>
+                        <video id="finalVideoPlayer" class="w-full h-full object-cover relative z-20 hidden" controls playsinline></video>
                     </div>
                 </div>
             </div>
@@ -598,7 +604,6 @@
                 if (!file) return;
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    // Mantiene el aspect ratio real del logo con object-contain sin deformarse
                     logoPreview.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-contain p-1" alt="Logo"/>`;
                     loadedLogo = new Image();
                     loadedLogo.src = event.target.result;
@@ -607,54 +612,62 @@
             });
         }
 
-        imageInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files).slice(0, 10 - loadedImages.length);
+        // FUNCIÓN CENTRALIZADA PARA PROCESAR Y AÑADIR LAS FOTOS (Soporta múltiples archivos y límite de 10)
+        function handleImageFiles(filesList) {
+            const files = Array.from(filesList).slice(0, 10 - loadedImages.length);
             if (files.length === 0) return;
             dropZone.classList.add('hidden'); 
             galleryContainer.classList.remove('hidden');
+
             files.forEach(file => {
+                if (!file.type.startsWith('image/')) return;
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    const img = new Image(); img.src = event.target.result;
+                    const img = new Image(); 
+                    img.src = event.target.result;
                     img.onload = () => {
                         loadedImages.push(img);
                         document.getElementById('photoCount').textContent = `${loadedImages.length} / 10`;
-                        if(loadedImages.length > 0 && loadedImages.length < 10) addMorePhotosBtn.classList.remove('hidden');
-                        else addMorePhotosBtn.classList.add('hidden');
-
-                        const div = document.createElement('div');
-                        div.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden snap-center border border-gray-200 shadow-sm relative cursor-move transition-transform flex-shrink-0 bg-white";
                         
-                        div.innerHTML = `
+                        if(loadedImages.length > 0 && loadedImages.length < 10) {
+                            addMorePhotosBtn.classList.remove('hidden');
+                        } else {
+                            addMorePhotosBtn.classList.add('hidden');
+                        }
+
+                        const card = document.createElement('div');
+                        card.className = "flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden snap-center border border-gray-200 shadow-sm relative cursor-grab active:cursor-grabbing bg-white flex flex-col justify-between group";
+                        
+                        card.innerHTML = `
                             <img src="${event.target.result}" class="w-full h-full object-cover pointer-events-none" alt="Preview"/>
-                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity pointer-events-none">
-                                <i class="fa-solid fa-arrows-up-down-left-right text-white"></i>
+                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                <i class="fa-solid fa-arrows-up-down-left-right text-white text-sm"></i>
                             </div>
                         `;
                         
-                        div.imageObj = img;
-                        div.draggable = true;
+                        card.imageObj = img;
+                        card.draggable = true;
 
-                        div.addEventListener('dragstart', function(e) { 
+                        card.addEventListener('dragstart', function(e) { 
                             draggedItem = this; 
                             setTimeout(() => this.classList.add('opacity-40', 'border-apple-blue', 'border-2'), 0); 
                         });
                         
-                        div.addEventListener('dragend', function() { 
+                        card.addEventListener('dragend', function() { 
                             this.classList.remove('opacity-40', 'border-apple-blue', 'border-2'); 
                             draggedItem = null; 
                         });
                         
-                        div.addEventListener('dragover', function(e) { 
+                        card.addEventListener('dragover', function(e) { 
                             e.preventDefault(); 
                             this.classList.add('scale-105', 'ring-2', 'ring-apple-blue');
                         });
                         
-                        div.addEventListener('dragleave', function(e) { 
+                        card.addEventListener('dragleave', function(e) { 
                             this.classList.remove('scale-105', 'ring-2', 'ring-apple-blue');
                         });
                         
-                        div.addEventListener('drop', function(e) {
+                        card.addEventListener('drop', function(e) {
                             e.preventDefault();
                             this.classList.remove('scale-105', 'ring-2', 'ring-apple-blue');
                             if (draggedItem && draggedItem !== this) {
@@ -670,11 +683,35 @@
                             }
                         });
 
-                        galleryContainer.appendChild(div);
+                        galleryContainer.appendChild(card);
                     }
                 };
                 reader.readAsDataURL(file);
             });
+        }
+
+        // Event listener para el input tradicional de archivos
+        imageInput.addEventListener('change', (e) => {
+            handleImageFiles(e.target.files);
+        });
+
+        // SOPORTE DE DRAG & DROP EN EL DROPZONE
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-apple-blue', 'bg-blue-50');
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-apple-blue', 'bg-blue-50');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-apple-blue', 'bg-blue-50');
+            if (e.dataTransfer && e.dataTransfer.files) {
+                handleImageFiles(e.dataTransfer.files);
+            }
         });
 
         generateBtn.addEventListener('click', async () => {
@@ -789,7 +826,6 @@
                 };
 
                 audioEl.onloadedmetadata = () => {
-                    // Anunciamos 3 minutos (180,000ms), pero sumamos 30 segundos (30,000ms) de gracia silenciosa integrada
                     const advertisedDuration = 180000;
                     const totalDuration = Math.max(audioEl.duration * 1000, advertisedDuration + 30000);
                     const durationPerImage = totalDuration / loadedImages.length;
@@ -879,7 +915,6 @@
                             }
                         }
 
-                        // Logo adaptativo preservando el Aspect Ratio real sin deformar (caja de 140x140 max)
                         if (loadedLogo) {
                             const maxLogoW = 140;
                             const maxLogoH = 140;
