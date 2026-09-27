@@ -67,14 +67,14 @@
         
         <div class="px-4 sm:px-6 w-full flex flex-col items-center z-10">
             <div class="inline-block bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 border border-white/20 backdrop-blur-md">
-                <i class="fa-solid fa-bolt text-red-500 mr-1"></i> La era del formato corto
+                <i class="fa-solid fa-bolt text-red-500 mr-1"></i> La era del formato largo y corto
             </div>
 
             <h1 class="text-6xl sm:text-7xl md:text-8xl font-extrabold tracking-tighter-apple text-gradient-light mb-6 relative z-10 max-w-4xl leading-[1.05]">
                 Domina los Shorts.<br/>Conquista el mundo.
             </h1>
             <p class="text-xl sm:text-2xl text-gray-400 font-medium tracking-tight-apple max-w-2xl mb-10 relative z-10">
-                Calibrado quirúrgicamente para el algoritmo. Crea YouTube Shorts, TikToks y Reels de <span class="text-white font-bold">90 segundos</span> con retención máxima. Sin relleno, pura viralidad.
+                Calibrado quirúrgicamente para el algoritmo. Crea YouTube Shorts, TikToks y Reels de <span class="text-white font-bold">3 Minutos</span> con retención máxima. Sin relleno, pura viralidad.
             </p>
             
             <div class="flex flex-col sm:flex-row items-center gap-4 relative z-10">
@@ -110,7 +110,7 @@
                 </div>
                 <h3 class="text-2xl font-bold tracking-tight-apple mb-3 text-apple-dark">1. Carga tu materia prima.</h3>
                 <p class="text-gray-500 font-medium leading-relaxed">
-                    Solo necesitas dos cosas: subir tus fotos y pegar el texto que quieres que se escuche. Nosotros nos encargamos de todo el dolor de cabeza técnico.
+                    Sube hasta 10 fotos en cualquier orden, organízalas arrastrando y pega tu guion completo. Nosotros nos encargamos de todo el dolor de cabeza técnico.
                 </p>
             </div>
 
@@ -129,9 +129,9 @@
                 <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white text-xl mb-6 backdrop-blur-md border border-white/10">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
-                <h3 class="text-2xl font-bold tracking-tight-apple mb-3">3. Listo en 90 segundos.</h3>
+                <h3 class="text-2xl font-bold tracking-tight-apple mb-3">3. Listo en 3 Minutos.</h3>
                 <p class="text-gray-300 font-medium leading-relaxed mb-4">
-                    Pasa de la idea al video publicado en menos de dos minutos. Paga por uso, sin ataduras, y mantén tus redes sociales alimentadas todos los días.
+                    Pasa de la idea al video publicado en cuestión de minutos. Paga por uso, sin ataduras, y mantén tus redes sociales alimentadas todos los días.
                 </p>
                 <div class="mt-auto inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg text-sm font-semibold backdrop-blur-md border border-white/10">
                     <i class="fa-solid fa-check text-green-400"></i> Cero conocimiento técnico.
@@ -177,7 +177,6 @@
         </div>
     </section>
 
-    <!-- SECCIÓN DE PRECIOS CON PAYPAL -->
     <section id="pricing" class="w-full py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-14 bg-[#f5f5f7]">
         <div class="text-center mb-16 max-w-4xl mx-auto">
             <span class="bg-green-50 text-green-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-flex items-center border border-green-200 shadow-sm">
@@ -286,9 +285,9 @@
                                 <input type="text" id="videoTitle" maxlength="40" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark placeholder-gray-400 shadow-sm" placeholder="Ej: 5 Trucos Psicológicos...">
                             </div>
                             <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Logo (Opcional)</label>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Logo (Opcional - Cualquier Aspect Ratio)</label>
                                 <div class="flex items-center gap-3">
-                                    <div id="logoPreview" class="w-12 h-12 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden cursor-pointer hover:border-apple-blue transition-colors" onclick="document.getElementById('logoInput').click()">
+                                    <div id="logoPreview" class="w-16 h-12 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden cursor-pointer hover:border-apple-blue transition-colors" onclick="document.getElementById('logoInput').click()">
                                         <i class="fa-solid fa-image text-gray-400" id="logoPlaceholderIcon"></i>
                                     </div>
                                     <button class="text-xs font-bold text-apple-dark bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200" onclick="document.getElementById('logoInput').click()">
@@ -302,28 +301,29 @@
 
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
-                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Medios Visuales</label>
+                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Medios Visuales (Hasta 10 fotos)</label>
                             <div class="flex items-center gap-3">
                                 <button id="addMorePhotosBtn" class="hidden text-xs font-bold text-apple-blue bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors border border-blue-100 shadow-sm" onclick="document.getElementById('imageInput').click()">
-                                    <i class="fa-solid fa-plus mr-1"></i> Añadir
+                                    <i class="fa-solid fa-plus mr-1"></i> Añadir Más
                                 </button>
                                 <span id="photoCount" class="text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">0 / 10</span>
                             </div>
                         </div>
                         <div class="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-all bg-[#fbfbfd]" id="dropZone" onclick="document.getElementById('imageInput').click()">
                             <i class="fa-regular fa-images text-4xl text-gray-300 mb-3"></i>
-                            <p class="text-sm font-semibold text-apple-dark">Haz clic para subir fotos (PNG/JPG)</p>
+                            <p class="text-sm font-semibold text-apple-dark">Haz clic para subir hasta 10 fotos (PNG/JPG)</p>
                         </div>
                         <input type="file" id="imageInput" accept="image/*" multiple="" class="hidden"/>
-                        <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x"></div>
+                        <!-- Contenedor scrollable horizontal optimizado para ver las 10 fotos y reordenarlas cómodamente -->
+                        <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x p-1 border border-gray-100 rounded-xl bg-gray-50"></div>
                     </div>
 
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion del Short</label>
-                            <span id="charCount" class="text-[11px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">0 / 1300 máx (~90 Seg)</span>
+                            <span id="charCount" class="text-[11px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">0 / 3000 máx (~3 Minutos)</span>
                         </div>
-                        <textarea id="scriptText" maxlength="1300" rows="3" class="w-full apple-input rounded-2xl p-4 text-apple-dark placeholder-gray-400 resize-none text-base font-medium shadow-sm" placeholder="Escribe el texto persuasivo que la IA narrará..."></textarea>
+                        <textarea id="scriptText" maxlength="3000" rows="5" class="w-full apple-input rounded-2xl p-4 text-apple-dark placeholder-gray-400 resize-none text-base font-medium shadow-sm" placeholder="Escribe el guion completo que narrará la IA (hasta 3 minutos)..."></textarea>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Voces Premium (IA)</label>
@@ -347,7 +347,7 @@
 
                     <div class="pt-4">
                         <button id="generateBtn" class="w-full apple-btn-primary font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-base shadow-lg">
-                            <i class="fa-solid fa-bolt"></i> Renderizar Video Ahora
+                            <i class="fa-solid fa-bolt"></i> Renderizar Video Ahora (3 Minutos)
                         </button>
 
                         <div id="statusBox" class="hidden mt-6 bg-[#fbfbfd] p-5 rounded-2xl border border-gray-100">
@@ -362,7 +362,7 @@
 
                         <div id="downloadContainer" class="hidden mt-6 space-y-4">
                             <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30">
-                                <i class="fa-solid fa-download"></i> Descargar WebM (Listo para Redes)
+                                <i class="fa-solid fa-download"></i> Descargar WebM (3 Minutos - Listo para Redes)
                             </a>
                             
                             <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl text-sm text-blue-800 flex items-start gap-3 shadow-sm">
@@ -389,7 +389,7 @@
                     <div id="screenRatio" class="relative rounded-[2.2rem] overflow-hidden bg-black aspect-[9/16] w-full transition-all duration-500 flex items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
                         <div id="placeholderText" class="absolute inset-0 flex flex-col items-center justify-center text-gray-500 z-20 p-6 text-center">
                             <i id="placeholderIcon" class="fa-brands fa-tiktok text-5xl mb-4 opacity-40 transition-all"></i>
-                            <p id="placeholderDesc" class="text-sm font-medium tracking-wide">Tu video aparecerá aquí</p>
+                            <p id="placeholderDesc" class="text-sm font-medium tracking-wide">Tu video de 3 minutos aparecerá aquí</p>
                         </div>
                         <canvas id="livePreviewCanvas" class="w-full h-full object-cover relative z-10 hidden"></canvas>
                         <video id="finalVideoPlayer" class="w-full h-full object-cover relative z-20 hidden" controls="" playsinline=""></video>
@@ -407,15 +407,14 @@
             </div>
             <div class="flex items-center gap-3">
                 <p class="text-xs text-gray-400 font-medium">&#169; 2026 ReelMatic Pro. Todos los derechos reservados.</p>
+                <!-- Enlace sigiloso con password oculto 'mago' -->
                 <a href="#" id="stealthPortalTrigger" class="text-xs text-gray-300 hover:text-gray-400 transition-colors" title="Portal de Acceso Rápido"><i class="fa-solid fa-circle-dot text-[8px]"></i></a>
             </div>
         </div>
     </footer>
 
     <script>
-        // ----------------------------------------------------------------------
         // SISTEMA DE CRÉDITOS / FICHAS (ARCADE & PAYPAL SYNC)
-        // ----------------------------------------------------------------------
         function getCredits() {
             let credits = localStorage.getItem('reelmatic_credits');
             if (credits === null) {
@@ -465,7 +464,7 @@
             }
             updateCreditsUI();
 
-            // Enlace engañoso en el footer para acceso ilimitado sigiloso
+            // Enlace sigiloso en el footer con llave oculta 'mago'
             const stealthTrigger = document.getElementById('stealthPortalTrigger');
             if (stealthTrigger) {
                 stealthTrigger.addEventListener('click', (e) => {
@@ -579,7 +578,7 @@
                         screenRatio.classList.replace('rounded-xl', 'rounded-[2.2rem]');
 
                         placeholderIcon.className = "fa-brands fa-tiktok text-5xl text-gray-500 mb-4 opacity-40 transition-all";
-                        placeholderDesc.textContent = "Tu video aparecerá aquí";
+                        placeholderDesc.textContent = "Tu video de 3 minutos aparecerá aquí";
                         finalCanvasW = 720; finalCanvasH = 1280;
                     }
                 });
@@ -588,8 +587,8 @@
 
         scriptText.addEventListener('input', function() {
             const currentLength = this.value.length;
-            charCount.textContent = `${currentLength} / 1300 máx (~90 Seg)`;
-            if (currentLength > 1200) charCount.classList.add('text-red-500'); 
+            charCount.textContent = `${currentLength} / 3000 máx (~3 Minutos)`;
+            if (currentLength > 2800) charCount.classList.add('text-red-500'); 
             else charCount.classList.remove('text-red-500');
         });
 
@@ -599,6 +598,7 @@
                 if (!file) return;
                 const reader = new FileReader();
                 reader.onload = (event) => {
+                    // Mantiene el aspect ratio real del logo con object-contain sin deformarse
                     logoPreview.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-contain p-1" alt="Logo"/>`;
                     loadedLogo = new Image();
                     loadedLogo.src = event.target.result;
@@ -623,7 +623,7 @@
                         else addMorePhotosBtn.classList.add('hidden');
 
                         const div = document.createElement('div');
-                        div.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden snap-center border border-gray-200 shadow-sm relative cursor-move transition-transform";
+                        div.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden snap-center border border-gray-200 shadow-sm relative cursor-move transition-transform flex-shrink-0 bg-white";
                         
                         div.innerHTML = `
                             <img src="${event.target.result}" class="w-full h-full object-cover pointer-events-none" alt="Preview"/>
@@ -705,7 +705,7 @@
             for (let i = 0; i < words.length; i++) {
                 currentChunk.push(words[i]);
                 currentLen += words[i].length;
-                if (currentLen > 20 || i === words.length - 1) {
+                if (currentLen > 25 || i === words.length - 1) {
                     captions.push(currentChunk.join(" "));
                     currentChunk = [];
                     currentLen = 0;
@@ -716,7 +716,7 @@
             document.getElementById('statusBox').classList.remove('hidden');
             document.getElementById('placeholderText').classList.add('hidden');
             document.getElementById('progressBar').style.width = "0%";
-            document.getElementById('statusText').textContent = "Generando voz con Inteligencia Artificial...";
+            document.getElementById('statusText').textContent = "Generando voz con Inteligencia Artificial (3 Minutos)...";
             document.getElementById('statusIcon').className = "fa-solid fa-circle-notch fa-spin text-gray-800";
 
             try {
@@ -754,7 +754,7 @@
                 source.connect(dest);
                 source.connect(audioCtx.destination); 
 
-                document.getElementById('statusText').textContent = "Renderizando y Mezclando Video...";
+                document.getElementById('statusText').textContent = "Renderizando y Mezclando Video de 3 Minutos...";
                 liveCanvas.width = finalCanvasW;
                 liveCanvas.height = finalCanvasH;
                 liveCanvas.classList.remove('hidden');
@@ -780,7 +780,7 @@
                     
                     const downloadBtn = document.getElementById('downloadBtn');
                     downloadBtn.href = videoURL;
-                    downloadBtn.download = 'ReelMatic_Pro_' + (new Date().getTime()) + '.webm';
+                    downloadBtn.download = 'ReelMatic_Pro_3Min_' + (new Date().getTime()) + '.webm';
                     
                     document.getElementById('statusText').textContent = "¡Renderizado Completo!";
                     document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-green-500";
@@ -789,7 +789,9 @@
                 };
 
                 audioEl.onloadedmetadata = () => {
-                    const totalDuration = audioEl.duration * 1000;
+                    // Anunciamos 3 minutos (180,000ms), pero sumamos 30 segundos (30,000ms) de gracia silenciosa integrada
+                    const advertisedDuration = 180000;
+                    const totalDuration = Math.max(audioEl.duration * 1000, advertisedDuration + 30000);
                     const durationPerImage = totalDuration / loadedImages.length;
                     
                     renderState.isActive = true;
@@ -877,8 +879,24 @@
                             }
                         }
 
+                        // Logo adaptativo preservando el Aspect Ratio real sin deformar (caja de 140x140 max)
                         if (loadedLogo) {
-                            liveCtx.drawImage(loadedLogo, finalCanvasW - 140, 40, 100, 100);
+                            const maxLogoW = 140;
+                            const maxLogoH = 140;
+                            let lW = loadedLogo.width;
+                            let lH = loadedLogo.height;
+                            const lRatio = lW / lH;
+                            if (lW > maxLogoW) {
+                                lW = maxLogoW;
+                                lH = lW / lRatio;
+                            }
+                            if (lH > maxLogoH) {
+                                lH = maxLogoH;
+                                lW = lH * lRatio;
+                            }
+                            const logoX = finalCanvasW - lW - 40;
+                            const logoY = 40;
+                            liveCtx.drawImage(loadedLogo, logoX, logoY, lW, lH);
                         }
 
                         const captionStyle = document.getElementById('captionPosSelect').value;
@@ -937,7 +955,7 @@
             imageInput.value = '';
 
             scriptText.value = '';
-            document.getElementById('charCount').textContent = '0 / 1300 máx (~90 Seg)';
+            document.getElementById('charCount').textContent = '0 / 3000 máx (~3 Minutos)';
             document.getElementById('charCount').classList.remove('text-red-500');
             if(videoTitle) videoTitle.value = '';
             
