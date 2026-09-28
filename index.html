@@ -470,10 +470,9 @@
         let recordedChunks = [];
         let draggedItem = null;
         let captions = [];
-        let realTimePreviewActive = false;
 
         function updateRealTimePreview() {
-            if (renderState.isActive) return; // Si está renderizando el video final, no interferir
+            if (renderState.isActive) return;
             
             if (loadedImages.length > 0 || (videoTitle && videoTitle.value.trim().length > 0)) {
                 placeholderText.classList.add('hidden');
@@ -481,7 +480,6 @@
                 liveCanvas.width = finalCanvasW;
                 liveCanvas.height = finalCanvasH;
 
-                // Dibujar la primera foto o un fondo negro si no hay foto
                 liveCtx.fillStyle = '#000';
                 liveCtx.fillRect(0, 0, finalCanvasW, finalCanvasH);
 
@@ -505,7 +503,6 @@
                     liveCtx.drawImage(img, drawX, drawY, drawW, drawH);
                 }
 
-                // Dibujar Título en tiempo real
                 if (videoTitle && videoTitle.value.trim()) {
                     const titleStr = videoTitle.value.trim().toUpperCase();
                     liveCtx.fillStyle = '#FFFFFF';
@@ -517,7 +514,6 @@
                     liveCtx.shadowBlur = 0;
                 }
 
-                // Dibujar Logo en tiempo real
                 if (loadedLogo) {
                     const maxLogoW = 140;
                     const maxLogoH = 140;
@@ -746,7 +742,10 @@
 
         generateBtn.addEventListener('click', async () => {
             updateGalleryOrder();
-            if (loadedImages.length === 0) return alert("Sube al menos una foto.");
+            if (loadedImages.length === 0) {
+                alert("Sube al menos una foto.");
+                return;
+            }
 
             const selectedAudioSource = document.querySelector('input[name="audioSourceType"]:checked').value;
             let audioUrlToUse = null;
@@ -761,7 +760,8 @@
                     if (!uploadedCustomAudioBlob) {
                         generateBtn.disabled = false;
                         document.getElementById('statusBox').classList.add('hidden');
-                        return alert("Por favor sube tu archivo de audio (MP3 o WAV).");
+                        alert("Por favor sube tu archivo de audio (MP3 o WAV).");
+                        return;
                     }
                     document.getElementById('statusText').textContent = "Cargando audio propio...";
                     audioUrlToUse = URL.createObjectURL(uploadedCustomAudioBlob);
@@ -770,7 +770,8 @@
                     if (!text) {
                         generateBtn.disabled = false;
                         document.getElementById('statusBox').classList.add('hidden');
-                        return alert("Escribe un guion para la IA.");
+                        alert("Escribe un guion para la IA.");
+                        return;
                     }
 
                     const words = text.split(/\s+/);
@@ -813,7 +814,10 @@
                         throw new Error("El servidor tardó demasiado o está saturado. Inténtalo de nuevo en unos minutos.");
                     }
 
-                    if (!response.ok) throw new Error(result.error || "Fallo en la conexión con el servidor");
+                    if (!response.ok) {
+                        const errMsg = (result && typeof result.error === 'string') ? result.error : (result && result.error && result.error.message ? result.error.message : "Fallo en la conexión con el servidor");
+                        throw new Error(errMsg);
+                    }
                     const part = result?.candidates?.[0]?.content?.parts?.[0];
                     if (!part || !part.inlineData) throw new Error("No se pudo generar el audio.");
 
@@ -981,7 +985,7 @@
                 };
 
             } catch (error) {
-                alert(error.message);
+                alert(error.message || error);
                 document.getElementById('statusBox').classList.add('hidden');
                 generateBtn.disabled = false;
             }
