@@ -199,7 +199,7 @@
                                 </div>
                             </div>
 
-                            <!-- Opciones de Compra y Créditos -->
+                            <!-- Opciones de Compra y Créditos (Con tu enlace correcto de PayPal para 3 videos) -->
                             <div class="bg-blue-50/50 border border-blue-200 rounded-2xl p-5 space-y-3">
                                 <div class="flex justify-between items-center">
                                     <span class="text-xs font-bold text-apple-dark uppercase">Obtén Créditos de Generación</span>
@@ -325,7 +325,6 @@
         }
 
         function buyCredits(amount) {
-            // Guardamos temporalmente que el usuario fue a pagar para sumarle cuando regrese o haga clic
             let current = getCredits();
             setCredits(current + amount);
             alert(`¡Has adquirido ${amount} crédito(s)! Se han sumado a tu navegador.`);
@@ -666,17 +665,14 @@
                     const downloadBtn = document.getElementById('downloadBtn');
                     const paywallBox = document.getElementById('paywallBox');
                     
-                    // VALIDACIÓN DE CRÉDITOS
                     let credits = getCredits();
                     if (credits > 0) {
-                        // Consumir 1 crédito
                         setCredits(credits - 1);
                         paywallBox.classList.add('hidden');
                         downloadBtn.classList.remove('hidden');
                         downloadBtn.href = videoURL;
                         downloadBtn.download = 'ReelMatic_Pro_Video_' + (new Date().getTime()) + '.webm';
                     } else {
-                        // Bloquear descarga y mostrar ofertas
                         downloadBtn.classList.add('hidden');
                         paywallBox.classList.remove('hidden');
                     }
