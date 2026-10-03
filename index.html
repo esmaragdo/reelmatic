@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ReelMatic Pro | Generador Automático de Videos de 1 Minuto</title>
+    <title>ReelMatic Pro | Studio Google Cloud Text-to-Speech</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
@@ -44,17 +44,18 @@
 
     <div id="app-workspace" class="w-full bg-[#fbfbfd] pt-12 pb-20 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
-            <span class="bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-blue-100">Estudio 1 Minuto Exacto (Google Voices)</span>
+            <span class="bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-blue-100">Estudio Google Cloud Neural2 (Oficial)</span>
             <h1 class="text-3xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-2">
                 ReelMatic Pro.
             </h1>
-            <p class="text-gray-500 text-xs md:text-sm mt-1">Sube tus fotos, escribe tu guion y genera tu video con las voces oficiales de Google Cloud.</p>
+            <p class="text-gray-500 text-xs md:text-sm mt-1">Conectado estrictamente a la API de Google Cloud para voces profesionales.</p>
         </div>
 
         <main class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
             <div class="lg:w-1/2 space-y-6 z-10 w-full">
                 <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
                     
+                    <!-- 1. Formato -->
                     <div class="space-y-4">
                         <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">1. Formato del Video</label>
                         <div class="grid grid-cols-2 gap-4">
@@ -75,6 +76,7 @@
                         </div>
                     </div>
 
+                    <!-- 2. Título y Logo -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">2. Identidad de Marca</label>
                         <div class="flex flex-col sm:flex-row gap-4">
@@ -97,6 +99,7 @@
                         </div>
                     </div>
 
+                    <!-- 3. Fotos -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Fotos (Hasta 10)</label>
@@ -110,22 +113,23 @@
                         <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white p-2"></div>
                     </div>
 
+                    <!-- 4. Guion y Voces Google -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-1">
-                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion de 1 Minuto (Locución y Subtítulos)</label>
+                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion de 1 Minuto (Locución Oficial Google)</label>
                             <span id="charCount" class="text-[10px] font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200">0 / 1300 máx</span>
                         </div>
-                        <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion para generar la voz oficial de Google y los subtítulos animados en pantalla..."></textarea>
+                        <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion para generar la voz oficial de Google Cloud..."></textarea>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Voz Oficial Google</label>
                                 <select id="googleVoiceSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                    <option value="es-ES-Neural2-B">Puck (Masculina Dinámica - ES)</option>
-                                    <option value="es-ES-Neural2-A">Charon (Femenina Clara - ES)</option>
-                                    <option value="es-US-Neural2-A">Aoede (Femenina LatAm)</option>
-                                    <option value="es-US-Neural2-B">Fenrir (Masculina LatAm)</option>
-                                    <option value="es-MX-Neural2-A">Kore (Dinámica México)</option>
+                                    <option value="Puck">Puck (Masculina Dinámica - España)</option>
+                                    <option value="Charon">Charon (Femenina Clara - España)</option>
+                                    <option value="Aoede">Aoede (Femenina LatAm)</option>
+                                    <option value="Fenrir">Fenrir (Masculina LatAm)</option>
+                                    <option value="Kore">Kore (Dinámica México)</option>
                                 </select>
                             </div>
                             <div>
@@ -139,9 +143,10 @@
                         </div>
                     </div>
 
+                    <!-- Botón de Generación y Estatus -->
                     <div class="pt-2 space-y-4">
                         <button id="generateBtn" class="w-full bg-black text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm hover:bg-neutral-800 transition-all shadow-lg cursor-pointer">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video de 1 Minuto (Gratis)
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video con Voz de Google
                         </button>
 
                         <div id="statusBox" class="hidden mt-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
@@ -154,6 +159,7 @@
                             </div>
                         </div>
 
+                        <!-- Contenedor de Descarga -->
                         <div id="downloadContainer" class="hidden mt-4 space-y-4">
                             <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30 text-xs">
                                 <i class="fa-solid fa-download"></i> Descargar Video Generado (.WEBM)
@@ -167,6 +173,7 @@
                 </div>
             </div>
 
+            <!-- Preview Device Frame -->
             <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
                 <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white border border-gray-200 apple-shadow max-w-sm w-full">
                     <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5 transition-opacity">
@@ -185,7 +192,9 @@
         </main>
     </div>
 
+    <!-- Scripts -->
     <script>
+        // URL Estricta de tu Cloudflare Worker
         const CLOUDFLARE_WORKER_URL = "https://reelmatic-api.esmaragdocamaz.workers.dev/";
 
         const formatRadios = document.querySelectorAll('input[name="videoFormat"]');
@@ -390,33 +399,26 @@
                     }
                 }
 
-                document.getElementById('statusText').textContent = "Conectando con Cloudflare Worker para locución oficial de Google...";
+                document.getElementById('statusText').textContent = "Conectando estrictamente con Google Cloud (Worker)...";
 
-                let audioUrlToUse = null;
                 const selectedVoice = document.getElementById('googleVoiceSelect').value;
                 
-                try {
-                    const response = await fetch(CLOUDFLARE_WORKER_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ text: text, voiceId: selectedVoice })
-                    });
-                    if (response.ok) {
-                        const audioBlob = await response.blob();
-                        audioUrlToUse = URL.createObjectURL(audioBlob);
-                    }
-                } catch(err) {
-                    console.log("Worker conector alternativo activado");
+                // Petición OBLIGATORIA al Worker de Google
+                const response = await fetch(CLOUDFLARE_WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text, voiceId: selectedVoice })
+                });
+
+                if (!response.ok) {
+                    const errData = await response.text();
+                    throw new Error("El Worker rechazó la petición: " + errData);
                 }
 
-                // Respaldo automático con la voz nativa del navegador si el Worker tarda o no responde
-                if (!audioUrlToUse) {
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = selectedVoice.startsWith('es-ES') ? 'es-ES' : 'es-MX';
-                    window.speechSynthesis.speak(utterance);
-                }
+                const audioBlob = await response.blob();
+                const audioUrlToUse = URL.createObjectURL(audioBlob);
 
-                const audioEl = new Audio(audioUrlToUse || 'https://actions.google.com/sounds/v1/ambiences/rain_heavy.ogg');
+                const audioEl = new Audio(audioUrlToUse);
                 audioEl.crossOrigin = "anonymous";
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const audioDest = audioCtx.createMediaStreamDestination();
@@ -574,7 +576,7 @@
                 };
 
             } catch (error) {
-                alert("Error en el proceso: " + error.message);
+                alert("Error de conexión con Google Cloud: " + error.message);
                 document.getElementById('statusBox').classList.add('hidden');
                 generateBtn.disabled = false;
             }
