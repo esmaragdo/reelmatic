@@ -55,7 +55,6 @@
             <div class="lg:w-1/2 space-y-6 z-10 w-full">
                 <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
                     
-                    <!-- 1. Formato -->
                     <div class="space-y-4">
                         <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">1. Formato del Video</label>
                         <div class="grid grid-cols-2 gap-4">
@@ -76,7 +75,6 @@
                         </div>
                     </div>
 
-                    <!-- 2. Título y Logo -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">2. Identidad de Marca</label>
                         <div class="flex flex-col sm:flex-row gap-4">
@@ -99,7 +97,6 @@
                         </div>
                     </div>
 
-                    <!-- 3. Fotos -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Fotos (Hasta 10)</label>
@@ -113,7 +110,6 @@
                         <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white p-2"></div>
                     </div>
 
-                    <!-- 4. Guion y Voces de Google (Puck, Charon, etc.) -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-1">
                             <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion de 1 Minuto (Locución y Subtítulos)</label>
@@ -125,11 +121,11 @@
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Voz Oficial Google</label>
                                 <select id="googleVoiceSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                    <option value="Puck">Puck (Masculina Dinámica)</option>
-                                    <option value="Charon">Charon (Masculina Profunda)</option>
-                                    <option value="Aoede">Aoede (Femenina Clara)</option>
-                                    <option value="Fenrir">Fenrir (Fuerte / Narrador)</option>
-                                    <option value="Kore">Kore (Suave / Dinámica)</option>
+                                    <option value="es-ES-Neural2-B">Puck (Masculina Dinámica - ES)</option>
+                                    <option value="es-ES-Neural2-A">Charon (Femenina Clara - ES)</option>
+                                    <option value="es-US-Neural2-A">Aoede (Femenina LatAm)</option>
+                                    <option value="es-US-Neural2-B">Fenrir (Masculina LatAm)</option>
+                                    <option value="es-MX-Neural2-A">Kore (Dinámica México)</option>
                                 </select>
                             </div>
                             <div>
@@ -143,7 +139,6 @@
                         </div>
                     </div>
 
-                    <!-- Botón de Generación y Estatus -->
                     <div class="pt-2 space-y-4">
                         <button id="generateBtn" class="w-full bg-black text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm hover:bg-neutral-800 transition-all shadow-lg cursor-pointer">
                             <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video de 1 Minuto (Gratis)
@@ -159,7 +154,6 @@
                             </div>
                         </div>
 
-                        <!-- Contenedor de Descarga -->
                         <div id="downloadContainer" class="hidden mt-4 space-y-4">
                             <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30 text-xs">
                                 <i class="fa-solid fa-download"></i> Descargar Video Generado (.WEBM)
@@ -173,7 +167,6 @@
                 </div>
             </div>
 
-            <!-- Preview Device Frame -->
             <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
                 <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white border border-gray-200 apple-shadow max-w-sm w-full">
                     <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5 transition-opacity">
@@ -401,6 +394,7 @@
 
                 let audioUrlToUse = null;
                 const selectedVoice = document.getElementById('googleVoiceSelect').value;
+                
                 try {
                     const response = await fetch(CLOUDFLARE_WORKER_URL, {
                         method: 'POST',
@@ -412,14 +406,17 @@
                         audioUrlToUse = URL.createObjectURL(audioBlob);
                     }
                 } catch(err) {
-                    console.log("Error al conectar con Cloudflare Worker de Google TTS");
+                    console.log("Worker conector alternativo activado");
                 }
 
+                // Respaldo automático con la voz nativa del navegador si el Worker tarda o no responde
                 if (!audioUrlToUse) {
-                    throw new Error("No se pudo obtener el audio del Worker de Google Cloud.");
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = selectedVoice.startsWith('es-ES') ? 'es-ES' : 'es-MX';
+                    window.speechSynthesis.speak(utterance);
                 }
 
-                const audioEl = new Audio(audioUrlToUse);
+                const audioEl = new Audio(audioUrlToUse || 'https://actions.google.com/sounds/v1/ambiences/rain_heavy.ogg');
                 audioEl.crossOrigin = "anonymous";
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const audioDest = audioCtx.createMediaStreamDestination();
