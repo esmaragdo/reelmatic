@@ -44,18 +44,17 @@
 
     <div id="app-workspace" class="w-full bg-[#fbfbfd] pt-12 pb-20 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
-            <span class="bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-blue-100">Estudio Google Cloud Neural2 (Oficial)</span>
+            <span class="bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-blue-100">Estudio Google AI & Cloud</span>
             <h1 class="text-3xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-2">
                 ReelMatic Pro.
             </h1>
-            <p class="text-gray-500 text-xs md:text-sm mt-1">Conectado estrictamente a la API de Google Cloud para voces profesionales.</p>
+            <p class="text-gray-500 text-xs md:text-sm mt-1">Conectado a tu Cloudflare Worker y Google AI Studio.</p>
         </div>
 
         <main class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
             <div class="lg:w-1/2 space-y-6 z-10 w-full">
                 <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
                     
-                    <!-- 1. Formato -->
                     <div class="space-y-4">
                         <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">1. Formato del Video</label>
                         <div class="grid grid-cols-2 gap-4">
@@ -76,7 +75,6 @@
                         </div>
                     </div>
 
-                    <!-- 2. Título y Logo -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">2. Identidad de Marca</label>
                         <div class="flex flex-col sm:flex-row gap-4">
@@ -99,7 +97,6 @@
                         </div>
                     </div>
 
-                    <!-- 3. Fotos -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
                             <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Fotos (Hasta 10)</label>
@@ -113,23 +110,22 @@
                         <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white p-2"></div>
                     </div>
 
-                    <!-- 4. Guion y Voces Google -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-1">
-                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion de 1 Minuto (Locución Oficial Google)</label>
+                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion de 1 Minuto</label>
                             <span id="charCount" class="text-[10px] font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200">0 / 1300 máx</span>
                         </div>
-                        <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion para generar la voz oficial de Google Cloud..."></textarea>
+                        <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion para generar el video..."></textarea>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                             <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Voz Oficial Google</label>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Voz / Locución</label>
                                 <select id="googleVoiceSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                    <option value="Puck">Puck (Masculina Dinámica - España)</option>
-                                    <option value="Charon">Charon (Femenina Clara - España)</option>
-                                    <option value="Aoede">Aoede (Femenina LatAm)</option>
-                                    <option value="Fenrir">Fenrir (Masculina LatAm)</option>
-                                    <option value="Kore">Kore (Dinámica México)</option>
+                                    <option value="Puck">Puck (Masculina Dinámica)</option>
+                                    <option value="Charon">Charon (Femenina Clara)</option>
+                                    <option value="Aoede">Aoede (Femenina Suave)</option>
+                                    <option value="Fenrir">Fenrir (Masculina Profunda)</option>
+                                    <option value="Kore">Kore (Dinámica)</option>
                                 </select>
                             </div>
                             <div>
@@ -143,10 +139,9 @@
                         </div>
                     </div>
 
-                    <!-- Botón de Generación y Estatus -->
                     <div class="pt-2 space-y-4">
                         <button id="generateBtn" class="w-full bg-black text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm hover:bg-neutral-800 transition-all shadow-lg cursor-pointer">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video con Voz de Google
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video con IA de Google
                         </button>
 
                         <div id="statusBox" class="hidden mt-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
@@ -159,7 +154,6 @@
                             </div>
                         </div>
 
-                        <!-- Contenedor de Descarga -->
                         <div id="downloadContainer" class="hidden mt-4 space-y-4">
                             <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30 text-xs">
                                 <i class="fa-solid fa-download"></i> Descargar Video Generado (.WEBM)
@@ -173,7 +167,6 @@
                 </div>
             </div>
 
-            <!-- Preview Device Frame -->
             <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
                 <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white border border-gray-200 apple-shadow max-w-sm w-full">
                     <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5 transition-opacity">
@@ -192,9 +185,7 @@
         </main>
     </div>
 
-    <!-- Scripts -->
     <script>
-        // URL Estricta de tu Cloudflare Worker
         const CLOUDFLARE_WORKER_URL = "https://reelmatic-api.esmaragdocamaz.workers.dev/";
 
         const formatRadios = document.querySelectorAll('input[name="videoFormat"]');
@@ -375,7 +366,7 @@
 
             const text = scriptText.value.trim();
             if (!text) {
-                alert("Escribe un guion para generar la voz oficial de Google y los subtítulos.");
+                alert("Escribe un guion para generar el video.");
                 return;
             }
 
@@ -399,15 +390,12 @@
                     }
                 }
 
-                document.getElementById('statusText').textContent = "Conectando estrictamente con Google Cloud (Worker)...";
+                document.getElementById('statusText').textContent = "Conectando con Google AI Studio (Worker)...";
 
-                const selectedVoice = document.getElementById('googleVoiceSelect').value;
-                
-                // Petición OBLIGATORIA al Worker de Google
                 const response = await fetch(CLOUDFLARE_WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: text, voiceId: selectedVoice })
+                    body: JSON.stringify({ text: text })
                 });
 
                 if (!response.ok) {
@@ -415,18 +403,22 @@
                     throw new Error("El Worker rechazó la petición: " + errData);
                 }
 
-                const audioBlob = await response.blob();
-                const audioUrlToUse = URL.createObjectURL(audioBlob);
+                const jsonRes = await response.json();
+                const spokenText = jsonRes.text || text;
 
-                const audioEl = new Audio(audioUrlToUse);
-                audioEl.crossOrigin = "anonymous";
+                const utterance = new SpeechSynthesisUtterance(spokenText);
+                utterance.lang = 'es-ES';
+                window.speechSynthesis.speak(utterance);
+
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.value = 0.01;
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
                 const audioDest = audioCtx.createMediaStreamDestination();
-                const source = audioEl ? audioCtx.createMediaElementSource(audioEl) : null;
-                if(source) {
-                    source.connect(audioDest);
-                    source.connect(audioCtx.destination); 
-                }
+                gainNode.connect(audioDest);
+                oscillator.start();
 
                 document.getElementById('statusText').textContent = "Ensamblando video final (WebM)...";
                 liveCanvas.width = finalCanvasW;
@@ -445,6 +437,7 @@
                 mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
                 
                 mediaRecorder.onstop = () => {
+                    try { oscillator.stop(); } catch(e){}
                     const blob = new Blob(recordedChunks, { type: 'video/webm' });
                     const videoURL = URL.createObjectURL(blob);
                     
@@ -462,121 +455,119 @@
                     generateBtn.disabled = false;
                 };
 
-                audioEl.onloadedmetadata = () => {
-                    const advertisedDuration = Math.max(audioEl.duration * 1000, 15000);
-                    const durationPerImage = advertisedDuration / loadedImages.length;
-                    
-                    renderState.isActive = true;
-                    renderState.startTime = performance.now();
-                    mediaRecorder.start();
-                    audioEl.play().catch(e => console.log("Audio autoplay prevented"));
+                const advertisedDuration = Math.max(spokenText.length * 75, 15000);
+                const durationPerImage = advertisedDuration / loadedImages.length;
+                
+                renderState.isActive = true;
+                renderState.startTime = performance.now();
+                mediaRecorder.start();
 
-                    function drawFrame(now) {
-                        if (!renderState.isActive) return;
-                        const elapsed = now - renderState.startTime;
-                        const progress = elapsed / advertisedDuration;
-                        document.getElementById('progressBar').style.width = `${Math.min(progress * 100, 100)}%`;
+                function drawFrame(now) {
+                    if (!renderState.isActive) return;
+                    const elapsed = now - renderState.startTime;
+                    const progress = elapsed / advertisedDuration;
+                    document.getElementById('progressBar').style.width = `${Math.min(progress * 100, 100)}%`;
 
-                        if (elapsed >= advertisedDuration || audioEl.ended) {
-                            renderState.isActive = false;
-                            try { mediaRecorder.stop(); } catch(e){}
-                            return;
-                        }
-
-                        const imageIndex = Math.min(Math.floor(elapsed / durationPerImage), loadedImages.length - 1);
-                        const imageElapsed = elapsed % durationPerImage;
-                        const imgProgress = imageElapsed / durationPerImage;
-                        
-                        liveCtx.fillStyle = '#000';
-                        liveCtx.fillRect(0, 0, finalCanvasW, finalCanvasH);
-
-                        function drawKenBurns(img, progress, alpha) {
-                            if (!img) return;
-                            const scale = 1 + (progress * 0.1);
-                            const imgRatio = img.width / img.height;
-                            const canvasRatio = finalCanvasW / finalCanvasH;
-                            let drawW, drawH, drawX, drawY;
-
-                            if (imgRatio > canvasRatio) {
-                                drawH = finalCanvasH;
-                                drawW = img.width * (finalCanvasH / img.height);
-                                drawX = (finalCanvasW - drawW) / 2;
-                                drawY = 0;
-                            } else {
-                                drawW = finalCanvasW;
-                                drawH = img.height * (finalCanvasW / img.width);
-                                drawX = 0;
-                                drawY = (finalCanvasH - drawH) / 2;
-                            }
-
-                            liveCtx.save();
-                            liveCtx.globalAlpha = alpha;
-                            liveCtx.translate(finalCanvasW/2, finalCanvasH/2);
-                            liveCtx.scale(scale, scale);
-                            liveCtx.translate(-finalCanvasW/2, -finalCanvasH/2);
-                            liveCtx.drawImage(img, drawX, drawY, drawW, drawH);
-                            liveCtx.restore();
-                        }
-
-                        const crossfadeDuration = 800;
-                        if (imageIndex > 0 && imageElapsed < crossfadeDuration) {
-                            const prevProgress = (durationPerImage + imageElapsed) / durationPerImage; 
-                            drawKenBurns(loadedImages[imageIndex - 1], prevProgress, 1);
-                            const alpha = imageElapsed / crossfadeDuration;
-                            drawKenBurns(loadedImages[imageIndex], imgProgress, alpha);
-                        } else {
-                            drawKenBurns(loadedImages[imageIndex], imgProgress, 1);
-                        }
-
-                        const videoTitle = document.getElementById('videoTitle');
-                        if(videoTitle) {
-                            const titleStr = videoTitle.value.trim().toUpperCase();
-                            if (titleStr) {
-                                liveCtx.fillStyle = '#FFFFFF';
-                                liveCtx.font = '900 38px Inter, sans-serif';
-                                liveCtx.textAlign = 'left';
-                                liveCtx.shadowColor = 'rgba(0,0,0,0.8)';
-                                liveCtx.shadowBlur = 12;
-                                liveCtx.fillText(titleStr, 40, 80);
-                                liveCtx.shadowBlur = 0;
-                            }
-                        }
-
-                        if (loadedLogo) {
-                            const maxLogoW = 140;
-                            const maxLogoH = 140;
-                            let lW = loadedLogo.width;
-                            let lH = loadedLogo.height;
-                            const lRatio = lW / lH;
-                            if (lW > maxLogoW) { lW = maxLogoW; lH = lW / lRatio; }
-                            if (lH > maxLogoH) { lH = maxLogoH; lW = lH * lRatio; }
-                            liveCtx.drawImage(loadedLogo, finalCanvasW - lW - 40, 40, lW, lH);
-                        }
-
-                        const captionPos = document.getElementById('captionPosSelect').value;
-                        if (captionPos !== 'none' && captions.length > 0) {
-                            const captionIndex = Math.min(Math.floor((elapsed / advertisedDuration) * captions.length), captions.length - 1);
-                            const currentCaption = captions[captionIndex].toUpperCase();
-                            
-                            liveCtx.fillStyle = '#FFFFFF'; 
-                            liveCtx.font = '900 52px Inter, sans-serif';
-                            liveCtx.textAlign = 'center';
-                            liveCtx.lineWidth = 12; 
-                            liveCtx.strokeStyle = '#000000';
-                            liveCtx.lineJoin = 'round'; 
-                            
-                            let capY = (captionPos === 'center') ? (finalCanvasH / 2) : (finalCanvasH * 0.82);
-                            liveCtx.strokeText(currentCaption, finalCanvasW / 2, capY);
-                            liveCtx.fillText(currentCaption, finalCanvasW / 2, capY);
-                        }
-
-                        requestAnimationFrame(drawFrame);
+                    if (elapsed >= advertisedDuration || !window.speechSynthesis.speaking) {
+                        renderState.isActive = false;
+                        try { window.speechSynthesis.cancel(); } catch(e){}
+                        try { mediaRecorder.stop(); } catch(e){}
+                        return;
                     }
+
+                    const imageIndex = Math.min(Math.floor(elapsed / durationPerImage), loadedImages.length - 1);
+                    const imageElapsed = elapsed % durationPerImage;
+                    const imgProgress = imageElapsed / durationPerImage;
+                    
+                    liveCtx.fillStyle = '#000';
+                    liveCtx.fillRect(0, 0, finalCanvasW, finalCanvasH);
+
+                    function drawKenBurns(img, progress, alpha) {
+                        if (!img) return;
+                        const scale = 1 + (progress * 0.1);
+                        const imgRatio = img.width / img.height;
+                        const canvasRatio = finalCanvasW / finalCanvasH;
+                        let drawW, drawH, drawX, drawY;
+
+                        if (imgRatio > canvasRatio) {
+                            drawH = finalCanvasH;
+                            drawW = img.width * (finalCanvasH / img.height);
+                            drawX = (finalCanvasW - drawW) / 2;
+                            drawY = 0;
+                        } else {
+                            drawW = finalCanvasW;
+                            drawH = img.height * (finalCanvasW / img.width);
+                            drawX = 0;
+                            drawY = (finalCanvasH - drawH) / 2;
+                        }
+
+                        liveCtx.save();
+                        liveCtx.globalAlpha = alpha;
+                        liveCtx.translate(finalCanvasW/2, finalCanvasH/2);
+                        liveCtx.scale(scale, scale);
+                        liveCtx.translate(-finalCanvasW/2, -finalCanvasH/2);
+                        liveCtx.drawImage(img, drawX, drawY, drawW, drawH);
+                        liveCtx.restore();
+                    }
+
+                    const crossfadeDuration = 800;
+                    if (imageIndex > 0 && imageElapsed < crossfadeDuration) {
+                        const prevProgress = (durationPerImage + imageElapsed) / durationPerImage; 
+                        drawKenBurns(loadedImages[imageIndex - 1], prevProgress, 1);
+                        const alpha = imageElapsed / crossfadeDuration;
+                        drawKenBurns(loadedImages[imageIndex], imgProgress, alpha);
+                    } else {
+                        drawKenBurns(loadedImages[imageIndex], imgProgress, 1);
+                    }
+
+                    const videoTitle = document.getElementById('videoTitle');
+                    if(videoTitle) {
+                        const titleStr = videoTitle.value.trim().toUpperCase();
+                        if (titleStr) {
+                            liveCtx.fillStyle = '#FFFFFF';
+                            liveCtx.font = '900 38px Inter, sans-serif';
+                            liveCtx.textAlign = 'left';
+                            liveCtx.shadowColor = 'rgba(0,0,0,0.8)';
+                            liveCtx.shadowBlur = 12;
+                            liveCtx.fillText(titleStr, 40, 80);
+                            liveCtx.shadowBlur = 0;
+                        }
+                    }
+
+                    if (loadedLogo) {
+                        const maxLogoW = 140;
+                        const maxLogoH = 140;
+                        let lW = loadedLogo.width;
+                        let lH = loadedLogo.height;
+                        const lRatio = lW / lH;
+                        if (lW > maxLogoW) { lW = maxLogoW; lH = lW / lRatio; }
+                        if (lH > maxLogoH) { lH = maxLogoH; lW = lH * lRatio; }
+                        liveCtx.drawImage(loadedLogo, finalCanvasW - lW - 40, 40, lW, lH);
+                    }
+
+                    const captionPos = document.getElementById('captionPosSelect').value;
+                    if (captionPos !== 'none' && captions.length > 0) {
+                        const captionIndex = Math.min(Math.floor((elapsed / advertisedDuration) * captions.length), captions.length - 1);
+                        const currentCaption = captions[captionIndex].toUpperCase();
+                        
+                        liveCtx.fillStyle = '#FFFFFF'; 
+                        liveCtx.font = '900 52px Inter, sans-serif';
+                        liveCtx.textAlign = 'center';
+                        liveCtx.lineWidth = 12; 
+                        liveCtx.strokeStyle = '#000000';
+                        liveCtx.lineJoin = 'round'; 
+                        
+                        let capY = (captionPos === 'center') ? (finalCanvasH / 2) : (finalCanvasH * 0.82);
+                        liveCtx.strokeText(currentCaption, finalCanvasW / 2, capY);
+                        liveCtx.fillText(currentCaption, finalCanvasW / 2, capY);
+                    }
+
                     requestAnimationFrame(drawFrame);
-                };
+                }
+                requestAnimationFrame(drawFrame);
 
             } catch (error) {
-                alert("Error de conexión con Google Cloud: " + error.message);
+                alert("Error en el proceso: " + error.message);
                 document.getElementById('statusBox').classList.add('hidden');
                 generateBtn.disabled = false;
             }
