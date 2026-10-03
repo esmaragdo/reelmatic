@@ -44,7 +44,7 @@
 </head>
 <body class="antialiased selection:bg-apple-blue selection:text-white flex flex-col min-h-screen">
 
-    <!-- 1. Cabezal Fijo (Sin cambios) -->
+    <!-- 1. Cabezal Fijo -->
     <nav class="w-full bg-[#f5f5f7]/90 backdrop-blur-xl border-b border-gray-200/50 fixed top-0 z-50 transition-all">
         <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
             <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
@@ -52,12 +52,15 @@
                 <span class="font-bold text-base tracking-tight text-black">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
             </div>
             <div class="flex items-center gap-4">
+                <div class="text-xs font-bold text-gray-700 bg-gray-200/60 px-3 py-1.5 rounded-full border border-gray-300">
+                    Créditos Pro: <span id="creditBadge" class="text-blue-600 font-mono text-sm">0</span>
+                </div>
                 <a href="#app-workspace" class="bg-black text-white font-bold text-xs px-5 py-2 rounded-full hover:bg-neutral-800 transition-colors">Crear Short Pro</a>
             </div>
         </div>
     </nav>
 
-    <!-- 2. Sección Principal Directa con la APP (Abajo del cabezal) -->
+    <!-- 2. Sección Principal Directa con la APP -->
     <div id="app-workspace" class="w-full bg-[#f5f5f7] pt-28 pb-20 relative">
         <div class="max-w-7xl mx-auto px-6 mb-12 text-center space-y-4">
             <span class="text-xs font-bold uppercase tracking-widest text-blue-600 bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">
@@ -204,17 +207,17 @@
                                 </div>
                                 <p class="text-[11px] text-gray-600">Paga tus créditos de manera segura con PayPal y genera tus videos automáticos de inmediato:</p>
                                 <div class="grid grid-cols-2 gap-3 pt-1">
-                                    <a href="https://www.paypal.com/ncp/payment/C36WFJD2FL3J2" target="_blank" rel="noopener noreferrer" class="text-center bg-black hover:bg-neutral-800 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-sm">
+                                    <a href="https://www.paypal.com/ncp/payment/C36WFJD2FL3J2" target="_blank" rel="noopener noreferrer" onclick="buyCredits(1)" class="text-center bg-black hover:bg-neutral-800 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-sm">
                                         1 Video ($1.99 USD)
                                     </a>
-                                    <a href="https://www.paypal.com/ncp/payment/YETWMYF5UH6K8" target="_blank" rel="noopener noreferrer" class="text-center bg-apple-blue hover:bg-apple-blue-hover text-white font-bold text-xs py-3 rounded-xl transition-all shadow-sm">
+                                    <a href="https://www.paypal.com/ncp/payment/YETWMYF5UH6K8" target="_blank" rel="noopener noreferrer" onclick="buyCredits(3)" class="text-center bg-apple-blue hover:bg-apple-blue-hover text-white font-bold text-xs py-3 rounded-xl transition-all shadow-sm">
                                         3 Videos ($4.99 USD)
                                     </a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Panel de Audio Propio (Versión Gratis Alternativa) -->
+                        <!-- Panel de Audio Propio -->
                         <div id="audioUploadPanel" class="hidden space-y-3 pt-2">
                             <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center cursor-pointer hover:border-blue-500 transition-all bg-white" onclick="document.getElementById('customAudioInput').click()">
                                 <i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-500 mb-2"></i>
@@ -251,7 +254,21 @@
                             </div>
                         </div>
 
+                        <!-- Contenedor de Descarga Protegido por Créditos -->
                         <div id="downloadContainer" class="hidden mt-4 space-y-4">
+                            <div id="paywallBox" class="hidden bg-amber-50 border border-amber-200 rounded-2xl p-5 text-center space-y-3">
+                                <p class="text-xs font-bold text-amber-900">¡Tu video está listo, pero no tienes créditos activos!</p>
+                                <p class="text-[11px] text-amber-700">Adquiere un paquete para desbloquear tu descarga y conservar créditos para tus próximos Shorts:</p>
+                                <div class="grid grid-cols-2 gap-3 pt-1">
+                                    <a href="https://www.paypal.com/ncp/payment/C36WFJD2FL3J2" target="_blank" rel="noopener noreferrer" onclick="buyCredits(1)" class="text-center bg-black text-white font-bold text-xs py-3 rounded-xl">
+                                        1 Video ($1.99)
+                                    </a>
+                                    <a href="https://www.paypal.com/ncp/payment/YETWMYF5UH6K8" target="_blank" rel="noopener noreferrer" onclick="buyCredits(3)" class="text-center bg-apple-blue text-white font-bold text-xs py-3 rounded-xl">
+                                        3 Videos ($4.99)
+                                    </a>
+                                </div>
+                            </div>
+
                             <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30 text-xs">
                                 <i class="fa-solid fa-download"></i> Descargar Video Generado (.WEBM)
                             </a>
@@ -291,6 +308,31 @@
 
     <!-- Scripts de la Aplicación -->
     <script>
+        // --- GESTIÓN DE CRÉDITOS EN LOCALSTORAGE ---
+        function getCredits() {
+            let c = localStorage.getItem('reelmatic_credits');
+            return c ? parseInt(c, 10) : 0;
+        }
+
+        function setCredits(val) {
+            localStorage.setItem('reelmatic_credits', val);
+            updateCreditBadge();
+        }
+
+        function updateCreditBadge() {
+            const badge = document.getElementById('creditBadge');
+            if(badge) badge.textContent = getCredits();
+        }
+
+        function buyCredits(amount) {
+            // Guardamos temporalmente que el usuario fue a pagar para sumarle cuando regrese o haga clic
+            let current = getCredits();
+            setCredits(current + amount);
+            alert(`¡Has adquirido ${amount} crédito(s)! Se han sumado a tu navegador.`);
+        }
+
+        updateCreditBadge();
+
         const audioSourceRadios = document.querySelectorAll('input[name="audioSourceType"]');
         const audioUploadPanel = document.getElementById('audioUploadPanel');
         const aiScriptPanel = document.getElementById('aiScriptPanel');
@@ -622,8 +664,22 @@
                     liveCanvas.classList.add('hidden');
                     
                     const downloadBtn = document.getElementById('downloadBtn');
-                    downloadBtn.href = videoURL;
-                    downloadBtn.download = 'ReelMatic_Pro_Video_' + (new Date().getTime()) + '.webm';
+                    const paywallBox = document.getElementById('paywallBox');
+                    
+                    // VALIDACIÓN DE CRÉDITOS
+                    let credits = getCredits();
+                    if (credits > 0) {
+                        // Consumir 1 crédito
+                        setCredits(credits - 1);
+                        paywallBox.classList.add('hidden');
+                        downloadBtn.classList.remove('hidden');
+                        downloadBtn.href = videoURL;
+                        downloadBtn.download = 'ReelMatic_Pro_Video_' + (new Date().getTime()) + '.webm';
+                    } else {
+                        // Bloquear descarga y mostrar ofertas
+                        downloadBtn.classList.add('hidden');
+                        paywallBox.classList.remove('hidden');
+                    }
                     
                     document.getElementById('statusText').textContent = "¡Video Generado con Éxito!";
                     document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-emerald-600";
