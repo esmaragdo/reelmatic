@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ReelMatic Pro | El Ensamblador Automático de Shorts y Reels</title>
+    <title>ReelMatic Pro | Generador Automático de Shorts y Reels de 1 Minuto</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
@@ -30,203 +30,89 @@
     </script>
     
     <style>
-        body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; }
-        .apple-shadow { box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.04); }
-        .bento-shadow { box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08); }
-        .apple-input { border: 1px solid #e5e5ea; transition: all 0.2s ease; background-color: #ffffff; }
-        .apple-input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
-        .apple-btn-primary { background-color: #1d1d1f; color: white; transition: all 0.3s ease; }
-        .apple-btn-primary:hover { background-color: #000000; transform: scale(0.98); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .apple-btn-primary:disabled { background-color: #e5e5ea; color: #86868b; transform: scale(1); cursor: not-allowed; box-shadow: none; }
+        body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; font-family: 'Inter', sans-serif; }
+        .apple-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
+        .bento-card { background: #ffffff; border: 1px solid rgba(0,0,0,0.08); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .apple-input { border: 1px solid #d2d2d7; background-color: #ffffff; color: #1d1d1f; transition: all 0.2s ease; }
+        .apple-input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.15); }
         .scrollbar-custom::-webkit-scrollbar { height: 6px; }
         .scrollbar-custom::-webkit-scrollbar-track { background: #f1f1f3; border-radius: 8px; }
         .scrollbar-custom::-webkit-scrollbar-thumb { background: #c7c7cc; border-radius: 8px; }
-        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: #8e8e93; }
-        .text-gradient-dark { background: linear-gradient(180deg, #1d1d1f 0%, #434345 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .text-gradient-light { background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
+        .text-gradient { background: linear-gradient(180deg, #1d1d1f 0%, #434345 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         #deviceFrame, #screenRatio, #notch { transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
     </style>
 </head>
 <body class="antialiased selection:bg-apple-blue selection:text-white flex flex-col min-h-screen">
 
-    <nav class="w-full bg-[#f5f5f7]/80 backdrop-blur-md border-b border-gray-200/50 fixed top-0 z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+    <!-- 1. Cabezal Fijo (Sin cambios) -->
+    <nav class="w-full bg-[#f5f5f7]/90 backdrop-blur-xl border-b border-gray-200/50 fixed top-0 z-50 transition-all">
+        <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
             <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
-                <div class="w-7 h-7 bg-apple-dark rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-sm">R</div>
-                <span class="font-bold text-lg tracking-tight text-apple-dark">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
+                <div class="w-7 h-7 bg-black rounded-lg flex items-center justify-center text-white font-extrabold text-xs shadow-sm">R</div>
+                <span class="font-bold text-base tracking-tight text-black">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
             </div>
             <div class="flex items-center gap-4">
-                <span class="inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 text-xs font-bold px-3 py-1 rounded-full border border-purple-200 shadow-sm">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> ElevenLabs Studio Engine
-                </span>
-                <a href="#app-workspace" class="bg-apple-dark text-white text-xs font-bold px-4 py-1.5 rounded-full hover:bg-black transition-colors">Crear Short</a>
+                <a href="#app-workspace" class="bg-black text-white font-bold text-xs px-5 py-2 rounded-full hover:bg-neutral-800 transition-colors">Crear Short Pro</a>
             </div>
         </div>
     </nav>
 
-    <header class="w-full bg-black pt-32 flex flex-col items-center text-center relative overflow-hidden">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none"></div>
-        
-        <div class="px-4 sm:px-6 w-full flex flex-col items-center z-10">
-            <div class="inline-block bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 border border-white/20 backdrop-blur-md">
-                <i class="fa-solid fa-bolt text-purple-400 mr-1"></i> Voces Ultra Realistas con ElevenLabs.
-            </div>
-
-            <h1 class="text-6xl sm:text-7xl md:text-8xl font-extrabold tracking-tighter-apple text-gradient-light mb-6 relative z-10 max-w-4xl leading-[1.05]">
-                Arma tus Shorts.<br/>Sin tocar líneas de tiempo.
-            </h1>
-            <p class="text-xl sm:text-2xl text-gray-400 font-medium tracking-tight-apple max-w-2xl mb-10 relative z-10">
-                Rápido, fácil, sin complicaciones, <span class="text-white font-bold">ilimitado</span>. Sube tu audio o genera voces con ElevenLabs y fotos para ensamblar videos nativos al instante.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row items-center gap-4 relative z-10">
-                <a href="#app-workspace" class="bg-white text-black font-semibold text-lg px-8 py-3.5 rounded-full hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                    Empezar a ensamblar gratis
-                </a>
-            </div>
-        </div>
-
-        <div class="mt-20 relative z-10 w-full bg-black">
-            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBL3bBn_SW2WCnZ-EMfcfOtsupQ7zWTEwLhUZmxusqt3NBfeSFpNve_XEdgwpyfhFhTGyROLsWyQo782-VKEUWp3cA-4XftyAHUwwtfvxYfHt2SmYiDsAG9HSxrnM4hsF8p986URz15hN4NakpkJPNuNjlcIOgPbpqzcL8doR49bbwKhjmJuxdL4F0sFpH/s1600/yt.jpeg" alt="Creator Studio" class="w-full h-auto object-cover opacity-80" style="max-height: 75vh;"/>
-        </div>
-    </header>
-
-    <section class="w-full pt-16 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10 bg-[#f5f5f7]">
-        <div class="text-center mb-16 max-w-5xl mx-auto">
-            <span class="bg-purple-50 text-purple-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-flex items-center border border-purple-100 shadow-sm">
-                <i class="fa-solid fa-circle-check mr-1.5"></i> La Revolución del Formato Corto
+    <!-- 2. Sección Principal Directa con la APP (Abajo del cabezal) -->
+    <div id="app-workspace" class="w-full bg-[#f5f5f7] pt-28 pb-20 relative">
+        <div class="max-w-7xl mx-auto px-6 mb-12 text-center space-y-4">
+            <span class="text-xs font-bold uppercase tracking-widest text-blue-600 bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">
+                <i class="fa-solid fa-bolt mr-1.5 text-blue-600"></i> Generador Automático de Videos de 1 Minuto
             </span>
-            <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tighter-apple text-apple-dark mt-4 mb-6 leading-[1.1]">
-                ¿Por qué perder horas en Premiere o CapCut?<br/>Usa el poder del <span class="text-purple-600">Ensamblaje Directo.</span>
-            </h2>
-            <p class="text-lg md:text-xl text-gray-500 font-medium leading-relaxed max-w-3xl mx-auto">
-                Los editores tradicionales te obligan a alinear cada segundo de audio con cada fotografía. ReelMatic.pro hace todo ese trabajo pesado por ti en un solo clic.
+            <h1 class="text-4xl sm:text-6xl font-black tracking-tighter-apple text-gradient leading-tight">
+                Crea tu Short de 1 Minuto.
+            </h1>
+            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto font-medium">
+                Selecciona tu formato, sube hasta 10 fotos, añade tu texto, elige una voz y tendrás tu video en minutos con texto animado.
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white rounded-[2rem] p-8 md:p-10 bento-shadow flex flex-col items-start hover:-translate-y-1 transition-transform duration-300 border border-gray-100">
-                <div class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 text-xl mb-6 border border-purple-100">
-                    <i class="fa-solid fa-microphone-lines"></i>
-                </div>
-                <h3 class="text-2xl font-bold tracking-tight-apple mb-3 text-apple-dark">1. Voz ElevenLabs o Propia.</h3>
-                <p class="text-gray-500 font-medium leading-relaxed">
-                    Sube tu audio o escribe tu guion para que ElevenLabs genere una locución cinematográfica hiperrealista.
-                </p>
-            </div>
-
-            <div class="bg-white rounded-[2rem] p-8 md:p-10 bento-shadow flex flex-col items-start hover:-translate-y-1 transition-transform duration-300 border border-gray-100">
-                <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-apple-dark text-xl mb-6 border border-gray-200">
-                    <i class="fa-solid fa-images"></i>
-                </div>
-                <h3 class="text-2xl font-bold tracking-tight-apple mb-3 text-apple-dark">2. Tus Fotos Organizadas.</h3>
-                <p class="text-gray-500 font-medium leading-relaxed">
-                    Arrastra y suelta hasta 10 imágenes, reordénalas a tu gusto y el sistema las distribuirá fluidamente.
-                </p>
-            </div>
-
-            <div class="bg-apple-dark text-white rounded-[2.5rem] p-8 md:p-10 bento-shadow flex flex-col items-start hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border border-gray-800">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-600/20 blur-2xl rounded-full"></div>
-                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white text-xl mb-6 backdrop-blur-md border border-white/10">
-                    <i class="fa-solid fa-bolt"></i>
-                </div>
-                <h3 class="text-2xl font-bold tracking-tight-apple mb-3">3. Ensamblaje Instantáneo.</h3>
-                <p class="text-gray-300 font-medium leading-relaxed mb-4">
-                    Obtén un video nativo en formato WebM optimizado para el algoritmo de TikTok, YouTube Shorts y Reels.
-                </p>
-                <div class="mt-auto inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg text-sm font-semibold backdrop-blur-md border border-white/10">
-                    <i class="fa-solid fa-check text-green-400"></i> Sin registros obligatorios.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="w-full pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-[#f5f5f7]">
-        <div class="bg-white rounded-[3rem] bento-shadow overflow-hidden flex flex-col lg:flex-row border border-gray-100">
-            <div class="lg:w-1/2 p-10 md:p-16 flex flex-col justify-center">
-                <span class="bg-purple-50 text-purple-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 w-max border border-purple-100">
-                    <i class="fa-solid fa-microchip mr-1"></i> Tecnología de Algoritmo
-                </span>
-                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mb-4 leading-tight">
-                    Por qué WebM destruye al MP4 en las redes de hoy.
-                </h2>
-                <p class="text-lg text-gray-500 font-medium mb-6 leading-relaxed">
-                    El formato tradicional <strong>.MP4</strong> genera archivos pesados que los servidores tardan en procesar, retrasando su viralización.
-                </p>
-                <p class="text-lg text-gray-500 font-medium mb-6 leading-relaxed">
-                    En cambio, <strong>WebM</strong> utiliza códecs optimizados para streaming web instantáneo. Pesa hasta un 50% menos sin perder calidad visual.
-                </p>
-            </div>
-            <div class="lg:w-1/2 bg-[#fbfbfd] p-10 md:p-16 flex items-center justify-center border-l border-gray-100 relative overflow-hidden">
-                <div class="relative z-10 flex items-center justify-center gap-8">
-                    <div class="flex flex-col items-center opacity-40 grayscale">
-                        <i class="fa-regular fa-file-video text-6xl text-gray-400 mb-3"></i>
-                        <span class="font-bold text-gray-500 tracking-wider">.MP4</span>
-                        <span class="text-xs text-gray-400 mt-1">Pesado / Lento</span>
-                    </div>
-                    <i class="fa-solid fa-arrow-right text-2xl text-gray-300"></i>
-                    <div class="flex flex-col items-center scale-110">
-                        <div class="w-24 h-24 bg-white rounded-2xl apple-shadow flex items-center justify-center mb-3 border border-purple-100 relative">
-                            <div class="absolute inset-0 bg-purple-400/20 blur-xl rounded-full"></div>
-                            <i class="fa-solid fa-bolt text-5xl text-purple-600 relative z-10"></i>
-                        </div>
-                        <span class="font-extrabold text-apple-dark tracking-wider text-xl mt-2">.WEBM</span>
-                        <span class="text-xs font-bold text-green-600 uppercase mt-1 bg-green-50 px-2.5 py-1 rounded-md border border-green-200">Viralidad Top</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div id="app-workspace" class="w-full bg-[#fbfbfd] border-t border-gray-200 py-20 relative scroll-mt-14">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
-            <span class="bg-purple-50 text-purple-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-purple-100">Estudio ElevenLabs</span>
-            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-2">
-                El Ensamblador con Motor de Voz ElevenLabs.
-            </h2>
-        </div>
-
-        <main class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+        <main class="px-6 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+            
+            <!-- Columna Izquierda: Controles del Estudio -->
             <div class="lg:w-1/2 space-y-6 z-10 w-full">
-                <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
+                <div class="bento-card p-6 sm:p-10 rounded-[2.5rem] space-y-8 bg-white apple-shadow">
                     
+                    <!-- Formato del Video -->
                     <div class="space-y-4">
-                        <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">1. Formato del Video</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">1. Formato del Video</label>
                         <div class="grid grid-cols-2 gap-4">
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="videoFormat" value="vertical" class="peer sr-only" checked>
-                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
-                                    <i class="fa-solid fa-mobile-screen text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block transition-colors"></i>
-                                    <span class="block text-sm font-bold text-apple-dark">Vertical (9:16)</span>
-                                    <span class="block text-xs text-gray-500 font-medium">TikTok, Shorts, Reels</span>
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-black peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
+                                    <i class="fa-solid fa-mobile-screen text-xl text-gray-400 mb-2 block"></i>
+                                    <span class="block text-xs font-bold text-black">Vertical (9:16)</span>
                                 </div>
                             </label>
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="videoFormat" value="horizontal" class="peer sr-only">
-                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
-                                    <i class="fa-brands fa-youtube text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block transition-colors"></i>
-                                    <span class="block text-sm font-bold text-apple-dark">Horizontal (16:9)</span>
-                                    <span class="block text-xs text-gray-500 font-medium">YouTube, Web, TV</span>
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-black peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
+                                    <i class="fa-brands fa-youtube text-xl text-gray-400 mb-2 block"></i>
+                                    <span class="block text-xs font-bold text-black">Horizontal (16:9)</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
+                    <!-- Identidad de Marca -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
-                        <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">2. Identidad de Marca</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">2. Identidad de Marca</label>
                         <div class="flex flex-col sm:flex-row gap-4">
                             <div class="flex-1">
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Título del Video</label>
-                                <input type="text" id="videoTitle" maxlength="40" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark placeholder-gray-400 shadow-sm" placeholder="Ej: 5 Trucos de Marketing...">
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Título Principal</label>
+                                <input type="text" id="videoTitle" maxlength="40" class="w-full apple-input rounded-xl p-3 text-xs font-medium placeholder-gray-400" placeholder="Ej: 5 Trucos de Crecimiento...">
                             </div>
                             <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Logo (Opcional)</label>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Logo Opcional</label>
                                 <div class="flex items-center gap-3">
-                                    <div id="logoPreview" class="w-16 h-12 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden cursor-pointer hover:border-apple-blue transition-colors" onclick="document.getElementById('logoInput').click()">
+                                    <div id="logoPreview" class="w-16 h-12 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden cursor-pointer hover:border-blue-500 transition-colors" onclick="document.getElementById('logoInput').click()">
                                         <i class="fa-solid fa-image text-gray-400" id="logoPlaceholderIcon"></i>
                                     </div>
-                                    <button class="text-xs font-bold text-apple-dark bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200" onclick="document.getElementById('logoInput').click()">
+                                    <button class="text-xs font-bold text-black bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200" onclick="document.getElementById('logoInput').click()">
                                         Subir Logo
                                     </button>
                                 </div>
@@ -235,164 +121,175 @@
                         </div>
                     </div>
 
+                    <!-- Fotos (Hasta 10) -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
-                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Medios Visuales (Hasta 10 fotos)</label>
-                            <div class="flex items-center gap-3">
-                                <button id="addMorePhotosBtn" class="hidden text-xs font-bold text-purple-700 bg-purple-50 px-3 py-1.5 rounded-lg hover:bg-purple-100 transition-colors border border-purple-200 shadow-sm" onclick="document.getElementById('imageInput').click()">
-                                    <i class="fa-solid fa-plus mr-1"></i> Añadir Más
-                                </button>
-                                <span id="photoCount" class="text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">0 / 10</span>
-                            </div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">3. Fotos (Hasta 10)</label>
+                            <span id="photoCount" class="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1 rounded-lg border border-gray-200">0 / 10</span>
                         </div>
-                        
-                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-purple-500 hover:bg-purple-50/50 transition-all bg-[#fbfbfd]" id="dropZone" onclick="document.getElementById('imageInput').click()">
-                            <i class="fa-regular fa-images text-4xl text-gray-400 mb-3"></i>
-                            <p class="text-sm font-semibold text-apple-dark mb-1">Haz clic o arrastra tus fotos aquí (Hasta 10)</p>
-                            <span class="text-xs text-gray-400 font-medium">Soporta PNG, JPG, WEBP</span>
+                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50/50 transition-all bg-gray-50/50" id="dropZone" onclick="document.getElementById('imageInput').click()">
+                            <i class="fa-regular fa-images text-3xl text-gray-400 mb-2"></i>
+                            <p class="text-xs font-semibold text-black">Haz clic o arrastra tus fotos aquí</p>
                         </div>
                         <input type="file" id="imageInput" accept="image/*" multiple class="hidden"/>
-                        
-                        <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white apple-shadow"></div>
+                        <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white p-2"></div>
                     </div>
 
-                    <!-- SELECTOR DUAL DE AUDIO (OPCIÓN 1: SUBIR AUDIO / OPCIÓN 2: ELEVENLABS TTS) -->
+                    <!-- Fuente de Audio y Precios -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
-                        <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Fuente de Audio (Locución)</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">4. Fuente de Audio (1 Minuto Exacto)</label>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Opción Pro: ElevenLabs -->
                             <label class="relative cursor-pointer">
-                                <input type="radio" name="audioSourceType" value="upload" class="peer sr-only" checked>
-                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50 h-full flex flex-col justify-between">
+                                <input type="radio" name="audioSourceType" value="ai" class="peer sr-only" checked>
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-black peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50 h-full flex flex-col justify-between">
                                     <div>
-                                        <i class="fa-solid fa-file-audio text-2xl text-apple-dark mb-2 block"></i>
-                                        <span class="block text-sm font-bold text-apple-dark">Opción 1: Subir mi Audio</span>
-                                        <span class="block text-xs text-gray-500 font-medium mt-1">Sube tu MP3 o WAV grabado (Hasta 3 min).</span>
+                                        <i class="fa-solid fa-wand-magic-sparkles text-xl text-blue-600 mb-2 block"></i>
+                                        <span class="block text-xs font-bold text-black">Generador Pro (ElevenLabs IA)</span>
+                                        <span class="block text-[11px] text-gray-500 mt-1">Crea locución cinemática con subtítulos animados automáticos.</span>
                                     </div>
-                                    <span class="mt-3 text-[10px] bg-green-100 text-green-800 font-bold px-2 py-1 rounded-md uppercase tracking-wider inline-block">Estable / Instantáneo</span>
+                                    <span class="mt-3 text-[9px] bg-blue-500/10 text-blue-700 font-bold px-2 py-1 rounded border border-blue-500/20">Recomendado / Pagos</span>
                                 </div>
                             </label>
 
+                            <!-- Opción Gratis: Subir Audio Propio -->
                             <label class="relative cursor-pointer">
-                                <input type="radio" name="audioSourceType" value="ai" class="peer sr-only">
-                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50 h-full flex flex-col justify-between">
+                                <input type="radio" name="audioSourceType" value="upload" class="peer sr-only">
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-black peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50 h-full flex flex-col justify-between">
                                     <div>
-                                        <i class="fa-solid fa-wand-magic-sparkles text-2xl text-purple-600 peer-checked:text-apple-dark mb-2 block"></i>
-                                        <span class="block text-sm font-bold text-apple-dark">Opción 2: Voz ElevenLabs IA</span>
-                                        <span class="block text-xs text-gray-500 font-medium mt-1">Voces ultra realistas de calidad cinematográfica.</span>
+                                        <i class="fa-solid fa-file-audio text-xl text-gray-500 mb-2 block"></i>
+                                        <span class="block text-xs font-bold text-black">Opción Básica (Subir Audio)</span>
+                                        <span class="block text-[11px] text-gray-500 mt-1">Sube tu propio MP3/WAV grabado (sin texto animado).</span>
                                     </div>
-                                    <span class="mt-3 text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-1 rounded-md uppercase tracking-wider inline-block">Studio Quality</span>
+                                    <span class="mt-3 text-[9px] bg-gray-100 text-gray-600 font-bold px-2 py-1 rounded border border-gray-200">Versión Gratis (Limitada)</span>
                                 </div>
                             </label>
                         </div>
 
-                        <!-- Panel Opción 1: Subir Audio -->
-                        <div id="audioUploadPanel" class="space-y-3 pt-2">
-                            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center cursor-pointer hover:border-apple-blue hover:bg-blue-50/50 transition-all bg-white" onclick="document.getElementById('customAudioInput').click()">
-                                <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-400 mb-2"></i>
-                                <p class="text-sm font-semibold text-apple-dark mb-1" id="audioFileNameDisplay">Haz clic para subir tu archivo de audio (MP3 / WAV)</p>
-                                <span class="text-xs text-gray-400 font-medium">Máximo 3 minutos de duración</span>
-                            </div>
-                            <input type="file" id="customAudioInput" accept="audio/mp3, audio/wav, audio/m4a, audio/mpeg" class="hidden"/>
-                        </div>
-
-                        <!-- Panel Opción 2: ElevenLabs TTS -->
-                        <div id="aiScriptPanel" class="hidden space-y-4 pt-2">
+                        <!-- Panel de ElevenLabs IA con Guion y Precios -->
+                        <div id="aiScriptPanel" class="space-y-4 pt-2">
                             <div class="flex justify-between items-end mb-1">
-                                <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider">Guion para ElevenLabs TTS</label>
-                                <span id="charCount" class="text-[11px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">0 / 2000 máx</span>
+                                <label class="block text-[11px] font-bold text-gray-500 uppercase">Guion de 1 Minuto (Máx. 1,300 Caracteres)</label>
+                                <span id="charCount" class="text-[10px] font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200">0 / 1300 máx</span>
                             </div>
-                            <textarea id="scriptText" maxlength="2000" rows="4" class="w-full apple-input rounded-2xl p-4 text-apple-dark placeholder-gray-400 resize-none text-sm font-medium shadow-sm" placeholder="Escribe tu guion para ElevenLabs..."></textarea>
+                            <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion de 1 minuto para generar el video automático con voz de estudio..."></textarea>
                             
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Voz de ElevenLabs</label>
-                                    <select id="elevenVoiceSelect" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark appearance-none cursor-pointer bg-white">
-                                        <option value="21m00Tcm4TlvDq8ikWAM">Rachel (Cálida / Profesional)</option>
-                                        <option value="AZnzlk1XvdvUeBnXmlld">Domi (Dinámica / Fuerte)</option>
-                                        <option value="EXAVITQu4vr4xnSDxMaL">Bella (Suave / Joven)</option>
-                                        <option value="ErXwobaYiN019PkySvjV">Antony (Narrador Serio)</option>
-                                        <option value="VR6AewLTigWG4xSOukaG">Arnold (Cinematográfico)</option>
+                                    <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Voz de Estudio</label>
+                                    <select id="elevenVoiceSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
+                                        <option value="21m00Tcm4TlvDq8ikWAM">Rachel (Profesional)</option>
+                                        <option value="AZnzlk1XvdvUeBnXmlld">Domi (Dinámica)</option>
+                                        <option value="EXAVITQu4vr4xnSDxMaL">Bella (Joven)</option>
+                                        <option value="ErXwobaYiN019PkySvjV">Antony (Serio)</option>
+                                        <option value="VR6AewLTigWG4xSOukaG">Arnold (Cine)</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Subtítulos</label>
-                                    <select id="captionPosSelect" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark appearance-none cursor-pointer bg-white">
+                                    <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Subtítulos Animados</label>
+                                    <select id="captionPosSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
                                         <option value="bottom">Inferior (TikTok/Reels)</option>
                                         <option value="center">Centro (Cine)</option>
                                         <option value="none">Sin Subtítulos</option>
                                     </select>
                                 </div>
                             </div>
+
+                            <!-- Opciones de Compra y Créditos -->
+                            <div class="bg-blue-50/50 border border-blue-200 rounded-2xl p-5 space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-apple-dark uppercase">Obtén Créditos de Generación</span>
+                                    <span class="text-xs font-mono font-bold text-blue-600">Pago Único (Sin Suscripción)</span>
+                                </div>
+                                <p class="text-[11px] text-gray-600">Paga tus créditos de manera segura con PayPal y genera tus videos automáticos de inmediato:</p>
+                                <div class="grid grid-cols-2 gap-3 pt-1">
+                                    <a href="https://www.paypal.com/ncp/payment/C36WFJD2FL3J2" target="_blank" rel="noopener noreferrer" class="text-center bg-black hover:bg-neutral-800 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-sm">
+                                        1 Video ($1.99 USD)
+                                    </a>
+                                    <a href="https://www.paypal.com/ncp/payment/C36WFJD2FL3J2" target="_blank" rel="noopener noreferrer" class="text-center bg-apple-blue hover:bg-apple-blue-hover text-white font-bold text-xs py-3 rounded-xl transition-all shadow-sm">
+                                        3 Videos ($4.99 USD)
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel de Audio Propio (Versión Gratis Alternativa) -->
+                        <div id="audioUploadPanel" class="hidden space-y-3 pt-2">
+                            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center cursor-pointer hover:border-blue-500 transition-all bg-white" onclick="document.getElementById('customAudioInput').click()">
+                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-500 mb-2"></i>
+                                <p class="text-xs font-semibold text-black" id="audioFileNameDisplay">Sube tu audio propio de 1 minuto (MP3/WAV)</p>
+                            </div>
+                            <input type="file" id="customAudioInput" accept="audio/mp3, audio/wav, audio/m4a, audio/mpeg" class="hidden"/>
                         </div>
                     </div>
 
-                    <div class="pt-4">
-                        <button id="generateBtn" class="w-full apple-btn-primary font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-base shadow-lg">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> Ensamblar con ElevenLabs
+                    <!-- Nota Técnica sobre .WEBM y HandBrake -->
+                    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 space-y-2 text-[11px] text-gray-600">
+                        <div class="flex items-center gap-2 font-bold text-black">
+                            <i class="fa-solid fa-circle-info text-blue-600"></i>
+                            <span>Nota Técnica sobre Formatos y Rendimiento</span>
+                        </div>
+                        <p>
+                            ReelMatic genera tus videos en formato nativo <strong>.WEBM</strong> para garantizar compresión ultrarrápida y entrega instantánea en los servidores de TikTok y YouTube. Si alguna plataforma exige estrictamente formato .MP4 tradicional, te recomendamos convertirlo en segundos con la herramienta gratuita y de código abierto <a href="https://handbrake.fr/" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-semibold">HandBrake Converter</a>.
+                        </p>
+                    </div>
+
+                    <!-- Botón de Generación y Estatus -->
+                    <div class="pt-2 space-y-4">
+                        <button id="generateBtn" class="w-full bg-black text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm hover:bg-neutral-800 transition-all shadow-lg">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video Automático de 1 Minuto
                         </button>
 
-                        <div id="statusBox" class="hidden mt-6 bg-[#fbfbfd] p-5 rounded-2xl border border-gray-100">
+                        <div id="statusBox" class="hidden mt-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
                             <div class="flex items-center gap-3 mb-3">
-                                <i id="statusIcon" class="fa-solid fa-circle-notch fa-spin text-gray-800"></i>
-                                <span id="statusText" class="text-sm font-semibold text-apple-dark">Iniciando Ensamblaje...</span>
+                                <i id="statusIcon" class="fa-solid fa-circle-notch fa-spin text-black"></i>
+                                <span id="statusText" class="text-xs font-semibold text-black">Iniciando Generación...</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                <div id="progressBar" class="bg-gray-800 h-2 rounded-full transition-all duration-300 w-0"></div>
+                                <div id="progressBar" class="bg-black h-2 rounded-full transition-all duration-300 w-0"></div>
                             </div>
                         </div>
 
-                        <div id="downloadContainer" class="hidden mt-6 space-y-4">
-                            <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30">
-                                <i class="fa-solid fa-download"></i> Descargar WebM Ensamblado (.WEBM)
+                        <div id="downloadContainer" class="hidden mt-4 space-y-4">
+                            <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30 text-xs">
+                                <i class="fa-solid fa-download"></i> Descargar Video Generado (.WEBM)
                             </a>
-                            
-                            <button id="resetBtn" class="w-full bg-gray-100 hover:bg-gray-200 text-apple-dark font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer border border-gray-200">
-                                <i class="fa-solid fa-rotate-right"></i> Ensamblar Otro Short
+                            <button id="resetBtn" class="w-full bg-gray-100 hover:bg-gray-200 text-black font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer border border-gray-200 text-xs">
+                                <i class="fa-solid fa-rotate-right"></i> Generar Otro Video
                             </button>
                         </div>
                     </div>
+
                 </div>
             </div>
 
-            <!-- PREVIEW EN TIEMPO REAL -->
+            <!-- Columna Derecha: Vista Previa Dispositivo -->
             <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
-                <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white apple-shadow border border-gray-100 mx-auto lg:mx-0 shadow-2xl transition-all duration-500 max-w-sm w-full">
+                <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white border border-gray-200 apple-shadow max-w-sm w-full">
                     <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5 transition-opacity">
                         <div class="w-16 h-4 bg-black rounded-full"></div>
                     </div>
-                    <div id="screenRatio" class="relative rounded-[2.2rem] overflow-hidden bg-black aspect-[9/16] w-full transition-all duration-500 flex items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
-                        <div id="placeholderText" class="absolute inset-0 flex flex-col items-center justify-center text-gray-500 z-20 p-6 text-center">
-                            <i id="placeholderIcon" class="fa-brands fa-tiktok text-5xl mb-4 opacity-40 transition-all"></i>
-                            <p id="placeholderDesc" class="text-sm font-medium tracking-wide">Sube tus fotos o título para ver la vista previa en tiempo real</p>
+                    <div id="screenRatio" class="relative rounded-[2.2rem] overflow-hidden bg-black aspect-[9/16] w-full flex items-center justify-center shadow-inner">
+                        <div id="placeholderText" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 z-20 p-6 text-center">
+                            <i id="placeholderIcon" class="fa-brands fa-tiktok text-4xl mb-3 opacity-40"></i>
+                            <p id="placeholderDesc" class="text-xs font-medium tracking-wide">Sube tus fotos y guion para ver la vista previa en tiempo real</p>
                         </div>
                         <canvas id="livePreviewCanvas" class="w-full h-full object-cover relative z-10 hidden"></canvas>
                         <video id="finalVideoPlayer" class="w-full h-full object-cover relative z-20 hidden" controls playsinline></video>
                     </div>
                 </div>
             </div>
+
         </main>
     </div>
 
-    <footer class="w-full bg-white border-t border-gray-200 py-12 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-2">
-                <div class="w-6 h-6 bg-apple-dark rounded-md flex items-center justify-center text-white font-bold text-xs">R</div>
-                <span class="font-bold text-sm tracking-tight text-apple-dark">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
-            </div>
-            
-            <div class="text-center md:text-left">
-                <p class="text-xs text-gray-500 font-medium">&#169; 2026 ReelMatic Pro. Integrado con ElevenLabs AI Voice Engine.</p>
-            </div>
-
-            <div>
-                <a href="https://www.paypal.com/ncp/payment/C36WFJD2FL3J2" target="_blank" rel="noopener noreferrer" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs px-4 py-2.5 rounded-full transition-all inline-flex items-center gap-2 shadow-sm border border-amber-300">
-                    <i class="fa-solid fa-mug-hot text-amber-700"></i> Apóyanos con un Cafecito
-                </a>
-            </div>
-        </div>
+    <!-- Footer -->
+    <footer class="w-full bg-white border-t border-gray-200 py-12 mt-auto text-center text-xs text-gray-500">
+        <p>&#169; 2026 ReelMatic Pro. Generador Automático de Videos para Redes Sociales. Integrado con ElevenLabs.</p>
     </footer>
 
+    <!-- Scripts de la Aplicación -->
     <script>
         const audioSourceRadios = document.querySelectorAll('input[name="audioSourceType"]');
         const audioUploadPanel = document.getElementById('audioUploadPanel');
@@ -418,7 +315,7 @@
             const file = e.target.files[0];
             if (!file) return;
             uploadedCustomAudioBlob = file;
-            audioFileNameDisplay.innerHTML = `<strong class="text-apple-blue">${file.name}</strong> (Cargado correctamente)`;
+            audioFileNameDisplay.innerHTML = `<strong class="text-blue-600">${file.name}</strong> (Cargado correctamente)`;
         });
 
         const formatRadios = document.querySelectorAll('input[name="videoFormat"]');
@@ -436,7 +333,6 @@
         const imageInput = document.getElementById('imageInput');
         const dropZone = document.getElementById('dropZone');
         const galleryContainer = document.getElementById('galleryContainer');
-        const addMorePhotosBtn = document.getElementById('addMorePhotosBtn');
         const generateBtn = document.getElementById('generateBtn');
         const scriptText = document.getElementById('scriptText');
         const charCount = document.getElementById('charCount');
@@ -444,7 +340,6 @@
         const liveCtx = liveCanvas.getContext('2d', { willReadFrequently: true });
         const finalVideoPlayer = document.getElementById('finalVideoPlayer');
         
-        // URL de tu Cloudflare Worker conectado a ElevenLabs
         const WORKER_URL = "https://reelmatic-api.esmaragdocamaz.workers.dev/";
 
         let loadedImages = []; 
@@ -526,23 +421,21 @@
                 radio.addEventListener('change', (e) => {
                     if (e.target.value === 'horizontal') {
                         screenRatio.classList.replace('aspect-[9/16]', 'aspect-[16/9]');
-                        deviceFrame.classList.remove('max-w-sm', 'rounded-[3rem]', 'p-3');
-                        deviceFrame.classList.add('max-w-3xl', 'rounded-2xl', 'p-2'); 
+                        deviceFrame.classList.remove('max-w-sm');
+                        deviceFrame.classList.add('max-w-3xl'); 
                         notch.classList.add('opacity-0'); 
                         screenRatio.classList.replace('rounded-[2.2rem]', 'rounded-xl');
-                        
-                        placeholderIcon.className = "fa-brands fa-youtube text-5xl text-gray-500 mb-4 opacity-40 transition-all";
+                        placeholderIcon.className = "fa-brands fa-youtube text-4xl text-gray-400 mb-3 opacity-40";
                         placeholderDesc.textContent = "Formato Horizontal (16:9)";
                         finalCanvasW = 1280; finalCanvasH = 720;
                     } else {
                         screenRatio.classList.replace('aspect-[16/9]', 'aspect-[9/16]');
-                        deviceFrame.classList.remove('max-w-3xl', 'rounded-2xl', 'p-2');
-                        deviceFrame.classList.add('max-w-sm', 'rounded-[3rem]', 'p-3');
+                        deviceFrame.classList.remove('max-w-3xl');
+                        deviceFrame.classList.add('max-w-sm');
                         notch.classList.remove('opacity-0');
                         screenRatio.classList.replace('rounded-xl', 'rounded-[2.2rem]');
-
-                        placeholderIcon.className = "fa-brands fa-tiktok text-5xl text-gray-500 mb-4 opacity-40 transition-all";
-                        placeholderDesc.textContent = "Sube tus fotos o título para ver la vista previa en tiempo real";
+                        placeholderIcon.className = "fa-brands fa-tiktok text-4xl text-gray-400 mb-3 opacity-40";
+                        placeholderDesc.textContent = "Sube tus fotos o guion para ver la vista previa en tiempo real";
                         finalCanvasW = 720; finalCanvasH = 1280;
                     }
                     updateRealTimePreview();
@@ -552,8 +445,8 @@
 
         scriptText.addEventListener('input', function() {
             const currentLength = this.value.length;
-            charCount.textContent = `${currentLength} / 2000 máx`;
-            if (currentLength > 1800) charCount.classList.add('text-red-500'); 
+            charCount.textContent = `${currentLength} / 1300 máx`;
+            if (currentLength > 1200) charCount.classList.add('text-red-500'); 
             else charCount.classList.remove('text-red-500');
         });
 
@@ -587,53 +480,21 @@
                     img.onload = () => {
                         loadedImages.push(img);
                         document.getElementById('photoCount').textContent = `${loadedImages.length} / 10`;
-                        
-                        if(loadedImages.length > 0 && loadedImages.length < 10) {
-                            addMorePhotosBtn.classList.remove('hidden');
-                        } else {
-                            addMorePhotosBtn.classList.add('hidden');
-                        }
 
                         const card = document.createElement('div');
-                        card.className = "flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden snap-center border border-gray-200 shadow-sm relative cursor-grab active:cursor-grabbing bg-white flex flex-col justify-between group";
-                        
-                        card.innerHTML = `
-                            <img src="${event.target.result}" class="w-full h-full object-cover pointer-events-none" alt="Preview"/>
-                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                                <i class="fa-solid fa-arrows-up-down-left-right text-white text-sm"></i>
-                            </div>
-                        `;
-                        
+                        card.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-gray-200 relative cursor-grab bg-white group";
+                        card.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-cover pointer-events-none" alt="Preview"/>`;
                         card.imageObj = img;
                         card.draggable = true;
 
-                        card.addEventListener('dragstart', function(e) { 
-                            draggedItem = this; 
-                            setTimeout(() => this.classList.add('opacity-40', 'border-apple-blue', 'border-2'), 0); 
-                        });
-                        
-                        card.addEventListener('dragend', function() { 
-                            this.classList.remove('opacity-40', 'border-apple-blue', 'border-2'); 
-                            draggedItem = null; 
-                        });
-                        
-                        card.addEventListener('dragover', function(e) { 
-                            e.preventDefault(); 
-                            this.classList.add('scale-105', 'ring-2', 'ring-apple-blue');
-                        });
-                        
-                        card.addEventListener('dragleave', function(e) { 
-                            this.classList.remove('scale-105', 'ring-2', 'ring-apple-blue');
-                        });
-                        
+                        card.addEventListener('dragstart', function(e) { draggedItem = this; });
+                        card.addEventListener('dragover', function(e) { e.preventDefault(); });
                         card.addEventListener('drop', function(e) {
                             e.preventDefault();
-                            this.classList.remove('scale-105', 'ring-2', 'ring-apple-blue');
                             if (draggedItem && draggedItem !== this) {
                                 let allItems = Array.from(galleryContainer.querySelectorAll('div[draggable="true"]'));
                                 let draggedIdx = allItems.indexOf(draggedItem);
                                 let targetIdx = allItems.indexOf(this);
-                                
                                 if (draggedIdx < targetIdx) {
                                     this.parentNode.insertBefore(draggedItem, this.nextSibling);
                                 } else {
@@ -659,27 +520,7 @@
             }
         }
 
-        imageInput.addEventListener('change', (e) => {
-            handleImageFiles(e.target.files);
-        });
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('border-apple-blue', 'bg-blue-50');
-        });
-
-        dropZone.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('border-apple-blue', 'bg-blue-50');
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('border-apple-blue', 'bg-blue-50');
-            if (e.dataTransfer && e.dataTransfer.files) {
-                handleImageFiles(e.dataTransfer.files);
-            }
-        });
+        imageInput.addEventListener('change', (e) => { handleImageFiles(e.target.files); });
 
         generateBtn.addEventListener('click', async () => {
             updateGalleryOrder();
@@ -711,7 +552,7 @@
                     if (!text) {
                         generateBtn.disabled = false;
                         document.getElementById('statusBox').classList.add('hidden');
-                        alert("Escribe un guion para la voz de ElevenLabs.");
+                        alert("Escribe un guion para generar la voz automática.");
                         return;
                     }
 
@@ -729,9 +570,7 @@
                         }
                     }
 
-                    document.getElementById('statusText').textContent = "Generando locución ultra realista con ElevenLabs...";
-                    document.getElementById('statusIcon').className = "fa-solid fa-circle-notch fa-spin text-gray-800";
-
+                    document.getElementById('statusText').textContent = "Generando locución profesional y subtítulos...";
                     const voiceId = document.getElementById('elevenVoiceSelect').value;
                     const response = await fetch(WORKER_URL, {
                         method: 'POST',
@@ -741,7 +580,7 @@
 
                     if (!response.ok) {
                         const errData = await response.text();
-                        throw new Error("Error en ElevenLabs: " + errData);
+                        throw new Error("Error al generar voz: " + errData);
                     }
 
                     const audioBlob = await response.blob();
@@ -784,10 +623,10 @@
                     
                     const downloadBtn = document.getElementById('downloadBtn');
                     downloadBtn.href = videoURL;
-                    downloadBtn.download = 'ReelMatic_Pro_ElevenLabs_' + (new Date().getTime()) + '.webm';
+                    downloadBtn.download = 'ReelMatic_Pro_Video_' + (new Date().getTime()) + '.webm';
                     
-                    document.getElementById('statusText').textContent = "¡Ensamblaje Completo!";
-                    document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-green-500";
+                    document.getElementById('statusText').textContent = "¡Video Generado con Éxito!";
+                    document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-emerald-600";
                     document.getElementById('downloadContainer').classList.remove('hidden');
                     generateBtn.disabled = false;
                 };
@@ -921,10 +760,9 @@
             galleryContainer.classList.add('hidden');
             dropZone.classList.remove('hidden');
             document.getElementById('photoCount').textContent = '0 / 10';
-            document.getElementById('addMorePhotosBtn').classList.add('hidden');
             imageInput.value = '';
 
-            audioFileNameDisplay.innerHTML = 'Haz clic para subir tu archivo de audio (MP3 / WAV)';
+            audioFileNameDisplay.innerHTML = 'Sube tu audio propio de 1 minuto (MP3/WAV)';
             customAudioInput.value = '';
 
             scriptText.value = '';
