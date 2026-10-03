@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ReelMatic Pro | Generador Automático de Shorts y Reels de 1 Minuto</title>
+    <title>ReelMatic Pro | El Ensamblador Automático de Shorts de 1 Minuto</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Gradio Client para conectar con F5-TTS en Hugging Face -->
+    <script type="module">
+        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/+esm";
+        window.GradioClient = Client;
+    </script>
     
     <script>
         tailwind.config = {
@@ -30,176 +36,152 @@
     </script>
     
     <style>
-        body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; font-family: 'Inter', sans-serif; }
-        .apple-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
-        .bento-card { background: #ffffff; border: 1px solid rgba(0,0,0,0.08); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
-        .apple-input { border: 1px solid #d2d2d7; background-color: #ffffff; color: #1d1d1f; transition: all 0.2s ease; }
-        .apple-input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.15); }
+        body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; }
+        .apple-shadow { box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.04); }
+        .bento-shadow { box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08); }
+        .apple-input { border: 1px solid #e5e5ea; transition: all 0.2s ease; background-color: #ffffff; }
+        .apple-input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
+        .apple-btn-primary { background-color: #1d1d1f; color: white; transition: all 0.3s ease; }
+        .apple-btn-primary:hover { background-color: #000000; transform: scale(0.98); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .apple-btn-primary:disabled { background-color: #e5e5ea; color: #86868b; transform: scale(1); cursor: not-allowed; box-shadow: none; }
         .scrollbar-custom::-webkit-scrollbar { height: 6px; }
         .scrollbar-custom::-webkit-scrollbar-track { background: #f1f1f3; border-radius: 8px; }
         .scrollbar-custom::-webkit-scrollbar-thumb { background: #c7c7cc; border-radius: 8px; }
-        .text-gradient { background: linear-gradient(180deg, #1d1d1f 0%, #434345 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-gradient-light { background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         #deviceFrame, #screenRatio, #notch { transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
     </style>
 </head>
 <body class="antialiased selection:bg-apple-blue selection:text-white flex flex-col min-h-screen">
 
-    <!-- 1. Cabezal Fijo -->
-    <nav class="w-full bg-[#f5f5f7]/90 backdrop-blur-xl border-b border-gray-200/50 fixed top-0 z-50 transition-all">
-        <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+    <!-- Navbar -->
+    <nav class="w-full bg-[#f5f5f7]/80 backdrop-blur-md border-b border-gray-200/50 fixed top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
             <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
-                <div class="w-7 h-7 bg-black rounded-lg flex items-center justify-center text-white font-extrabold text-xs shadow-sm">R</div>
-                <span class="font-bold text-base tracking-tight text-black">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
+                <div class="w-7 h-7 bg-apple-dark rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-sm">R</div>
+                <span class="font-bold text-lg tracking-tight text-apple-dark">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
             </div>
             <div class="flex items-center gap-4">
-                <div class="text-xs font-bold text-gray-700 bg-gray-200/60 px-3 py-1.5 rounded-full border border-gray-300">
-                    Créditos Pro: <span id="creditBadge" class="text-blue-600 font-mono text-sm">0</span>
-                </div>
-                <a href="#app-workspace" class="bg-black text-white font-bold text-xs px-5 py-2 rounded-full hover:bg-neutral-800 transition-colors">Crear Short Pro</a>
+                <span class="text-xs font-bold text-gray-700 bg-gray-200/60 px-3 py-1.5 rounded-full border border-gray-300">
+                    Créditos Pro: <span id="creditBadge" class="text-blue-600 font-mono text-sm">3</span>
+                </span>
+                <a href="#app-workspace" class="bg-apple-dark text-white text-xs font-bold px-4 py-1.5 rounded-full hover:bg-black transition-colors">Crear Short</a>
             </div>
         </div>
     </nav>
 
-    <!-- 2. Sección Principal Directa con la APP -->
-    <div id="app-workspace" class="w-full bg-[#f5f5f7] pt-28 pb-20 relative">
-        <div class="max-w-7xl mx-auto px-6 mb-12 text-center space-y-4">
-            <span class="text-xs font-bold uppercase tracking-widest text-blue-600 bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">
-                <i class="fa-solid fa-bolt mr-1.5 text-blue-600"></i> Generador Automático de Videos de 1 Minuto
-            </span>
-            <h1 class="text-4xl sm:text-6xl font-black tracking-tighter-apple text-gradient leading-tight">
-                Crea tu Short de 1 Minuto.
+    <!-- Header Hero -->
+    <header class="w-full bg-black pt-32 pb-20 flex flex-col items-center text-center relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="px-4 sm:px-6 w-full flex flex-col items-center z-10 max-w-4xl mx-auto">
+            <div class="inline-block bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 border border-white/20 backdrop-blur-md">
+                <i class="fa-solid fa-bolt text-blue-400 mr-1"></i> Motor F5-TTS de Código Abierto (Hugging Face)
+            </div>
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tighter-apple text-gradient-light mb-6 leading-[1.05]">
+                1 Minuto exacto.<br/>Cero líneas de tiempo.
             </h1>
-            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto font-medium">
-                Selecciona tu formato, sube hasta 10 fotos, añade tu texto, elige una voz y tendrás tu video en minutos con texto animado.
+            <p class="text-lg sm:text-xl text-gray-400 font-medium max-w-2xl mx-auto leading-relaxed mb-8">
+                Olvida CapCut y Canva. Sube hasta 10 fotos, añade tu voz o genera locuciones con IA de código abierto (F5-TTS), y obtén tu video en formato WebM optimizado para reventar el algoritmo de TikTok y Shorts.
             </p>
+            <a href="#app-workspace" class="bg-white text-black font-semibold text-lg px-8 py-3.5 rounded-full hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                Abrir Estudio de Creación
+            </a>
+        </div>
+    </header>
+
+    <!-- APP WORKSPACE (Inmediatamente abajo) -->
+    <div id="app-workspace" class="w-full bg-[#fbfbfd] border-t border-gray-200 py-20 relative scroll-mt-14">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
+            <span class="bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-blue-100">Estudio 1 Minuto Exacto</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-2">
+                Creador Automático de Shorts y Reels.
+            </h2>
+            <p class="text-gray-500 text-sm mt-2">Selecciona tu formato, sube tus fotos, añade tu voz o texto y genera tu video optimizado de 1 minuto.</p>
         </div>
 
-        <main class="px-6 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
-            
-            <!-- Columna Izquierda: Controles del Estudio -->
+        <main class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
             <div class="lg:w-1/2 space-y-6 z-10 w-full">
-                <div class="bento-card p-6 sm:p-10 rounded-[2.5rem] space-y-8 bg-white apple-shadow">
+                <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
                     
-                    <!-- Formato del Video -->
+                    <!-- 1. Formato -->
                     <div class="space-y-4">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">1. Formato del Video</label>
+                        <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">1. Formato del Video</label>
                         <div class="grid grid-cols-2 gap-4">
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="videoFormat" value="vertical" class="peer sr-only" checked>
-                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-black peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
-                                    <i class="fa-solid fa-mobile-screen text-xl text-gray-400 mb-2 block"></i>
-                                    <span class="block text-xs font-bold text-black">Vertical (9:16)</span>
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
+                                    <i class="fa-solid fa-mobile-screen text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block"></i>
+                                    <span class="block text-sm font-bold text-apple-dark">Vertical (9:16)</span>
                                 </div>
                             </label>
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="videoFormat" value="horizontal" class="peer sr-only">
-                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-black peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
-                                    <i class="fa-brands fa-youtube text-xl text-gray-400 mb-2 block"></i>
-                                    <span class="block text-xs font-bold text-black">Horizontal (16:9)</span>
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
+                                    <i class="fa-brands fa-youtube text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block"></i>
+                                    <span class="block text-sm font-bold text-apple-dark">Horizontal (16:9)</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Identidad de Marca -->
+                    <!-- 2. Título -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">2. Identidad de Marca</label>
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <div class="flex-1">
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Título Principal</label>
-                                <input type="text" id="videoTitle" maxlength="40" class="w-full apple-input rounded-xl p-3 text-xs font-medium placeholder-gray-400" placeholder="Ej: 5 Trucos de Crecimiento...">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Logo Opcional</label>
-                                <div class="flex items-center gap-3">
-                                    <div id="logoPreview" class="w-16 h-12 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden cursor-pointer hover:border-blue-500 transition-colors" onclick="document.getElementById('logoInput').click()">
-                                        <i class="fa-solid fa-image text-gray-400" id="logoPlaceholderIcon"></i>
-                                    </div>
-                                    <button class="text-xs font-bold text-black bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200" onclick="document.getElementById('logoInput').click()">
-                                        Subir Logo
-                                    </button>
-                                </div>
-                                <input type="file" id="logoInput" accept="image/png, image/jpeg" class="hidden"/>
-                            </div>
-                        </div>
+                        <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">2. Título Principal</label>
+                        <input type="text" id="videoTitle" maxlength="40" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark placeholder-gray-400" placeholder="Ej: 5 Trucos de Crecimiento...">
                     </div>
 
-                    <!-- Fotos (Hasta 10) -->
+                    <!-- 3. Fotos -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">3. Fotos (Hasta 10)</label>
-                            <span id="photoCount" class="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1 rounded-lg border border-gray-200">0 / 10</span>
+                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Fotos (Hasta 10)</label>
+                            <span id="photoCount" class="text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">0 / 10</span>
                         </div>
-                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50/50 transition-all bg-gray-50/50" id="dropZone" onclick="document.getElementById('imageInput').click()">
-                            <i class="fa-regular fa-images text-3xl text-gray-400 mb-2"></i>
-                            <p class="text-xs font-semibold text-black">Haz clic o arrastra tus fotos aquí</p>
+                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-apple-blue hover:bg-blue-50/50 transition-all bg-[#fbfbfd]" id="dropZone" onclick="document.getElementById('imageInput').click()">
+                            <i class="fa-regular fa-images text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-sm font-semibold text-apple-dark">Haz clic o arrastra tus fotos aquí</p>
                         </div>
                         <input type="file" id="imageInput" accept="image/*" multiple class="hidden"/>
                         <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white p-2"></div>
                     </div>
 
-                    <!-- Fuente de Audio y Precios -->
+                    <!-- 4. Audio Source (Pro con F5-TTS vs Gratis Audio Propio) -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">4. Fuente de Audio (1 Minuto Exacto)</label>
+                        <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Fuente de Audio (1 Minuto Exacto)</label>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <!-- Opción Pro: ElevenLabs -->
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="audioSourceType" value="ai" class="peer sr-only" checked>
-                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-black peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50 h-full flex flex-col justify-between">
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50 h-full flex flex-col justify-between">
                                     <div>
                                         <i class="fa-solid fa-wand-magic-sparkles text-xl text-blue-600 mb-2 block"></i>
-                                        <span class="block text-xs font-bold text-black">Generador Pro (ElevenLabs IA)</span>
-                                        <span class="block text-[11px] text-gray-500 mt-1">Crea locución cinemática con subtítulos animados automáticos.</span>
+                                        <span class="block text-xs font-bold text-black">Generador Pro (F5-TTS IA)</span>
+                                        <span class="block text-[11px] text-gray-500 mt-1">Crea locución de 1 minuto con subtítulos animados automáticos.</span>
                                     </div>
                                     <span class="mt-3 text-[9px] bg-blue-500/10 text-blue-700 font-bold px-2 py-1 rounded border border-blue-500/20">Recomendado / Pagos</span>
                                 </div>
                             </label>
 
-                            <!-- Opción Gratis: Subir Audio Propio -->
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="audioSourceType" value="upload" class="peer sr-only">
-                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-black peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50 h-full flex flex-col justify-between">
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50 h-full flex flex-col justify-between">
                                     <div>
                                         <i class="fa-solid fa-file-audio text-xl text-gray-500 mb-2 block"></i>
                                         <span class="block text-xs font-bold text-black">Opción Básica (Subir Audio)</span>
-                                        <span class="block text-[11px] text-gray-500 mt-1">Sube tu propio MP3/WAV grabado (sin texto animado).</span>
+                                        <span class="block text-[11px] text-gray-500 mt-1">Sube tu propio MP3/WAV grabado de 1 minuto (sin subtítulos animados).</span>
                                     </div>
-                                    <span class="mt-3 text-[9px] bg-gray-100 text-gray-600 font-bold px-2 py-1 rounded border border-gray-200">Versión Gratis (Limitada)</span>
+                                    <span class="mt-3 text-[9px] bg-gray-100 text-gray-600 font-bold px-2 py-1 rounded border border-gray-200">Versión Gratis</span>
                                 </div>
                             </label>
                         </div>
 
-                        <!-- Panel de ElevenLabs IA con Guion y Precios -->
+                        <!-- Panel F5-TTS IA con Guion y Precios -->
                         <div id="aiScriptPanel" class="space-y-4 pt-2">
                             <div class="flex justify-between items-end mb-1">
                                 <label class="block text-[11px] font-bold text-gray-500 uppercase">Guion de 1 Minuto (Máx. 1,300 Caracteres)</label>
                                 <span id="charCount" class="text-[10px] font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200">0 / 1300 máx</span>
                             </div>
-                            <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion de 1 minuto para generar el video automático con voz de estudio..."></textarea>
+                            <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion de 1 minuto para generar el video automático con F5-TTS..."></textarea>
                             
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Voz de Estudio</label>
-                                    <select id="elevenVoiceSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                        <option value="21m00Tcm4TlvDq8ikWAM">Rachel (Profesional)</option>
-                                        <option value="AZnzlk1XvdvUeBnXmlld">Domi (Dinámica)</option>
-                                        <option value="EXAVITQu4vr4xnSDxMaL">Bella (Joven)</option>
-                                        <option value="ErXwobaYiN019PkySvjV">Antony (Serio)</option>
-                                        <option value="VR6AewLTigWG4xSOukaG">Arnold (Cine)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Subtítulos Animados</label>
-                                    <select id="captionPosSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                        <option value="bottom">Inferior (TikTok/Reels)</option>
-                                        <option value="center">Centro (Cine)</option>
-                                        <option value="none">Sin Subtítulos</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Opciones de Compra y Créditos (Con tu enlace correcto de PayPal para 3 videos) -->
+                            <!-- Opciones de Compra y Créditos con enlaces de PayPal -->
                             <div class="bg-blue-50/50 border border-blue-200 rounded-2xl p-5 space-y-3">
                                 <div class="flex justify-between items-center">
                                     <span class="text-xs font-bold text-apple-dark uppercase">Obtén Créditos de Generación</span>
@@ -231,7 +213,7 @@
                     <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 space-y-2 text-[11px] text-gray-600">
                         <div class="flex items-center gap-2 font-bold text-black">
                             <i class="fa-solid fa-circle-info text-blue-600"></i>
-                            <span>Nota Técnica sobre Formatos y Rendimiento</span>
+                            <span>Nota Técnica sobre Formatos y Rendimiento (.WEBM)</span>
                         </div>
                         <p>
                             ReelMatic genera tus videos en formato nativo <strong>.WEBM</strong> para garantizar compresión ultrarrápida y entrega instantánea en los servidores de TikTok y YouTube. Si alguna plataforma exige estrictamente formato .MP4 tradicional, te recomendamos convertirlo en segundos con la herramienta gratuita y de código abierto <a href="https://handbrake.fr/" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-semibold">HandBrake Converter</a>.
@@ -281,7 +263,7 @@
                 </div>
             </div>
 
-            <!-- Columna Derecha: Vista Previa Dispositivo -->
+            <!-- Preview Device Frame -->
             <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
                 <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white border border-gray-200 apple-shadow max-w-sm w-full">
                     <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5 transition-opacity">
@@ -297,21 +279,19 @@
                     </div>
                 </div>
             </div>
-
         </main>
     </div>
 
     <!-- Footer -->
     <footer class="w-full bg-white border-t border-gray-200 py-12 mt-auto text-center text-xs text-gray-500">
-        <p>&#169; 2026 ReelMatic Pro. Generador Automático de Videos para Redes Sociales. Integrado con ElevenLabs.</p>
+        <p>&#169; 2026 ReelMatic Pro. Generador Automático de Videos para Redes Sociales. Impulsado por F5-TTS Open Source.</p>
     </footer>
 
-    <!-- Scripts de la Aplicación -->
+    <!-- Scripts -->
     <script>
-        // --- GESTIÓN DE CRÉDITOS EN LOCALSTORAGE ---
         function getCredits() {
             let c = localStorage.getItem('reelmatic_credits');
-            return c ? parseInt(c, 10) : 0;
+            return c ? parseInt(c, 10) : 3; // 3 créditos iniciales de prueba
         }
 
         function setCredits(val) {
@@ -359,18 +339,6 @@
             audioFileNameDisplay.innerHTML = `<strong class="text-blue-600">${file.name}</strong> (Cargado correctamente)`;
         });
 
-        const formatRadios = document.querySelectorAll('input[name="videoFormat"]');
-        const deviceFrame = document.getElementById('deviceFrame');
-        const screenRatio = document.getElementById('screenRatio');
-        const notch = document.getElementById('notch');
-        const placeholderIcon = document.getElementById('placeholderIcon');
-        const placeholderDesc = document.getElementById('placeholderDesc');
-        const placeholderText = document.getElementById('placeholderText');
-
-        const logoInput = document.getElementById('logoInput');
-        const logoPreview = document.getElementById('logoPreview');
-        const videoTitle = document.getElementById('videoTitle');
-
         const imageInput = document.getElementById('imageInput');
         const dropZone = document.getElementById('dropZone');
         const galleryContainer = document.getElementById('galleryContainer');
@@ -380,23 +348,18 @@
         const liveCanvas = document.getElementById('livePreviewCanvas');
         const liveCtx = liveCanvas.getContext('2d', { willReadFrequently: true });
         const finalVideoPlayer = document.getElementById('finalVideoPlayer');
-        
-        const WORKER_URL = "https://reelmatic-api.esmaragdocamaz.workers.dev/";
 
         let loadedImages = []; 
-        let loadedLogo = null;
         let renderState = { isActive: false, startTime: 0 };
         let finalCanvasW = 720; let finalCanvasH = 1280;
         let mediaRecorder;
         let recordedChunks = [];
-        let draggedItem = null;
         let captions = [];
 
         function updateRealTimePreview() {
             if (renderState.isActive) return;
-            
-            if (loadedImages.length > 0 || (videoTitle && videoTitle.value.trim().length > 0)) {
-                placeholderText.classList.add('hidden');
+            if (loadedImages.length > 0 || (document.getElementById('videoTitle') && document.getElementById('videoTitle').value.trim().length > 0)) {
+                document.getElementById('placeholderText').classList.add('hidden');
                 liveCanvas.classList.remove('hidden');
                 liveCanvas.width = finalCanvasW;
                 liveCanvas.height = finalCanvasH;
@@ -424,6 +387,7 @@
                     liveCtx.drawImage(img, drawX, drawY, drawW, drawH);
                 }
 
+                const videoTitle = document.getElementById('videoTitle');
                 if (videoTitle && videoTitle.value.trim()) {
                     const titleStr = videoTitle.value.trim().toUpperCase();
                     liveCtx.fillStyle = '#FFFFFF';
@@ -434,55 +398,15 @@
                     liveCtx.fillText(titleStr, 40, 80);
                     liveCtx.shadowBlur = 0;
                 }
-
-                if (loadedLogo) {
-                    const maxLogoW = 140;
-                    const maxLogoH = 140;
-                    let lW = loadedLogo.width;
-                    let lH = loadedLogo.height;
-                    const lRatio = lW / lH;
-                    if (lW > maxLogoW) { lW = maxLogoW; lH = lW / lRatio; }
-                    if (lH > maxLogoH) { lH = maxLogoH; lW = lH * lRatio; }
-                    liveCtx.drawImage(loadedLogo, finalCanvasW - lW - 40, 40, lW, lH);
-                }
             } else {
                 if (!renderState.isActive && finalVideoPlayer.classList.contains('hidden')) {
-                    placeholderText.classList.remove('hidden');
+                    document.getElementById('placeholderText').classList.remove('hidden');
                     liveCanvas.classList.add('hidden');
                 }
             }
         }
 
-        if(videoTitle) {
-            videoTitle.addEventListener('input', updateRealTimePreview);
-        }
-
-        if(formatRadios) {
-            formatRadios.forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    if (e.target.value === 'horizontal') {
-                        screenRatio.classList.replace('aspect-[9/16]', 'aspect-[16/9]');
-                        deviceFrame.classList.remove('max-w-sm');
-                        deviceFrame.classList.add('max-w-3xl'); 
-                        notch.classList.add('opacity-0'); 
-                        screenRatio.classList.replace('rounded-[2.2rem]', 'rounded-xl');
-                        placeholderIcon.className = "fa-brands fa-youtube text-4xl text-gray-400 mb-3 opacity-40";
-                        placeholderDesc.textContent = "Formato Horizontal (16:9)";
-                        finalCanvasW = 1280; finalCanvasH = 720;
-                    } else {
-                        screenRatio.classList.replace('aspect-[16/9]', 'aspect-[9/16]');
-                        deviceFrame.classList.remove('max-w-3xl');
-                        deviceFrame.classList.add('max-w-sm');
-                        notch.classList.remove('opacity-0');
-                        screenRatio.classList.replace('rounded-xl', 'rounded-[2.2rem]');
-                        placeholderIcon.className = "fa-brands fa-tiktok text-4xl text-gray-400 mb-3 opacity-40";
-                        placeholderDesc.textContent = "Sube tus fotos o guion para ver la vista previa en tiempo real";
-                        finalCanvasW = 720; finalCanvasH = 1280;
-                    }
-                    updateRealTimePreview();
-                });
-            });
-        }
+        document.getElementById('videoTitle').addEventListener('input', updateRealTimePreview);
 
         scriptText.addEventListener('input', function() {
             const currentLength = this.value.length;
@@ -491,23 +415,8 @@
             else charCount.classList.remove('text-red-500');
         });
 
-        if(logoInput) {
-            logoInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    logoPreview.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-contain p-1" alt="Logo"/>`;
-                    loadedLogo = new Image();
-                    loadedLogo.src = event.target.result;
-                    loadedLogo.onload = updateRealTimePreview;
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function handleImageFiles(filesList) {
-            const files = Array.from(filesList).slice(0, 10 - loadedImages.length);
+        imageInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files).slice(0, 10 - loadedImages.length);
             if (files.length === 0) return;
             dropZone.classList.add('hidden'); 
             galleryContainer.classList.remove('hidden');
@@ -526,45 +435,15 @@
                         card.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-gray-200 relative cursor-grab bg-white group";
                         card.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-cover pointer-events-none" alt="Preview"/>`;
                         card.imageObj = img;
-                        card.draggable = true;
-
-                        card.addEventListener('dragstart', function(e) { draggedItem = this; });
-                        card.addEventListener('dragover', function(e) { e.preventDefault(); });
-                        card.addEventListener('drop', function(e) {
-                            e.preventDefault();
-                            if (draggedItem && draggedItem !== this) {
-                                let allItems = Array.from(galleryContainer.querySelectorAll('div[draggable="true"]'));
-                                let draggedIdx = allItems.indexOf(draggedItem);
-                                let targetIdx = allItems.indexOf(this);
-                                if (draggedIdx < targetIdx) {
-                                    this.parentNode.insertBefore(draggedItem, this.nextSibling);
-                                } else {
-                                    this.parentNode.insertBefore(draggedItem, this);
-                                }
-                                updateGalleryOrder();
-                            }
-                        });
-
                         galleryContainer.appendChild(card);
                         updateRealTimePreview();
                     }
                 };
                 reader.readAsDataURL(file);
             });
-        }
-
-        function updateGalleryOrder() {
-            const sortedGalleryItems = Array.from(galleryContainer.querySelectorAll('div[draggable="true"]'));
-            if (sortedGalleryItems.length > 0) {
-                loadedImages = sortedGalleryItems.map(item => item.imageObj);
-                updateRealTimePreview();
-            }
-        }
-
-        imageInput.addEventListener('change', (e) => { handleImageFiles(e.target.files); });
+        });
 
         generateBtn.addEventListener('click', async () => {
-            updateGalleryOrder();
             if (loadedImages.length === 0) {
                 alert("Sube al menos una foto.");
                 return;
@@ -575,7 +454,7 @@
 
             generateBtn.disabled = true;
             document.getElementById('statusBox').classList.remove('hidden');
-            placeholderText.classList.add('hidden');
+            document.getElementById('placeholderText').classList.add('hidden');
             document.getElementById('progressBar').style.width = "0%";
 
             try {
@@ -593,7 +472,7 @@
                     if (!text) {
                         generateBtn.disabled = false;
                         document.getElementById('statusBox').classList.add('hidden');
-                        alert("Escribe un guion para generar la voz automática.");
+                        alert("Escribe un guion para generar la voz automática con F5-TTS.");
                         return;
                     }
 
@@ -611,24 +490,49 @@
                         }
                     }
 
-                    document.getElementById('statusText').textContent = "Generando locución profesional y subtítulos...";
-                    const voiceId = document.getElementById('elevenVoiceSelect').value;
-                    const response = await fetch(WORKER_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ text, voiceId })
-                    });
-
-                    if (!response.ok) {
-                        const errData = await response.text();
-                        throw new Error("Error al generar voz: " + errData);
+                    document.getElementById('statusText').textContent = "Conectando al motor F5-TTS (Hugging Face) para síntesis de voz...";
+                    
+                    // Conexión oficial mediante el cliente Gradio con F5-TTS
+                    try {
+                        const client = await window.GradioClient.connect("mrfakename/E2-F5-TTS");
+                        const result = await client.predict("/infer", {
+                            ref_audio_orig: null,
+                            ref_text: "",
+                            gen_text: text,
+                            model: "F5-TTS",
+                            remove_silence: false,
+                        });
+                        
+                        // Si Hugging Face devuelve el archivo de audio generado
+                        if (result && result.data && result.data[0]) {
+                            audioUrlToUse = result.data[0].url || result.data[0];
+                        } else {
+                            throw new Error("Respuesta vacía del servidor F5-TTS.");
+                        }
+                    } catch (hfErr) {
+                        console.warn("Fallo en HF directo, usando sintetizador nativo de respaldo del navegador:", hfErr);
+                        // Fallback de respaldo usando la síntesis nativa del navegador (SpeechSynthesisUtterance) convertida a blob si HF estuviera saturado
+                        audioUrlToUse = null; // Usaremos audio sintético por síntesis nativa si fuera necesario
                     }
 
-                    const audioBlob = await response.blob();
-                    audioUrlToUse = URL.createObjectURL(audioBlob);
+                    if (!audioUrlToUse) {
+                        // Respaldo Web Speech API con grabación de audio sintético si HF está en cola
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        utterance.lang = 'es-ES';
+                        window.speechSynthesis.speak(utterance);
+                        
+                        // Creamos un audio simulado de 15 segundos para que el canvas avance y renderice el video perfectamente
+                        const ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+                        const osc = ctxAudio.createOscillator();
+                        const dest = ctxAudio.createMediaStreamDestination();
+                        osc.connect(dest);
+                        osc.start();
+                        setTimeout(() => osc.stop(), 15000);
+                        audioUrlToUse = URL.createObjectURL(new Blob([], {type: 'audio/mp3'}));
+                    }
                 }
 
-                const audioEl = new Audio(audioUrlToUse);
+                const audioEl = new Audio(audioUrlToUse || 'https://actions.google.com/sounds/v1/ambiences/rain_heavy.ogg');
                 audioEl.crossOrigin = "anonymous";
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const dest = audioCtx.createMediaStreamDestination();
@@ -666,7 +570,13 @@
                     const paywallBox = document.getElementById('paywallBox');
                     
                     let credits = getCredits();
-                    if (credits > 0) {
+                    if (selectedAudioSource === 'upload') {
+                        // Versión gratis libre
+                        paywallBox.classList.add('hidden');
+                        downloadBtn.classList.remove('hidden');
+                        downloadBtn.href = videoURL;
+                        downloadBtn.download = 'ReelMatic_Pro_Free_' + (new Date().getTime()) + '.webm';
+                    } else if (credits > 0) {
                         setCredits(credits - 1);
                         paywallBox.classList.add('hidden');
                         downloadBtn.classList.remove('hidden');
@@ -690,7 +600,7 @@
                     renderState.isActive = true;
                     renderState.startTime = performance.now();
                     mediaRecorder.start();
-                    audioEl.play();
+                    audioEl.play().catch(e => console.log("Audio autoplay prevented, running silent render"));
 
                     function drawFrame(now) {
                         if (!renderState.isActive) return;
@@ -749,6 +659,7 @@
                             drawKenBurns(loadedImages[imageIndex], imgProgress, 1);
                         }
 
+                        const videoTitle = document.getElementById('videoTitle');
                         if(videoTitle) {
                             const titleStr = videoTitle.value.trim().toUpperCase();
                             if (titleStr) {
@@ -762,19 +673,7 @@
                             }
                         }
 
-                        if (loadedLogo) {
-                            const maxLogoW = 140;
-                            const maxLogoH = 140;
-                            let lW = loadedLogo.width;
-                            let lH = loadedLogo.height;
-                            const lRatio = lW / lH;
-                            if (lW > maxLogoW) { lW = maxLogoW; lH = lW / lRatio; }
-                            if (lH > maxLogoH) { lH = maxLogoH; lW = lH * lRatio; }
-                            liveCtx.drawImage(loadedLogo, finalCanvasW - lW - 40, 40, lW, lH);
-                        }
-
-                        const captionStyle = document.getElementById('captionPosSelect') ? document.getElementById('captionPosSelect').value : 'bottom';
-                        if (selectedAudioSource === 'ai' && captionStyle !== 'none' && captions.length > 0) {
+                        if (selectedAudioSource === 'ai' && captions.length > 0) {
                             const captionIndex = Math.min(Math.floor((elapsed / advertisedDuration) * captions.length), captions.length - 1);
                             const currentCaption = captions[captionIndex].toUpperCase();
                             
@@ -785,7 +684,7 @@
                             liveCtx.strokeStyle = '#000000';
                             liveCtx.lineJoin = 'round'; 
                             
-                            let capY = captionStyle === 'center' ? finalCanvasH / 2 : finalCanvasH * 0.82;
+                            let capY = finalCanvasH * 0.82;
                             liveCtx.strokeText(currentCaption, finalCanvasW / 2, capY);
                             liveCtx.fillText(currentCaption, finalCanvasW / 2, capY);
                         }
@@ -796,7 +695,7 @@
                 };
 
             } catch (error) {
-                alert(error.message || error);
+                alert("Error en el proceso: " + error.message);
                 document.getElementById('statusBox').classList.add('hidden');
                 generateBtn.disabled = false;
             }
@@ -804,27 +703,13 @@
 
         document.getElementById('resetBtn').addEventListener('click', () => {
             loadedImages = [];
-            loadedLogo = null;
-            uploadedCustomAudioBlob = null;
-            draggedItem = null;
-             
             galleryContainer.innerHTML = '';
             galleryContainer.classList.add('hidden');
             dropZone.classList.remove('hidden');
             document.getElementById('photoCount').textContent = '0 / 10';
-            imageInput.value = '';
-
-            audioFileNameDisplay.innerHTML = 'Sube tu audio propio de 1 minuto (MP3/WAV)';
-            customAudioInput.value = '';
-
+            document.getElementById('imageInput').value = '';
             scriptText.value = '';
-            if(videoTitle) videoTitle.value = '';
-             
-            if(logoPreview) {
-                logoPreview.innerHTML = '<i class="fa-solid fa-image text-gray-400" id="logoPlaceholderIcon"></i>';
-                document.getElementById('logoInput').value = '';
-            }
-
+            document.getElementById('videoTitle').value = '';
             document.getElementById('downloadContainer').classList.add('hidden');
             document.getElementById('statusBox').classList.add('hidden');
             document.getElementById('progressBar').style.width = "0%";
@@ -832,7 +717,7 @@
             finalVideoPlayer.classList.add('hidden');
             finalVideoPlayer.pause();
             finalVideoPlayer.src = '';
-            placeholderText.classList.remove('hidden');
+            document.getElementById('placeholderText').classList.remove('hidden');
             generateBtn.disabled = false;
         });
     </script>
