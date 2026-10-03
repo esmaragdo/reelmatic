@@ -1,104 +1,153 @@
-<!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>VideoAuto · Videos de 1 minuto</title>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MINUTO AI — Prototipo</title>
 <style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f5f3ff;--card:#fff;--tx:#1e1b2e;--mut:#6b6880;--ac:#7c3aed;--bd:#e3dff5}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f0d1a;--card:#1a1730;--tx:#f1eeff;--mut:#9d98b8;--ac:#a78bfa;--bd:#2d2950}}
-:root[data-theme="dark"]{--bg:#0f0d1a;--card:#1a1730;--tx:#f1eeff;--mut:#9d98b8;--ac:#a78bfa;--bd:#2d2950}
-*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
-.w{max-width:960px;margin:0 auto;padding:20px;display:grid;gap:20px;grid-template-columns:1fr 330px}
-@media(max-width:760px){.w{grid-template-columns:1fr}}
-h1{font-size:22px;margin:0 0 4px}p.s{margin:0 0 16px;color:var(--mut)}
-.c{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px}
-.c h2{font-size:14px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)}
-textarea,select,input[type=number]{width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:10px;font:inherit}
-textarea{min-height:140px;resize:vertical}
-button,.b{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:11px 16px;font:600 15px inherit;cursor:pointer;display:inline-block;text-align:center}
-button.g,.b.g{background:transparent;color:var(--ac);border:1px solid var(--ac)}
-button:disabled{opacity:.5;cursor:wait}
-.th{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.th div{position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden}
-.th img{width:100%;height:100%;object-fit:cover}
-.th i{position:absolute;top:2px;right:2px;background:#000a;color:#fff;border-radius:50%;width:18px;height:18px;font:12px/18px sans-serif;text-align:center;cursor:pointer;font-style:normal}
-.r{display:flex;gap:10px;margin-top:10px}.r>*{flex:1}
-canvas{width:100%;max-width:310px;aspect-ratio:9/16;border-radius:14px;background:#000;display:block;margin:0 auto 12px}
-.bar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden;margin-bottom:12px}.bar div{height:100%;width:0;background:var(--ac)}
-small{color:var(--mut);display:block;margin-top:8px;font-size:12px}
-</style></head><body>
-<div class="w">
-<div>
-<h1>🎬 VideoAuto</h1><p class="s">Fotos + texto + voz = video vertical con subtítulos animados.</p>
-<div class="c"><h2>1 · Fotos</h2>
-<label class="b g" for="ph">+ Subir fotos</label><input id="ph" type="file" accept="image/*" multiple hidden>
-<div class="th" id="th"></div></div>
-<div class="c"><h2>2 · Texto</h2>
-<textarea id="tx" placeholder="Escribe o pega tu guion aquí…"></textarea>
-<div class="r"><label class="b g" for="tf">📄 Subir .txt</label><input id="tf" type="file" accept=".txt,text/plain" hidden>
-<button class="g" id="ej">Ejemplo</button></div>
-<small id="wc">0 palabras</small></div>
-<div class="c"><h2>3 · Voz y duración</h2>
-<select id="vz"></select>
-<div class="r"><select id="du"><option value="60">60 segundos</option><option value="45">45 segundos</option><option value="30">30 segundos</option></select>
-<select id="st"><option value="0">Subtítulo amarillo</option><option value="1">Subtítulo verde</option><option value="2">Subtítulo rosa</option></select></div></div>
+:root{--bg:#0b0d11;--panel:#12151b;--panel2:#191d25;--line:#292e38;--text:#f5f7fa;--muted:#9aa3b2;--accent:#7c5cff;--accent2:#a78bfa;--green:#30d158}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#090b0f,#11141b);color:var(--text);font:14px Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:270px 1fr}
+.sidebar{border-right:1px solid var(--line);background:#0c0e13;padding:24px 18px;display:flex;flex-direction:column}
+.logo{font-size:23px;font-weight:800;letter-spacing:-.8px;margin-bottom:34px}.logo span{color:var(--accent)}
+.step{display:flex;gap:12px;align-items:center;padding:12px 10px;border-radius:12px;color:var(--muted);margin-bottom:5px}
+.step.active{background:#1b1730;color:#fff}.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:1px solid #3a4050;font-weight:700;font-size:12px}.active .num{background:var(--accent);border-color:var(--accent)}
+.tip{margin-top:auto;background:#151922;border:1px solid var(--line);border-radius:15px;padding:15px;color:var(--muted);line-height:1.5}.tip b{color:#fff}
+.main{padding:28px;overflow:auto}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.top h1{margin:0;font-size:25px}.status{color:var(--muted)}.grid{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:22px;max-width:1450px;margin:auto}
+.card{background:rgba(18,21,27,.94);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 15px 50px rgba(0,0,0,.18)}.card h2{font-size:15px;margin:0 0 14px}.muted{color:var(--muted)}
+.drop{border:1.5px dashed #4b5260;border-radius:15px;padding:25px;text-align:center;transition:.2s}.drop.drag{border-color:var(--accent);background:#17142a}.drop strong{display:block;font-size:15px;margin-bottom:6px}.drop input{display:none}.choose{display:inline-block;background:#242934;border:1px solid #363c48;padding:9px 14px;border-radius:10px;margin-top:10px}
+.thumbs{display:flex;gap:8px;overflow:auto;margin-top:12px}.thumb{width:74px;height:74px;object-fit:cover;border-radius:9px;border:1px solid var(--line);flex:0 0 auto}
+textarea{width:100%;height:180px;resize:vertical;background:#0d1015;color:#fff;border:1px solid var(--line);border-radius:12px;padding:13px;outline:none}textarea:focus,select:focus{border-color:var(--accent)}
+.row{display:flex;gap:10px;align-items:center}.field{margin-top:16px}label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}select{width:100%;background:#0d1015;color:#fff;border:1px solid var(--line);padding:11px;border-radius:10px}
+.primary{border:0;background:linear-gradient(135deg,var(--accent),#5b3fe7);color:#fff;font-weight:800;border-radius:11px;padding:13px 18px}.secondary{border:1px solid var(--line);background:#1a1e26;color:#fff;border-radius:10px;padding:10px 14px}
+.actions{display:flex;gap:9px;justify-content:flex-end;margin-top:15px}.progress{height:7px;background:#242934;border-radius:99px;overflow:hidden;margin-top:13px;display:none}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#c084fc);transition:.3s}
+.phone{aspect-ratio:9/16;max-height:650px;background:#050608;border:8px solid #242832;border-radius:30px;position:relative;overflow:hidden;margin:auto;box-shadow:0 25px 70px #0008}.phone img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity .35s,transform 4s}.phone img.show{opacity:1;transform:scale(1.06)}.shade{position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(0,0,0,.15) 60%,rgba(0,0,0,.88) 100%)}
+.badge{position:absolute;top:13px;left:13px;background:#0009;border:1px solid #fff2;padding:5px 8px;border-radius:8px;font-size:10px;z-index:3}.caption{position:absolute;bottom:44px;left:12px;right:12px;text-align:center;font-weight:900;font-size:22px;line-height:1.1;text-shadow:0 2px 8px #000;z-index:4}.caption .word{display:inline-block;animation:pop .25s ease}@keyframes pop{from{transform:scale(.75);opacity:.2}to{transform:scale(1);opacity:1}}
+.timeline{margin-top:18px}.track{height:44px;background:#0c0f14;border:1px solid var(--line);border-radius:10px;display:flex;overflow:hidden}.seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;border-right:1px solid #111;background:#29233e;min-width:1px}.seg:nth-child(even){background:#332b4b}.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:8px}
+.notice{display:none;background:#152319;border:1px solid #294b31;color:#b8efc0;border-radius:10px;padding:10px;margin-top:12px}.small{font-size:12px}
+@media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{display:none}.grid{grid-template-columns:1fr}.main{padding:16px}.phone{max-height:520px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">MINUTO<span> AI</span></div>
+  <div class="step active"><div class="num">1</div><div><b>Material</b><div class="small">Fotos y guion</div></div></div>
+  <div class="step"><div class="num">2</div><div><b>Voz</b><div class="small">Narración</div></div></div>
+  <div class="step"><div class="num">3</div><div><b>Estilo</b><div class="small">Subtítulos y ritmo</div></div></div>
+  <div class="step"><div class="num">4</div><div><b>Generar</b><div class="small">Video de 60 s</div></div></div>
+  <div class="tip"><b>Prototipo funcional</b><br>Todo lo que haces aquí ocurre en tu navegador. Tus fotos no se suben a un servidor.</div>
+</aside>
+<main class="main">
+  <div class="top"><div><h1>Crea tu video de 1 minuto</h1><div class="status">Fotos + texto + voz + subtítulos animados</div></div><div class="status" id="timer">00:00 / 01:00</div></div>
+  <div class="grid">
+    <section>
+      <div class="card">
+        <h2>01 · Tus fotos</h2>
+        <div class="drop" id="drop">
+          <strong>Arrastra tus fotos aquí</strong><span class="muted">JPG, PNG o WEBP · se ordenan automáticamente</span><br>
+          <label class="choose">Seleccionar fotos<input id="files" type="file" accept="image/*" multiple></label>
+        </div>
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h2>02 · Guion</h2>
+        <textarea id="script" placeholder="Escribe o pega aquí el texto de tu video. Ejemplo: Hoy te contamos una historia que merece ser conocida..."></textarea>
+        <div class="meta"><span id="chars">0 caracteres</span><span>Objetivo: 120–150 palabras</span></div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h2>03 · Voz y estilo</h2>
+        <div class="field"><label>VOZ</label><select id="voice"><option value="female">María · Femenina · México</option><option value="male">Carlos · Masculina · México</option><option value="neutral">Alex · Neutra · Latinoamérica</option></select></div>
+        <div class="field"><label>ESTILO</label><select id="style"><option>Noticias</option><option>Documental cinematográfico</option><option>Viral / Reels</option><option>Corporativo</option><option>Historia emocional</option></select></div>
+        <div class="actions"><button class="secondary" id="speak">▶ Escuchar voz</button><button class="primary" id="generate">✨ Generar video</button></div>
+        <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
+        <div class="notice" id="notice">✓ Video generado. La vista previa está lista.</div>
+      </div>
+      <div class="card timeline">
+        <h2>04 · Línea de tiempo automática</h2>
+        <div class="track" id="track"><div class="seg" style="width:100%">Genera el video para crear escenas</div></div>
+        <div class="meta"><span id="sceneCount">0 escenas</span><span>Duración objetivo: 60 s</span></div>
+      </div>
+    </section>
+    <aside class="card">
+      <h2>Vista previa · 9:16</h2>
+      <div class="phone" id="phone">
+        <div class="badge" id="styleBadge">MINUTO AI</div>
+        <img id="previewImg" alt="">
+        <div class="shade"></div>
+        <div class="caption" id="caption">Tu video aparecerá aquí</div>
+      </div>
+      <div class="actions">
+        <button class="secondary" id="play">▶ Reproducir</button>
+        <button class="secondary" id="download">↓ Descargar proyecto</button>
+      </div>
+      <div class="muted small" style="margin-top:10px;text-align:center">La exportación MP4 real se conecta al motor de render en la siguiente fase.</div>
+    </aside>
+  </div>
+</main>
 </div>
-<div>
-<div class="c" style="position:sticky;top:12px"><h2>Vista previa</h2>
-<canvas id="cv" width="540" height="960"></canvas>
-<div class="bar"><div id="pb"></div></div>
-<button id="go" style="width:100%">▶ Generar video</button>
-<a id="dl" class="b g" style="display:none;width:100%;margin-top:8px" download="video.webm">⬇ Descargar video</a>
-<small>La voz se escucha durante la generación. Los navegadores no permiten grabar la voz del sistema, así que el archivo descargado trae imagen y subtítulos (añade tu audio en cualquier editor).</small></div>
-</div></div>
 <script>
-const $=i=>document.getElementById(i),cv=$('cv'),x=cv.getContext('2d'),W=540,H=960;
-let imgs=[],words=[],D=60,T=[],running=false,SC=[['#ffd93d','#fff'],['#4ade80','#fff'],['#f472b6','#fff']];
-const EJ="¿Sabías que una pequeña idea puede cambiarlo todo? Hoy quiero contarte cómo empezar un proyecto desde cero. Primero, define tu objetivo con claridad. Después, da un solo paso pequeño cada día. La constancia vale más que la velocidad. Cuando mires atrás, verás cuánto has avanzado. Empieza hoy, empieza ahora, y no te detengas.";
-function th(){$('th').innerHTML='';imgs.forEach((o,i)=>{const d=document.createElement('div');d.append(o.cloneNode());const k=document.createElement('i');k.textContent='×';k.onclick=()=>{imgs.splice(i,1);th();draw(0)};d.append(k);$('th').append(d)})}
-$('ph').onchange=e=>{[...e.target.files].forEach(f=>{const im=new Image();im.onload=()=>{imgs.push(im);th();draw(0)};im.src=URL.createObjectURL(f)});e.target.value=''};
-$('tf').onchange=e=>{const f=e.target.files[0];if(f)f.text().then(t=>{$('tx').value=t;wc()})};
-$('ej').onclick=()=>{$('tx').value=EJ;wc()};
-function wc(){$('wc').textContent=($('tx').value.trim().split(/\s+/).filter(Boolean).length)+' palabras'}
-$('tx').oninput=wc;
-function voices(){const v=speechSynthesis.getVoices().sort((a,b)=>(b.lang.startsWith('es'))-(a.lang.startsWith('es')));$('vz').innerHTML=v.map((o,i)=>`<option value="${o.name}">${o.name} (${o.lang})</option>`).join('')||'<option>Voz predeterminada</option>'}
-if('speechSynthesis'in window){voices();speechSynthesis.onvoiceschanged=voices}
-function plan(){words=$('tx').value.trim().split(/\s+/).filter(Boolean);D=+$('du').value;let w=words.map(s=>s.length+1.5+(/[.,;:!?]$/.test(s)?3:0)),tot=w.reduce((a,b)=>a+b,0),t=0;T=w.map(v=>{const s=t;t+=v/tot*D;return s});T.push(D)}
-function cover(im,sc,px){const r=Math.max(W/im.width,H/im.height)*sc,w=im.width*r,h=im.height*r;x.drawImage(im,(W-w)/2+px,(H-h)/2,w,h)}
-function draw(t){
- x.fillStyle='#111';x.fillRect(0,0,W,H);
- const n=imgs.length;
- if(!n){const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#4c1d95');g.addColorStop(1,'#be185d');x.fillStyle=g;x.fillRect(0,0,W,H)}
- else{const seg=D/n,i=Math.min(n-1,Math.floor(t/seg)),p=(t-i*seg)/seg,dir=i%2?-1:1;
-  x.globalAlpha=1;cover(imgs[i],1.05+.12*p,dir*(p-.5)*30);
-  if(i>0&&p*seg<.6){x.globalAlpha=1-p*seg/.6;const q=(seg-.01)/seg;cover(imgs[i-1],1.05+.12*q,-dir*(q-.5)*30);x.globalAlpha=1}}
- const g=x.createLinearGradient(0,H*.5,0,H);g.addColorStop(0,'#0000');g.addColorStop(1,'#000c');x.fillStyle=g;x.fillRect(0,H*.5,W,H*.5);
- if(words.length){
-  let k=0;while(k<words.length-1&&T[k+1]<=t)k++;
-  const cs=Math.floor(k/4)*4,ch=words.slice(cs,cs+4);
-  x.font='800 50px system-ui,sans-serif';x.textBaseline='middle';
-  const sp=x.measureText(' ').width;let lines=[[]],lw=0;
-  ch.forEach((s,j)=>{const w=x.measureText(s).width;if(lw+w>W-60&&lines[lines.length-1].length){lines.push([]);lw=0}lines[lines.length-1].push([s,w,cs+j]);lw+=w+sp});
-  const y0=H*.74-(lines.length-1)*34;
-  lines.forEach((ln,li)=>{const tw=ln.reduce((a,o)=>a+o[1]+sp,-sp);let px=(W-tw)/2;const y=y0+li*68;
-   ln.forEach(([s,w,gi])=>{const on=gi===k,pop=on?1+.18*Math.max(0,1-(t-T[gi])*6):1;
-    x.save();x.translate(px+w/2,y);x.scale(pop,pop);x.textAlign='center';x.lineWidth=10;x.lineJoin='round';x.strokeStyle='#000';x.strokeText(s,0,0);
-    x.fillStyle=on?SC[$('st').value][0]:(gi<k?'#fff':'#ffffffaa');x.fillText(s,0,0);x.restore();px+=w+sp})})}
- $('pb').style.width=(t/D*100)+'%'}
-function go(){
- if(running)return;plan();if(!words.length){alert('Escribe o sube un texto primero.');return}
- running=true;$('go').disabled=true;$('go').textContent='⏺ Generando…';$('dl').style.display='none';
- let rec,chunks=[];
- try{rec=new MediaRecorder(cv.captureStream(30),{mimeType:MediaRecorder.isTypeSupported('video/webm;codecs=vp9')?'video/webm;codecs=vp9':'video/webm',videoBitsPerSecond:4e6});
-  rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
-  rec.onstop=()=>{const a=$('dl');a.href=URL.createObjectURL(new Blob(chunks,{type:'video/webm'}));a.style.display='block'};rec.start()}catch(e){rec=null}
- if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(words.join(' '));
-  const v=speechSynthesis.getVoices().find(o=>o.name===$('vz').value);if(v){u.voice=v;u.lang=v.lang}else u.lang='es-ES';
-  u.rate=Math.min(2,Math.max(.6,words.length/D*60/150));speechSynthesis.speak(u)}
- const t0=performance.now();
- (function f(){const t=(performance.now()-t0)/1000;
-  if(t>=D){draw(D-.01);speechSynthesis.cancel();rec&&rec.state!=='inactive'&&rec.stop();running=false;$('go').disabled=false;$('go').textContent='↻ Generar de nuevo';return}
-  draw(t);requestAnimationFrame(f)})();
+const $=id=>document.getElementById(id);
+let photos=[], scenes=[], playing=false, playTimer=null, current=0;
+
+$('script').addEventListener('input',()=>{$('chars').textContent=$('script').value.length+' caracteres'});
+$('files').addEventListener('change',e=>addFiles([...e.target.files]));
+const drop=$('drop');
+['dragenter','dragover'].forEach(x=>drop.addEventListener(x,e=>{e.preventDefault();drop.classList.add('drag')}));
+['dragleave','drop'].forEach(x=>drop.addEventListener(x,e=>{e.preventDefault();drop.classList.remove('drag')}));
+drop.addEventListener('drop',e=>addFiles([...e.dataTransfer.files]));
+function addFiles(files){
+  photos.push(...files.filter(f=>f.type.startsWith('image/')));
+  renderThumbs();
 }
-$('go').onclick=go;draw(0);
-</script></body></html>
+function renderThumbs(){
+  $('thumbs').innerHTML='';
+  photos.forEach(f=>{let u=URL.createObjectURL(f),im=document.createElement('img');im.src=u;im.className='thumb';$('thumbs').appendChild(im)});
+}
+function words(){return $('script').value.trim().split(/\s+/).filter(Boolean)}
+function makeScenes(){
+  const ws=words(), n=Math.max(1,photos.length||Math.min(8,Math.ceil(ws.length/18)));
+  const chunks=[]; for(let i=0;i<n;i++){let a=Math.floor(i*ws.length/n),b=Math.floor((i+1)*ws.length/n);chunks.push(ws.slice(a,b).join(' '))}
+  scenes=chunks.map((text,i)=>({text,duration:60/n,img:i<photos.length?photos[i]:null}));
+  return scenes;
+}
+$('generate').onclick=async()=>{
+  if(!words().length){alert('Escribe un guion primero.');return}
+  const p=$('progress'),bar=$('bar');p.style.display='block';$('notice').style.display='none';
+  for(let i=0;i<=100;i+=5){bar.style.width=i+'%';await new Promise(r=>setTimeout(r,35))}
+  makeScenes(); renderTimeline(); $('styleBadge').textContent=$('style').value.toUpperCase(); $('notice').style.display='block'; playScene(0);
+};
+function renderTimeline(){
+  $('track').innerHTML='';
+  scenes.forEach((s,i)=>{let d=document.createElement('div');d.className='seg';d.style.width=(100/scenes.length)+'%';d.textContent='Escena '+(i+1);$('track').appendChild(d)});
+  $('sceneCount').textContent=scenes.length+' escenas';
+}
+function playScene(i){
+  if(!scenes.length)return; current=i%scenes.length; const s=scenes[current];
+  if(s.img){$('previewImg').src=URL.createObjectURL(s.img);$('previewImg').classList.remove('show');void $('previewImg').offsetWidth;$('previewImg').classList.add('show')}
+  $('caption').innerHTML=s.text.split(/\s+/).map((w,j)=>`<span class="word" style="animation-delay:${j*35}ms">${w} </span>`).join('');
+  $('timer').textContent=String(current*60/scenes.length|0).padStart(2,'0')+':00 / 01:00';
+}
+function playAll(){
+  if(!scenes.length)return;
+  playing=!playing;$('play').textContent=playing?'❚❚ Pausar':'▶ Reproducir';
+  if(!playing){clearInterval(playTimer);return}
+  playScene(current);
+  playTimer=setInterval(()=>{current=(current+1)%scenes.length;playScene(current)},Math.max(900,60000/scenes.length));
+}
+$('play').onclick=playAll;
+$('speak').onclick=()=>{
+  const t=$('script').value.trim(); if(!t)return alert('Escribe un guion primero.');
+  speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t);u.lang='es-MX';u.rate=1.03;
+  const vs=speechSynthesis.getVoices(); if(vs.length){const female=vs.find(v=>/female|mujer|sabina|paulina|monica/i.test(v.name));const male=vs.find(v=>/male|hombre|jorge|juan/i.test(v.name));u.voice=$('voice').value==='female'?(female||vs[0]):$('voice').value==='male'?(male||vs[0]):vs[0]}
+  speechSynthesis.speak(u);
+};
+$('download').onclick=()=>{
+  const data={app:'MINUTO AI',duration:60,voice:$('voice').value,style:$('style').value,script:$('script').value,scenes:scenes.map(s=>({text:s.text,duration:s.duration}))};
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='minuto-ai-proyecto.json';a.click();
+};
+speechSynthesis.onvoiceschanged=()=>{};
+</script>
+</body>
+</html>
