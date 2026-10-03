@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ReelMatic Pro | Studio Google Cloud Text-to-Speech</title>
+    <title>ReelMatic Pro | Generador Automático de Shorts y Reels de 1 Minuto</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
@@ -31,56 +31,80 @@
     
     <style>
         body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; font-family: 'Inter', sans-serif; }
-        .apple-shadow { box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.04); }
-        .apple-input { border: 1px solid #e5e5ea; transition: all 0.2s ease; background-color: #ffffff; }
-        .apple-input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
+        .apple-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
+        .bento-card { background: #ffffff; border: 1px solid rgba(0,0,0,0.08); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .apple-input { border: 1px solid #d2d2d7; background-color: #ffffff; color: #1d1d1f; transition: all 0.2s ease; }
+        .apple-input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.15); }
         .scrollbar-custom::-webkit-scrollbar { height: 6px; }
         .scrollbar-custom::-webkit-scrollbar-track { background: #f1f1f3; border-radius: 8px; }
         .scrollbar-custom::-webkit-scrollbar-thumb { background: #c7c7cc; border-radius: 8px; }
+        .text-gradient { background: linear-gradient(180deg, #1d1d1f 0%, #434345 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         #deviceFrame, #screenRatio, #notch { transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
     </style>
 </head>
 <body class="antialiased selection:bg-apple-blue selection:text-white flex flex-col min-h-screen">
 
-    <div id="app-workspace" class="w-full bg-[#fbfbfd] pt-12 pb-20 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
-            <span class="bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-blue-100">Estudio Google AI & Cloud</span>
-            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-2">
-                ReelMatic Pro.
+    <nav class="w-full bg-[#f5f5f7]/90 backdrop-blur-xl border-b border-gray-200/50 fixed top-0 z-50 transition-all">
+        <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                <div class="w-7 h-7 bg-black rounded-lg flex items-center justify-center text-white font-extrabold text-xs shadow-sm">R</div>
+                <span class="font-bold text-base tracking-tight text-black">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
+                    Google AI Studio Conectado
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div id="app-workspace" class="w-full bg-[#f5f5f7] pt-28 pb-20 relative">
+        <div class="max-w-7xl mx-auto px-6 mb-12 text-center space-y-4">
+            <span class="text-xs font-bold uppercase tracking-widest text-blue-600 bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">
+                <i class="fa-solid fa-bolt mr-1.5 text-blue-600"></i> Generador Automático de Videos de 1 Minuto Exacto
+            </span>
+            <h1 class="text-4xl sm:text-6xl font-black tracking-tighter-apple text-gradient leading-tight">
+                Crea tu Short de 1 Minuto.
             </h1>
-            <p class="text-gray-500 text-xs md:text-sm mt-1">Conectado a tu Cloudflare Worker y Google AI Studio.</p>
+            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto font-medium">
+                Sube hasta 10 fotos, reordénalas arrastrándolas, añade tu título y guion optimizado por Google AI Studio.
+            </p>
         </div>
 
-        <main class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+        <main class="px-6 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+            
+            <!-- Columna Izquierda: Controles del Estudio -->
             <div class="lg:w-1/2 space-y-6 z-10 w-full">
-                <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
+                <div class="bento-card p-6 sm:p-10 rounded-[2.5rem] space-y-8 bg-white apple-shadow">
                     
+                    <!-- Formato del Video -->
                     <div class="space-y-4">
-                        <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">1. Formato del Video</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">1. Formato del Video</label>
                         <div class="grid grid-cols-2 gap-4">
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="videoFormat" value="vertical" class="peer sr-only" checked>
-                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
-                                    <i class="fa-solid fa-mobile-screen text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block"></i>
-                                    <span class="block text-sm font-bold text-apple-dark">Vertical (9:16)</span>
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-black peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
+                                    <i class="fa-solid fa-mobile-screen text-xl text-gray-400 mb-2 block"></i>
+                                    <span class="block text-xs font-bold text-black">Vertical (9:16)</span>
                                 </div>
                             </label>
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="videoFormat" value="horizontal" class="peer sr-only">
-                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
-                                    <i class="fa-brands fa-youtube text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block"></i>
-                                    <span class="block text-sm font-bold text-apple-dark">Horizontal (16:9)</span>
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-black peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
+                                    <i class="fa-brands fa-youtube text-xl text-gray-400 mb-2 block"></i>
+                                    <span class="block text-xs font-bold text-black">Horizontal (16:9)</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
+                    <!-- Identidad de Marca -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
-                        <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">2. Identidad de Marca</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">2. Identidad de Marca</label>
                         <div class="flex flex-col sm:flex-row gap-4">
                             <div class="flex-1">
                                 <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Título Principal</label>
-                                <input type="text" id="videoTitle" maxlength="40" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark placeholder-gray-400" placeholder="Ej: 5 Trucos de Crecimiento...">
+                                <input type="text" id="videoTitle" maxlength="40" class="w-full apple-input rounded-xl p-3 text-xs font-medium placeholder-gray-400" placeholder="Ej: 5 Trucos de Crecimiento...">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Logo Opcional</label>
@@ -97,35 +121,40 @@
                         </div>
                     </div>
 
+                    <!-- Fotos (Hasta 10 con reordenamiento y borrado) -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
-                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Fotos (Hasta 10)</label>
-                            <span id="photoCount" class="text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">0 / 10</span>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">3. Fotos (Hasta 10 - Arrastra para Reordenar)</label>
+                            <div class="flex items-center gap-2">
+                                <button id="addMorePhotosBtn" class="hidden text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors cursor-pointer" onclick="document.getElementById('imageInput').click()">
+                                    <i class="fa-solid fa-plus"></i> Añadir Más
+                                </button>
+                                <span id="photoCount" class="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1 rounded-lg border border-gray-200">0 / 10</span>
+                            </div>
                         </div>
-                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-apple-blue hover:bg-blue-50/50 transition-all bg-[#fbfbfd]" id="dropZone" onclick="document.getElementById('imageInput').click()">
-                            <i class="fa-regular fa-images text-4xl text-gray-400 mb-3"></i>
-                            <p class="text-sm font-semibold text-apple-dark">Haz clic o arrastra tus fotos aquí</p>
+                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50/50 transition-all bg-gray-50/50" id="dropZone" onclick="document.getElementById('imageInput').click()">
+                            <i class="fa-regular fa-images text-3xl text-gray-400 mb-2"></i>
+                            <p class="text-xs font-semibold text-black">Haz clic o arrastra tus fotos aquí</p>
                         </div>
                         <input type="file" id="imageInput" accept="image/*" multiple class="hidden"/>
                         <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white p-2"></div>
                     </div>
 
+                    <!-- Guion y Voz de Google -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-1">
-                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion de 1 Minuto</label>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">4. Guion Exacto de 1 Minuto (Google AI Studio)</label>
                             <span id="charCount" class="text-[10px] font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200">0 / 1300 máx</span>
                         </div>
-                        <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion para generar el video..."></textarea>
+                        <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion. La duración del video se ajustará exactamente a 60 segundos (1 minuto)..."></textarea>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Voz / Locución</label>
                                 <select id="googleVoiceSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                    <option value="Puck">Puck (Masculina Dinámica)</option>
-                                    <option value="Charon">Charon (Femenina Clara)</option>
-                                    <option value="Aoede">Aoede (Femenina Suave)</option>
-                                    <option value="Fenrir">Fenrir (Masculina Profunda)</option>
-                                    <option value="Kore">Kore (Dinámica)</option>
+                                    <option value="es-ES">Español España (Natural)</option>
+                                    <option value="es-MX" selected>Español México (Latino)</option>
+                                    <option value="es-US">Español US (Neutro)</option>
                                 </select>
                             </div>
                             <div>
@@ -139,9 +168,10 @@
                         </div>
                     </div>
 
+                    <!-- Botón de Generación y Estatus -->
                     <div class="pt-2 space-y-4">
                         <button id="generateBtn" class="w-full bg-black text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm hover:bg-neutral-800 transition-all shadow-lg cursor-pointer">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video con IA de Google
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video Exacto de 1 Minuto (Google AI)
                         </button>
 
                         <div id="statusBox" class="hidden mt-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
@@ -167,6 +197,7 @@
                 </div>
             </div>
 
+            <!-- Columna Derecha: Vista Previa Dispositivo -->
             <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
                 <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white border border-gray-200 apple-shadow max-w-sm w-full">
                     <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5 transition-opacity">
@@ -182,6 +213,7 @@
                     </div>
                 </div>
             </div>
+
         </main>
     </div>
 
@@ -202,6 +234,7 @@
         const imageInput = document.getElementById('imageInput');
         const dropZone = document.getElementById('dropZone');
         const galleryContainer = document.getElementById('galleryContainer');
+        const addMorePhotosBtn = document.getElementById('addMorePhotosBtn');
         const generateBtn = document.getElementById('generateBtn');
         const scriptText = document.getElementById('scriptText');
         const charCount = document.getElementById('charCount');
@@ -215,6 +248,7 @@
         let finalCanvasW = 720; let finalCanvasH = 1280;
         let mediaRecorder;
         let recordedChunks = [];
+        let draggedItem = null;
         let captions = [];
 
         function updateRealTimePreview() {
@@ -330,8 +364,8 @@
             else charCount.classList.remove('text-red-500');
         });
 
-        imageInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files).slice(0, 10 - loadedImages.length);
+        function handleImageFiles(filesList) {
+            const files = Array.from(filesList).slice(0, 10 - loadedImages.length);
             if (files.length === 0) return;
             dropZone.classList.add('hidden'); 
             galleryContainer.classList.remove('hidden');
@@ -346,26 +380,92 @@
                         loadedImages.push(img);
                         document.getElementById('photoCount').textContent = `${loadedImages.length} / 10`;
 
+                        if (loadedImages.length > 0 && loadedImages.length < 10) {
+                            addMorePhotosBtn.classList.remove('hidden');
+                        } else {
+                            addMorePhotosBtn.classList.add('hidden');
+                        }
+
                         const card = document.createElement('div');
-                        card.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-gray-200 relative cursor-grab bg-white group";
-                        card.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-cover pointer-events-none" alt="Preview"/>`;
+                        card.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-gray-200 relative cursor-grab bg-white group flex flex-col justify-end p-1 shadow-sm";
+                        card.draggable = true;
+                        card.innerHTML = `
+                            <img src="${event.target.result}" class="absolute inset-0 w-full h-full object-cover pointer-events-none" alt="Preview"/>
+                            <button class="absolute top-1 right-1 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity z-10 delete-photo-btn cursor-pointer">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        `;
+
                         card.imageObj = img;
+
+                        card.addEventListener('dragstart', (e) => {
+                            draggedItem = card;
+                            e.dataTransfer.effectAllowed = 'move';
+                        });
+
+                        card.addEventListener('dragover', (e) => {
+                            e.preventDefault();
+                        });
+
+                        card.addEventListener('drop', (e) => {
+                            e.preventDefault();
+                            if (draggedItem && draggedItem !== card) {
+                                const allCards = Array.from(galleryContainer.children);
+                                const fromIdx = allCards.indexOf(draggedItem);
+                                const toIdx = allCards.indexOf(card);
+                                if (fromIdx < toIdx) {
+                                    galleryContainer.insertBefore(draggedItem, card.nextSibling);
+                                } else {
+                                    galleryContainer.insertBefore(draggedItem, card);
+                                }
+                                updateGalleryOrder();
+                            }
+                        });
+
+                        card.querySelector('.delete-photo-btn').addEventListener('click', (ev) => {
+                            ev.stopPropagation();
+                            const idx = loadedImages.indexOf(img);
+                            if (idx > -1) loadedImages.splice(idx, 1);
+                            card.remove();
+                            document.getElementById('photoCount').textContent = `${loadedImages.length} / 10`;
+                            if (loadedImages.length === 0) {
+                                dropZone.classList.remove('hidden');
+                                galleryContainer.classList.add('hidden');
+                                addMorePhotosBtn.classList.add('hidden');
+                            }
+                            if (loadedImages.length < 10) {
+                                addMorePhotosBtn.classList.remove('hidden');
+                            }
+                            updateRealTimePreview();
+                        });
+
                         galleryContainer.appendChild(card);
-                        updateRealTimePreview();
+                        updateGalleryOrder();
                     }
                 };
                 reader.readAsDataURL(file);
             });
+        }
+
+        function updateGalleryOrder() {
+            const cards = Array.from(galleryContainer.querySelectorAll('div[draggable="true"]'));
+            loadedImages = cards.map(c => c.imageObj);
+            updateRealTimePreview();
+        }
+
+        imageInput.addEventListener('change', (e) => {
+            handleImageFiles(e.target.files);
         });
 
         generateBtn.addEventListener('click', async () => {
+            updateGalleryOrder();
             if (loadedImages.length === 0) {
                 alert("Sube al menos una foto.");
                 return;
             }
 
-            const text = scriptText.value.trim();
-            if (!text) {
+            const rawText = scriptText.value.trim();
+            if (!rawText) {
                 alert("Escribe un guion para generar el video.");
                 return;
             }
@@ -376,7 +476,23 @@
             document.getElementById('progressBar').style.width = "0%";
 
             try {
-                const words = text.split(/\s+/);
+                document.getElementById('statusText').textContent = "Conectando con Google AI Studio (Worker)...";
+
+                const response = await fetch(CLOUDFLARE_WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: rawText })
+                });
+
+                if (!response.ok) {
+                    const errData = await response.text();
+                    throw new Error("El Worker rechazó la petición: " + errData);
+                }
+
+                const jsonRes = await response.json();
+                const spokenText = jsonRes.text || rawText;
+
+                const words = spokenText.split(/\s+/);
                 captions = [];
                 let currentChunk = [];
                 let currentLen = 0;
@@ -390,37 +506,27 @@
                     }
                 }
 
-                document.getElementById('statusText').textContent = "Conectando con Google AI Studio (Worker)...";
-
-                const response = await fetch(CLOUDFLARE_WORKER_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: text })
-                });
-
-                if (!response.ok) {
-                    const errData = await response.text();
-                    throw new Error("El Worker rechazó la petición: " + errData);
-                }
-
-                const jsonRes = await response.json();
-                const spokenText = jsonRes.text || text;
-
                 const utterance = new SpeechSynthesisUtterance(spokenText);
-                utterance.lang = 'es-ES';
+                const selectedVoiceLang = document.getElementById('googleVoiceSelect').value;
+                utterance.lang = selectedVoiceLang;
+                
+                const voices = window.speechSynthesis.getVoices();
+                const targetVoice = voices.find(v => v.lang.startsWith(selectedVoiceLang));
+                if (targetVoice) utterance.voice = targetVoice;
+
                 window.speechSynthesis.speak(utterance);
 
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioCtx.createOscillator();
                 const gainNode = audioCtx.createGain();
-                gainNode.gain.value = 0.01;
+                gainNode.gain.value = 0.0001; // Silencioso para mantener la captura activa sin ruidos
                 oscillator.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
                 const audioDest = audioCtx.createMediaStreamDestination();
                 gainNode.connect(audioDest);
                 oscillator.start();
 
-                document.getElementById('statusText').textContent = "Ensamblando video final (WebM)...";
+                document.getElementById('statusText').textContent = "Ensamblando video final (Exactamente 60 Segundos)...";
                 liveCanvas.width = finalCanvasW;
                 liveCanvas.height = finalCanvasH;
                 liveCanvas.classList.remove('hidden');
@@ -447,15 +553,16 @@
                     
                     const downloadBtn = document.getElementById('downloadBtn');
                     downloadBtn.href = videoURL;
-                    downloadBtn.download = 'ReelMatic_Pro_Google_' + (new Date().getTime()) + '.webm';
+                    downloadBtn.download = 'ReelMatic_Pro_1Minuto_' + (new Date().getTime()) + '.webm';
                     
-                    document.getElementById('statusText').textContent = "¡Video Generado con Éxito!";
+                    document.getElementById('statusText').textContent = "¡Video de 1 Minuto Generado con Éxito!";
                     document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-emerald-600";
                     document.getElementById('downloadContainer').classList.remove('hidden');
                     generateBtn.disabled = false;
                 };
 
-                const advertisedDuration = Math.max(spokenText.length * 75, 15000);
+                // Duración fija y estricta de 60 segundos exactos (1 minuto)
+                const advertisedDuration = 60000;
                 const durationPerImage = advertisedDuration / loadedImages.length;
                 
                 renderState.isActive = true;
@@ -520,18 +627,15 @@
                         drawKenBurns(loadedImages[imageIndex], imgProgress, 1);
                     }
 
-                    const videoTitle = document.getElementById('videoTitle');
-                    if(videoTitle) {
-                        const titleStr = videoTitle.value.trim().toUpperCase();
-                        if (titleStr) {
-                            liveCtx.fillStyle = '#FFFFFF';
-                            liveCtx.font = '900 38px Inter, sans-serif';
-                            liveCtx.textAlign = 'left';
-                            liveCtx.shadowColor = 'rgba(0,0,0,0.8)';
-                            liveCtx.shadowBlur = 12;
-                            liveCtx.fillText(titleStr, 40, 80);
-                            liveCtx.shadowBlur = 0;
-                        }
+                    const titleVal = videoTitle ? videoTitle.value.trim().toUpperCase() : "";
+                    if (titleVal) {
+                        liveCtx.fillStyle = '#FFFFFF';
+                        liveCtx.font = '900 38px Inter, sans-serif';
+                        liveCtx.textAlign = 'left';
+                        liveCtx.shadowColor = 'rgba(0,0,0,0.8)';
+                        liveCtx.shadowBlur = 12;
+                        liveCtx.fillText(titleVal, 40, 80);
+                        liveCtx.shadowBlur = 0;
                     }
 
                     if (loadedLogo) {
@@ -579,10 +683,11 @@
             galleryContainer.innerHTML = '';
             galleryContainer.classList.add('hidden');
             dropZone.classList.remove('hidden');
+            addMorePhotosBtn.classList.add('hidden');
             document.getElementById('photoCount').textContent = '0 / 10';
             document.getElementById('imageInput').value = '';
             scriptText.value = '';
-            document.getElementById('videoTitle').value = '';
+            videoTitle.value = '';
             logoPreview.innerHTML = '<i class="fa-solid fa-image text-gray-400" id="logoPlaceholderIcon"></i>';
             document.getElementById('logoInput').value = '';
             document.getElementById('downloadContainer').classList.add('hidden');
