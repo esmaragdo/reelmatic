@@ -1,153 +1,601 @@
-<!doctype html>
-<html lang="es">
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MINUTO AI — Prototipo</title>
-<style>
-:root{--bg:#0b0d11;--panel:#12151b;--panel2:#191d25;--line:#292e38;--text:#f5f7fa;--muted:#9aa3b2;--accent:#7c5cff;--accent2:#a78bfa;--green:#30d158}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#090b0f,#11141b);color:var(--text);font:14px Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-button,input,textarea,select{font:inherit}button{cursor:pointer}
-.app{min-height:100vh;display:grid;grid-template-columns:270px 1fr}
-.sidebar{border-right:1px solid var(--line);background:#0c0e13;padding:24px 18px;display:flex;flex-direction:column}
-.logo{font-size:23px;font-weight:800;letter-spacing:-.8px;margin-bottom:34px}.logo span{color:var(--accent)}
-.step{display:flex;gap:12px;align-items:center;padding:12px 10px;border-radius:12px;color:var(--muted);margin-bottom:5px}
-.step.active{background:#1b1730;color:#fff}.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:1px solid #3a4050;font-weight:700;font-size:12px}.active .num{background:var(--accent);border-color:var(--accent)}
-.tip{margin-top:auto;background:#151922;border:1px solid var(--line);border-radius:15px;padding:15px;color:var(--muted);line-height:1.5}.tip b{color:#fff}
-.main{padding:28px;overflow:auto}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.top h1{margin:0;font-size:25px}.status{color:var(--muted)}.grid{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:22px;max-width:1450px;margin:auto}
-.card{background:rgba(18,21,27,.94);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 15px 50px rgba(0,0,0,.18)}.card h2{font-size:15px;margin:0 0 14px}.muted{color:var(--muted)}
-.drop{border:1.5px dashed #4b5260;border-radius:15px;padding:25px;text-align:center;transition:.2s}.drop.drag{border-color:var(--accent);background:#17142a}.drop strong{display:block;font-size:15px;margin-bottom:6px}.drop input{display:none}.choose{display:inline-block;background:#242934;border:1px solid #363c48;padding:9px 14px;border-radius:10px;margin-top:10px}
-.thumbs{display:flex;gap:8px;overflow:auto;margin-top:12px}.thumb{width:74px;height:74px;object-fit:cover;border-radius:9px;border:1px solid var(--line);flex:0 0 auto}
-textarea{width:100%;height:180px;resize:vertical;background:#0d1015;color:#fff;border:1px solid var(--line);border-radius:12px;padding:13px;outline:none}textarea:focus,select:focus{border-color:var(--accent)}
-.row{display:flex;gap:10px;align-items:center}.field{margin-top:16px}label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}select{width:100%;background:#0d1015;color:#fff;border:1px solid var(--line);padding:11px;border-radius:10px}
-.primary{border:0;background:linear-gradient(135deg,var(--accent),#5b3fe7);color:#fff;font-weight:800;border-radius:11px;padding:13px 18px}.secondary{border:1px solid var(--line);background:#1a1e26;color:#fff;border-radius:10px;padding:10px 14px}
-.actions{display:flex;gap:9px;justify-content:flex-end;margin-top:15px}.progress{height:7px;background:#242934;border-radius:99px;overflow:hidden;margin-top:13px;display:none}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#c084fc);transition:.3s}
-.phone{aspect-ratio:9/16;max-height:650px;background:#050608;border:8px solid #242832;border-radius:30px;position:relative;overflow:hidden;margin:auto;box-shadow:0 25px 70px #0008}.phone img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity .35s,transform 4s}.phone img.show{opacity:1;transform:scale(1.06)}.shade{position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(0,0,0,.15) 60%,rgba(0,0,0,.88) 100%)}
-.badge{position:absolute;top:13px;left:13px;background:#0009;border:1px solid #fff2;padding:5px 8px;border-radius:8px;font-size:10px;z-index:3}.caption{position:absolute;bottom:44px;left:12px;right:12px;text-align:center;font-weight:900;font-size:22px;line-height:1.1;text-shadow:0 2px 8px #000;z-index:4}.caption .word{display:inline-block;animation:pop .25s ease}@keyframes pop{from{transform:scale(.75);opacity:.2}to{transform:scale(1);opacity:1}}
-.timeline{margin-top:18px}.track{height:44px;background:#0c0f14;border:1px solid var(--line);border-radius:10px;display:flex;overflow:hidden}.seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;border-right:1px solid #111;background:#29233e;min-width:1px}.seg:nth-child(even){background:#332b4b}.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:8px}
-.notice{display:none;background:#152319;border:1px solid #294b31;color:#b8efc0;border-radius:10px;padding:10px;margin-top:12px}.small{font-size:12px}
-@media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{display:none}.grid{grid-template-columns:1fr}.main{padding:16px}.phone{max-height:520px}}
-</style>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ReelMatic Pro | Generador Automático de Videos de 1 Minuto 100% Gratis</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], },
+                    letterSpacing: { 'tighter-apple': '-0.04em', 'tight-apple': '-0.02em' },
+                    colors: {
+                        'apple-black': '#000000',
+                        'apple-dark': '#1d1d1f',
+                        'apple-gray': '#f5f5f7',
+                        'apple-blue': '#0071e3',
+                        'apple-blue-hover': '#0077ED'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; font-family: 'Inter', sans-serif; }
+        .apple-shadow { box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.04); }
+        .apple-input { border: 1px solid #e5e5ea; transition: all 0.2s ease; background-color: #ffffff; }
+        .apple-input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
+        .scrollbar-custom::-webkit-scrollbar { height: 6px; }
+        .scrollbar-custom::-webkit-scrollbar-track { background: #f1f1f3; border-radius: 8px; }
+        .scrollbar-custom::-webkit-scrollbar-thumb { background: #c7c7cc; border-radius: 8px; }
+        #deviceFrame, #screenRatio, #notch { transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+    </style>
 </head>
-<body>
-<div class="app">
-<aside class="sidebar">
-  <div class="logo">MINUTO<span> AI</span></div>
-  <div class="step active"><div class="num">1</div><div><b>Material</b><div class="small">Fotos y guion</div></div></div>
-  <div class="step"><div class="num">2</div><div><b>Voz</b><div class="small">Narración</div></div></div>
-  <div class="step"><div class="num">3</div><div><b>Estilo</b><div class="small">Subtítulos y ritmo</div></div></div>
-  <div class="step"><div class="num">4</div><div><b>Generar</b><div class="small">Video de 60 s</div></div></div>
-  <div class="tip"><b>Prototipo funcional</b><br>Todo lo que haces aquí ocurre en tu navegador. Tus fotos no se suben a un servidor.</div>
-</aside>
-<main class="main">
-  <div class="top"><div><h1>Crea tu video de 1 minuto</h1><div class="status">Fotos + texto + voz + subtítulos animados</div></div><div class="status" id="timer">00:00 / 01:00</div></div>
-  <div class="grid">
-    <section>
-      <div class="card">
-        <h2>01 · Tus fotos</h2>
-        <div class="drop" id="drop">
-          <strong>Arrastra tus fotos aquí</strong><span class="muted">JPG, PNG o WEBP · se ordenan automáticamente</span><br>
-          <label class="choose">Seleccionar fotos<input id="files" type="file" accept="image/*" multiple></label>
-        </div>
-        <div class="thumbs" id="thumbs"></div>
-      </div>
-      <div class="card" style="margin-top:16px">
-        <h2>02 · Guion</h2>
-        <textarea id="script" placeholder="Escribe o pega aquí el texto de tu video. Ejemplo: Hoy te contamos una historia que merece ser conocida..."></textarea>
-        <div class="meta"><span id="chars">0 caracteres</span><span>Objetivo: 120–150 palabras</span></div>
-      </div>
-      <div class="card" style="margin-top:16px">
-        <h2>03 · Voz y estilo</h2>
-        <div class="field"><label>VOZ</label><select id="voice"><option value="female">María · Femenina · México</option><option value="male">Carlos · Masculina · México</option><option value="neutral">Alex · Neutra · Latinoamérica</option></select></div>
-        <div class="field"><label>ESTILO</label><select id="style"><option>Noticias</option><option>Documental cinematográfico</option><option>Viral / Reels</option><option>Corporativo</option><option>Historia emocional</option></select></div>
-        <div class="actions"><button class="secondary" id="speak">▶ Escuchar voz</button><button class="primary" id="generate">✨ Generar video</button></div>
-        <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
-        <div class="notice" id="notice">✓ Video generado. La vista previa está lista.</div>
-      </div>
-      <div class="card timeline">
-        <h2>04 · Línea de tiempo automática</h2>
-        <div class="track" id="track"><div class="seg" style="width:100%">Genera el video para crear escenas</div></div>
-        <div class="meta"><span id="sceneCount">0 escenas</span><span>Duración objetivo: 60 s</span></div>
-      </div>
-    </section>
-    <aside class="card">
-      <h2>Vista previa · 9:16</h2>
-      <div class="phone" id="phone">
-        <div class="badge" id="styleBadge">MINUTO AI</div>
-        <img id="previewImg" alt="">
-        <div class="shade"></div>
-        <div class="caption" id="caption">Tu video aparecerá aquí</div>
-      </div>
-      <div class="actions">
-        <button class="secondary" id="play">▶ Reproducir</button>
-        <button class="secondary" id="download">↓ Descargar proyecto</button>
-      </div>
-      <div class="muted small" style="margin-top:10px;text-align:center">La exportación MP4 real se conecta al motor de render en la siguiente fase.</div>
-    </aside>
-  </div>
-</main>
-</div>
-<script>
-const $=id=>document.getElementById(id);
-let photos=[], scenes=[], playing=false, playTimer=null, current=0;
+<body class="antialiased selection:bg-apple-blue selection:text-white flex flex-col min-h-screen">
 
-$('script').addEventListener('input',()=>{$('chars').textContent=$('script').value.length+' caracteres'});
-$('files').addEventListener('change',e=>addFiles([...e.target.files]));
-const drop=$('drop');
-['dragenter','dragover'].forEach(x=>drop.addEventListener(x,e=>{e.preventDefault();drop.classList.add('drag')}));
-['dragleave','drop'].forEach(x=>drop.addEventListener(x,e=>{e.preventDefault();drop.classList.remove('drag')}));
-drop.addEventListener('drop',e=>addFiles([...e.dataTransfer.files]));
-function addFiles(files){
-  photos.push(...files.filter(f=>f.type.startsWith('image/')));
-  renderThumbs();
-}
-function renderThumbs(){
-  $('thumbs').innerHTML='';
-  photos.forEach(f=>{let u=URL.createObjectURL(f),im=document.createElement('img');im.src=u;im.className='thumb';$('thumbs').appendChild(im)});
-}
-function words(){return $('script').value.trim().split(/\s+/).filter(Boolean)}
-function makeScenes(){
-  const ws=words(), n=Math.max(1,photos.length||Math.min(8,Math.ceil(ws.length/18)));
-  const chunks=[]; for(let i=0;i<n;i++){let a=Math.floor(i*ws.length/n),b=Math.floor((i+1)*ws.length/n);chunks.push(ws.slice(a,b).join(' '))}
-  scenes=chunks.map((text,i)=>({text,duration:60/n,img:i<photos.length?photos[i]:null}));
-  return scenes;
-}
-$('generate').onclick=async()=>{
-  if(!words().length){alert('Escribe un guion primero.');return}
-  const p=$('progress'),bar=$('bar');p.style.display='block';$('notice').style.display='none';
-  for(let i=0;i<=100;i+=5){bar.style.width=i+'%';await new Promise(r=>setTimeout(r,35))}
-  makeScenes(); renderTimeline(); $('styleBadge').textContent=$('style').value.toUpperCase(); $('notice').style.display='block'; playScene(0);
-};
-function renderTimeline(){
-  $('track').innerHTML='';
-  scenes.forEach((s,i)=>{let d=document.createElement('div');d.className='seg';d.style.width=(100/scenes.length)+'%';d.textContent='Escena '+(i+1);$('track').appendChild(d)});
-  $('sceneCount').textContent=scenes.length+' escenas';
-}
-function playScene(i){
-  if(!scenes.length)return; current=i%scenes.length; const s=scenes[current];
-  if(s.img){$('previewImg').src=URL.createObjectURL(s.img);$('previewImg').classList.remove('show');void $('previewImg').offsetWidth;$('previewImg').classList.add('show')}
-  $('caption').innerHTML=s.text.split(/\s+/).map((w,j)=>`<span class="word" style="animation-delay:${j*35}ms">${w} </span>`).join('');
-  $('timer').textContent=String(current*60/scenes.length|0).padStart(2,'0')+':00 / 01:00';
-}
-function playAll(){
-  if(!scenes.length)return;
-  playing=!playing;$('play').textContent=playing?'❚❚ Pausar':'▶ Reproducir';
-  if(!playing){clearInterval(playTimer);return}
-  playScene(current);
-  playTimer=setInterval(()=>{current=(current+1)%scenes.length;playScene(current)},Math.max(900,60000/scenes.length));
-}
-$('play').onclick=playAll;
-$('speak').onclick=()=>{
-  const t=$('script').value.trim(); if(!t)return alert('Escribe un guion primero.');
-  speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t);u.lang='es-MX';u.rate=1.03;
-  const vs=speechSynthesis.getVoices(); if(vs.length){const female=vs.find(v=>/female|mujer|sabina|paulina|monica/i.test(v.name));const male=vs.find(v=>/male|hombre|jorge|juan/i.test(v.name));u.voice=$('voice').value==='female'?(female||vs[0]):$('voice').value==='male'?(male||vs[0]):vs[0]}
-  speechSynthesis.speak(u);
-};
-$('download').onclick=()=>{
-  const data={app:'MINUTO AI',duration:60,voice:$('voice').value,style:$('style').value,script:$('script').value,scenes:scenes.map(s=>({text:s.text,duration:s.duration}))};
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='minuto-ai-proyecto.json';a.click();
-};
-speechSynthesis.onvoiceschanged=()=>{};
-</script>
+    <!-- APP WORKSPACE (Inicia directo y minimalista) -->
+    <div id="app-workspace" class="w-full bg-[#fbfbfd] pt-12 pb-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
+            <span class="bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-blue-100">Estudio 1 Minuto Exacto (100% Gratis)</span>
+            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-2">
+                ReelMatic Pro.
+            </h1>
+            <p class="text-gray-500 text-xs md:text-sm mt-1">Sube tus fotos, escribe tu guion y genera tu video de 1 minuto. Servicio gratuito sujeto a disponibilidad diaria.</p>
+        </div>
+
+        <main class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+            <div class="lg:w-1/2 space-y-6 z-10 w-full">
+                <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
+                    
+                    <!-- 1. Formato (Vertical / Horizontal) -->
+                    <div class="space-y-4">
+                        <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">1. Formato del Video</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="videoFormat" value="vertical" class="peer sr-only" checked>
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
+                                    <i class="fa-solid fa-mobile-screen text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block"></i>
+                                    <span class="block text-sm font-bold text-apple-dark">Vertical (9:16)</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="videoFormat" value="horizontal" class="peer sr-only">
+                                <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
+                                    <i class="fa-brands fa-youtube text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block"></i>
+                                    <span class="block text-sm font-bold text-apple-dark">Horizontal (16:9)</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 2. Título y Logo -->
+                    <div class="space-y-4 pt-6 border-t border-gray-100">
+                        <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">2. Identidad de Marca</label>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-1">
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Título Principal</label>
+                                <input type="text" id="videoTitle" maxlength="40" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark placeholder-gray-400" placeholder="Ej: 5 Trucos de Crecimiento...">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Logo Opcional</label>
+                                <div class="flex items-center gap-3">
+                                    <div id="logoPreview" class="w-16 h-12 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden cursor-pointer hover:border-blue-500 transition-colors" onclick="document.getElementById('logoInput').click()">
+                                        <i class="fa-solid fa-image text-gray-400" id="logoPlaceholderIcon"></i>
+                                    </div>
+                                    <button class="text-xs font-bold text-black bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200" onclick="document.getElementById('logoInput').click()">
+                                        Subir Logo
+                                    </button>
+                                </div>
+                                <input type="file" id="logoInput" accept="image/png, image/jpeg" class="hidden"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Fotos -->
+                    <div class="space-y-4 pt-6 border-t border-gray-100">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Fotos (Hasta 10)</label>
+                            <span id="photoCount" class="text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">0 / 10</span>
+                        </div>
+                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-apple-blue hover:bg-blue-50/50 transition-all bg-[#fbfbfd]" id="dropZone" onclick="document.getElementById('imageInput').click()">
+                            <i class="fa-regular fa-images text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-sm font-semibold text-apple-dark">Haz clic o arrastra tus fotos aquí</p>
+                        </div>
+                        <input type="file" id="imageInput" accept="image/*" multiple class="hidden"/>
+                        <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white p-2"></div>
+                    </div>
+
+                    <!-- 4. Guion y Selector de Subtítulos -->
+                    <div class="space-y-4 pt-6 border-t border-gray-100">
+                        <div class="flex justify-between items-end mb-1">
+                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion de 1 Minuto (Locución y Subtítulos)</label>
+                            <span id="charCount" class="text-[10px] font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200">0 / 1300 máx</span>
+                        </div>
+                        <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion para generar la voz automática y los subtítulos animados en pantalla..."></textarea>
+                        
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Posición de Subtítulos</label>
+                            <select id="captionPosSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
+                                <option value="bottom">Abajo (Estándar TikTok/Reels)</option>
+                                <option value="center">En Medio (Pantalla Completa)</option>
+                                <option value="none">Sin Subtítulos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botón de Generación y Estatus -->
+                    <div class="pt-2 space-y-4">
+                        <button id="generateBtn" class="w-full bg-black text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm hover:bg-neutral-800 transition-all shadow-lg cursor-pointer">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video de 1 Minuto (Gratis)
+                        </button>
+
+                        <div id="statusBox" class="hidden mt-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i id="statusIcon" class="fa-solid fa-circle-notch fa-spin text-black"></i>
+                                <span id="statusText" class="text-xs font-semibold text-black">Iniciando Generación...</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                <div id="progressBar" class="bg-black h-2 rounded-full transition-all duration-300 w-0"></div>
+                            </div>
+                        </div>
+
+                        <!-- Contenedor de Descarga -->
+                        <div id="downloadContainer" class="hidden mt-4 space-y-4">
+                            <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30 text-xs">
+                                <i class="fa-solid fa-download"></i> Descargar Video Generado (.WEBM)
+                            </a>
+                            <button id="resetBtn" class="w-full bg-gray-100 hover:bg-gray-200 text-black font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer border border-gray-200 text-xs">
+                                <i class="fa-solid fa-rotate-right"></i> Generar Otro Video
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Preview Device Frame -->
+            <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
+                <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white border border-gray-200 apple-shadow max-w-sm w-full">
+                    <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5 transition-opacity">
+                        <div class="w-16 h-4 bg-black rounded-full"></div>
+                    </div>
+                    <div id="screenRatio" class="relative rounded-[2.2rem] overflow-hidden bg-black aspect-[9/16] w-full flex items-center justify-center shadow-inner">
+                        <div id="placeholderText" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 z-20 p-6 text-center">
+                            <i id="placeholderIcon" class="fa-brands fa-tiktok text-4xl mb-3 opacity-40"></i>
+                            <p id="placeholderDesc" class="text-xs font-medium tracking-wide">Sube tus fotos y guion para ver la vista previa en tiempo real</p>
+                        </div>
+                        <canvas id="livePreviewCanvas" class="w-full h-full object-cover relative z-10 hidden"></canvas>
+                        <video id="finalVideoPlayer" class="w-full h-full object-cover relative z-20 hidden" controls playsinline></video>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const CLOUDFLARE_WORKER_URL = "https://reelmatic-api.esmaragdocamaz.workers.dev/";
+
+        const formatRadios = document.querySelectorAll('input[name="videoFormat"]');
+        const deviceFrame = document.getElementById('deviceFrame');
+        const screenRatio = document.getElementById('screenRatio');
+        const notch = document.getElementById('notch');
+        const placeholderIcon = document.getElementById('placeholderIcon');
+        const placeholderDesc = document.getElementById('placeholderDesc');
+
+        const logoInput = document.getElementById('logoInput');
+        const logoPreview = document.getElementById('logoPreview');
+        const videoTitle = document.getElementById('videoTitle');
+
+        const imageInput = document.getElementById('imageInput');
+        const dropZone = document.getElementById('dropZone');
+        const galleryContainer = document.getElementById('galleryContainer');
+        const generateBtn = document.getElementById('generateBtn');
+        const scriptText = document.getElementById('scriptText');
+        const charCount = document.getElementById('charCount');
+        const liveCanvas = document.getElementById('livePreviewCanvas');
+        const liveCtx = liveCanvas.getContext('2d', { willReadFrequently: true });
+        const finalVideoPlayer = document.getElementById('finalVideoPlayer');
+
+        let loadedImages = []; 
+        let loadedLogo = null;
+        let renderState = { isActive: false, startTime: 0 };
+        let finalCanvasW = 720; let finalCanvasH = 1280;
+        let mediaRecorder;
+        let recordedChunks = [];
+        let captions = [];
+
+        function updateRealTimePreview() {
+            if (renderState.isActive) return;
+            if (loadedImages.length > 0 || (videoTitle && videoTitle.value.trim().length > 0)) {
+                document.getElementById('placeholderText').classList.add('hidden');
+                liveCanvas.classList.remove('hidden');
+                liveCanvas.width = finalCanvasW;
+                liveCanvas.height = finalCanvasH;
+
+                liveCtx.fillStyle = '#000';
+                liveCtx.fillRect(0, 0, finalCanvasW, finalCanvasH);
+
+                if (loadedImages.length > 0) {
+                    const img = loadedImages[0];
+                    const imgRatio = img.width / img.height;
+                    const canvasRatio = finalCanvasW / finalCanvasH;
+                    let drawW, drawH, drawX, drawY;
+
+                    if (imgRatio > canvasRatio) {
+                        drawH = finalCanvasH;
+                        drawW = img.width * (finalCanvasH / img.height);
+                        drawX = (finalCanvasW - drawW) / 2;
+                        drawY = 0;
+                    } else {
+                        drawW = finalCanvasW;
+                        drawH = img.height * (finalCanvasW / img.width);
+                        drawX = 0;
+                        drawY = (finalCanvasH - drawH) / 2;
+                    }
+                    liveCtx.drawImage(img, drawX, drawY, drawW, drawH);
+                }
+
+                if (videoTitle && videoTitle.value.trim()) {
+                    const titleStr = videoTitle.value.trim().toUpperCase();
+                    liveCtx.fillStyle = '#FFFFFF';
+                    liveCtx.font = '900 38px Inter, sans-serif';
+                    liveCtx.textAlign = 'left';
+                    liveCtx.shadowColor = 'rgba(0,0,0,0.8)';
+                    liveCtx.shadowBlur = 12;
+                    liveCtx.fillText(titleStr, 40, 80);
+                    liveCtx.shadowBlur = 0;
+                }
+
+                if (loadedLogo) {
+                    const maxLogoW = 140;
+                    const maxLogoH = 140;
+                    let lW = loadedLogo.width;
+                    let lH = loadedLogo.height;
+                    const lRatio = lW / lH;
+                    if (lW > maxLogoW) { lW = maxLogoW; lH = lW / lRatio; }
+                    if (lH > maxLogoH) { lH = maxLogoH; lW = lH * lRatio; }
+                    liveCtx.drawImage(loadedLogo, finalCanvasW - lW - 40, 40, lW, lH);
+                }
+            } else {
+                if (!renderState.isActive && finalVideoPlayer.classList.contains('hidden')) {
+                    document.getElementById('placeholderText').classList.remove('hidden');
+                    liveCanvas.classList.add('hidden');
+                }
+            }
+        }
+
+        if (videoTitle) {
+            videoTitle.addEventListener('input', updateRealTimePreview);
+        }
+
+        if (formatRadios) {
+            formatRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.value === 'horizontal') {
+                        screenRatio.classList.replace('aspect-[9/16]', 'aspect-[16/9]');
+                        deviceFrame.classList.remove('max-w-sm');
+                        deviceFrame.classList.add('max-w-3xl'); 
+                        notch.classList.add('opacity-0'); 
+                        screenRatio.classList.replace('rounded-[2.2rem]', 'rounded-xl');
+                        placeholderIcon.className = "fa-brands fa-youtube text-4xl text-gray-400 mb-3 opacity-40";
+                        placeholderDesc.textContent = "Formato Horizontal (16:9)";
+                        finalCanvasW = 1280; finalCanvasH = 720;
+                    } else {
+                        screenRatio.classList.replace('aspect-[16/9]', 'aspect-[9/16]');
+                        deviceFrame.classList.remove('max-w-3xl');
+                        deviceFrame.classList.add('max-w-sm');
+                        notch.classList.remove('opacity-0');
+                        screenRatio.classList.replace('rounded-xl', 'rounded-[2.2rem]');
+                        placeholderIcon.className = "fa-brands fa-tiktok text-4xl text-gray-400 mb-3 opacity-40";
+                        placeholderDesc.textContent = "Sube tus fotos y guion para ver la vista previa en tiempo real";
+                        finalCanvasW = 720; finalCanvasH = 1280;
+                    }
+                    updateRealTimePreview();
+                });
+            });
+        }
+
+        if (logoInput) {
+            logoInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    logoPreview.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-contain p-1" alt="Logo"/>`;
+                    loadedLogo = new Image();
+                    loadedLogo.src = event.target.result;
+                    loadedLogo.onload = updateRealTimePreview;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        scriptText.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            charCount.textContent = `${currentLength} / 1300 máx`;
+            if (currentLength > 1200) charCount.classList.add('text-red-500'); 
+            else charCount.classList.remove('text-red-500');
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files).slice(0, 10 - loadedImages.length);
+            if (files.length === 0) return;
+            dropZone.classList.add('hidden'); 
+            galleryContainer.classList.remove('hidden');
+
+            files.forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image(); 
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        loadedImages.push(img);
+                        document.getElementById('photoCount').textContent = `${loadedImages.length} / 10`;
+
+                        const card = document.createElement('div');
+                        card.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-gray-200 relative cursor-grab bg-white group";
+                        card.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-cover pointer-events-none" alt="Preview"/>`;
+                        card.imageObj = img;
+                        galleryContainer.appendChild(card);
+                        updateRealTimePreview();
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        generateBtn.addEventListener('click', async () => {
+            if (loadedImages.length === 0) {
+                alert("Sube al menos una foto.");
+                return;
+            }
+
+            const text = scriptText.value.trim();
+            if (!text) {
+                alert("Escribe un guion para generar la voz automática y los subtítulos.");
+                return;
+            }
+
+            generateBtn.disabled = true;
+            document.getElementById('statusBox').classList.remove('hidden');
+            document.getElementById('placeholderText').classList.add('hidden');
+            document.getElementById('progressBar').style.width = "0%";
+
+            try {
+                const words = text.split(/\s+/);
+                captions = [];
+                let currentChunk = [];
+                let currentLen = 0;
+                for (let i = 0; i < words.length; i++) {
+                    currentChunk.push(words[i]);
+                    currentLen += words[i].length;
+                    if (currentLen > 25 || i === words.length - 1) {
+                        captions.push(currentChunk.join(" "));
+                        currentChunk = [];
+                        currentLen = 0;
+                    }
+                }
+
+                document.getElementById('statusText').textContent = "Conectando con Google AI Studio (Worker) para locución y subtítulos...";
+
+                let audioUrlToUse = null;
+                try {
+                    const response = await fetch(CLOUDFLARE_WORKER_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ text: text })
+                    });
+                    if (response.ok) {
+                        const audioBlob = await response.blob();
+                        audioUrlToUse = URL.createObjectURL(audioBlob);
+                    }
+                } catch(err) {
+                    console.log("Usando respaldo de voz del navegador...");
+                }
+
+                if (!audioUrlToUse) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'es-ES';
+                    window.speechSynthesis.speak(utterance);
+                }
+
+                const audioEl = new Audio(audioUrlToUse || 'https://actions.google.com/sounds/v1/ambiences/rain_heavy.ogg');
+                audioEl.crossOrigin = "anonymous";
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const audioDest = audioCtx.createMediaStreamDestination();
+                const source = audioEl ? audioCtx.createMediaElementSource(audioEl) : null;
+                if(source) {
+                    source.connect(audioDest);
+                    source.connect(audioCtx.destination); 
+                }
+
+                document.getElementById('statusText').textContent = "Ensamblando video final (WebM)...";
+                liveCanvas.width = finalCanvasW;
+                liveCanvas.height = finalCanvasH;
+                liveCanvas.classList.remove('hidden');
+                finalVideoPlayer.classList.add('hidden');
+                recordedChunks = [];
+
+                const canvasStream = liveCanvas.captureStream(30);
+                const combinedStream = new MediaStream([
+                    ...canvasStream.getVideoTracks(),
+                    ...audioDest.stream.getAudioTracks()
+                ]);
+
+                mediaRecorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
+                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+                
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                    const videoURL = URL.createObjectURL(blob);
+                    
+                    finalVideoPlayer.src = videoURL;
+                    finalVideoPlayer.classList.remove('hidden');
+                    liveCanvas.classList.add('hidden');
+                    
+                    const downloadBtn = document.getElementById('downloadBtn');
+                    downloadBtn.href = videoURL;
+                    downloadBtn.download = 'ReelMatic_Pro_Free_' + (new Date().getTime()) + '.webm';
+                    
+                    document.getElementById('statusText').textContent = "¡Video Generado con Éxito (Sujeto a disponibilidad)!";
+                    document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-emerald-600";
+                    document.getElementById('downloadContainer').classList.remove('hidden');
+                    generateBtn.disabled = false;
+                };
+
+                audioEl.onloadedmetadata = () => {
+                    const advertisedDuration = Math.max(audioEl.duration * 1000, 15000);
+                    const durationPerImage = advertisedDuration / loadedImages.length;
+                    
+                    renderState.isActive = true;
+                    renderState.startTime = performance.now();
+                    mediaRecorder.start();
+                    audioEl.play().catch(e => console.log("Audio autoplay prevented"));
+
+                    function drawFrame(now) {
+                        if (!renderState.isActive) return;
+                        const elapsed = now - renderState.startTime;
+                        const progress = elapsed / advertisedDuration;
+                        document.getElementById('progressBar').style.width = `${Math.min(progress * 100, 100)}%`;
+
+                        if (elapsed >= advertisedDuration || audioEl.ended) {
+                            renderState.isActive = false;
+                            try { mediaRecorder.stop(); } catch(e){}
+                            return;
+                        }
+
+                        const imageIndex = Math.min(Math.floor(elapsed / durationPerImage), loadedImages.length - 1);
+                        const imageElapsed = elapsed % durationPerImage;
+                        const imgProgress = imageElapsed / durationPerImage;
+                        
+                        liveCtx.fillStyle = '#000';
+                        liveCtx.fillRect(0, 0, finalCanvasW, finalCanvasH);
+
+                        function drawKenBurns(img, progress, alpha) {
+                            if (!img) return;
+                            const scale = 1 + (progress * 0.1);
+                            const imgRatio = img.width / img.height;
+                            const canvasRatio = finalCanvasW / finalCanvasH;
+                            let drawW, drawH, drawX, drawY;
+
+                            if (imgRatio > canvasRatio) {
+                                drawH = finalCanvasH;
+                                drawW = img.width * (finalCanvasH / img.height);
+                                drawX = (finalCanvasW - drawW) / 2;
+                                drawY = 0;
+                            } else {
+                                drawW = finalCanvasW;
+                                drawH = img.height * (finalCanvasW / img.width);
+                                drawX = 0;
+                                drawY = (finalCanvasH - drawH) / 2;
+                            }
+
+                            liveCtx.save();
+                            liveCtx.globalAlpha = alpha;
+                            liveCtx.translate(finalCanvasW/2, finalCanvasH/2);
+                            liveCtx.scale(scale, scale);
+                            liveCtx.translate(-finalCanvasW/2, -finalCanvasH/2);
+                            liveCtx.drawImage(img, drawX, drawY, drawW, drawH);
+                            liveCtx.restore();
+                        }
+
+                        const crossfadeDuration = 800;
+                        if (imageIndex > 0 && imageElapsed < crossfadeDuration) {
+                            const prevProgress = (durationPerImage + imageElapsed) / durationPerImage; 
+                            drawKenBurns(loadedImages[imageIndex - 1], prevProgress, 1);
+                            const alpha = imageElapsed / crossfadeDuration;
+                            drawKenBurns(loadedImages[imageIndex], imgProgress, alpha);
+                        } else {
+                            drawKenBurns(loadedImages[imageIndex], imgProgress, 1);
+                        }
+
+                        const videoTitle = document.getElementById('videoTitle');
+                        if(videoTitle) {
+                            const titleStr = videoTitle.value.trim().toUpperCase();
+                            if (titleStr) {
+                                liveCtx.fillStyle = '#FFFFFF';
+                                liveCtx.font = '900 38px Inter, sans-serif';
+                                liveCtx.textAlign = 'left';
+                                liveCtx.shadowColor = 'rgba(0,0,0,0.8)';
+                                liveCtx.shadowBlur = 12;
+                                liveCtx.fillText(titleStr, 40, 80);
+                                liveCtx.shadowBlur = 0;
+                            }
+                        }
+
+                        if (loadedLogo) {
+                            const maxLogoW = 140;
+                            const maxLogoH = 140;
+                            let lW = loadedLogo.width;
+                            let lH = loadedLogo.height;
+                            const lRatio = lW / lH;
+                            if (lW > maxLogoW) { lW = maxLogoW; lH = lW / lRatio; }
+                            if (lH > maxLogoH) { lH = maxLogoH; lW = lH * lRatio; }
+                            liveCtx.drawImage(loadedLogo, finalCanvasW - lW - 40, 40, lW, lH);
+                        }
+
+                        const captionPos = document.getElementById('captionPosSelect').value;
+                        if (captionPos !== 'none' && captions.length > 0) {
+                            const captionIndex = Math.min(Math.floor((elapsed / advertisedDuration) * captions.length), captions.length - 1);
+                            const currentCaption = captions[captionIndex].toUpperCase();
+                            
+                            liveCtx.fillStyle = '#FFFFFF'; 
+                            liveCtx.font = '900 52px Inter, sans-serif';
+                            liveCtx.textAlign = 'center';
+                            liveCtx.lineWidth = 12; 
+                            liveCtx.strokeStyle = '#000000';
+                            liveCtx.lineJoin = 'round'; 
+                            
+                            let capY = (captionPos === 'center') ? (finalCanvasH / 2) : (finalCanvasH * 0.82);
+                            liveCtx.strokeText(currentCaption, finalCanvasW / 2, capY);
+                            liveCtx.fillText(currentCaption, finalCanvasW / 2, capY);
+                        }
+
+                        requestAnimationFrame(drawFrame);
+                    }
+                    requestAnimationFrame(drawFrame);
+                };
+
+            } catch (error) {
+                alert("Error en el proceso: " + error.message);
+                document.getElementById('statusBox').classList.add('hidden');
+                generateBtn.disabled = false;
+            }
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            loadedImages = [];
+            loadedLogo = null;
+            galleryContainer.innerHTML = '';
+            galleryContainer.classList.add('hidden');
+            dropZone.classList.remove('hidden');
+            document.getElementById('photoCount').textContent = '0 / 10';
+            document.getElementById('imageInput').value = '';
+            scriptText.value = '';
+            document.getElementById('videoTitle').value = '';
+            logoPreview.innerHTML = '<i class="fa-solid fa-image text-gray-400" id="logoPlaceholderIcon"></i>';
+            document.getElementById('logoInput').value = '';
+            document.getElementById('downloadContainer').classList.add('hidden');
+            document.getElementById('statusBox').classList.add('hidden');
+            document.getElementById('progressBar').style.width = "0%";
+            liveCanvas.classList.add('hidden');
+            finalVideoPlayer.classList.add('hidden');
+            finalVideoPlayer.pause();
+            finalVideoPlayer.src = '';
+            document.getElementById('placeholderText').classList.remove('hidden');
+            generateBtn.disabled = false;
+        });
+    </script>
 </body>
 </html>
