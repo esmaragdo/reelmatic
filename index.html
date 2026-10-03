@@ -42,7 +42,7 @@
 </head>
 <body class="antialiased selection:bg-apple-blue selection:text-white flex flex-col min-h-screen">
 
-    <!-- APP WORKSPACE (Inicia directo y minimalista) -->
+    <!-- APP WORKSPACE (Inicia directo y minimalista sin barras negras superiores) -->
     <div id="app-workspace" class="w-full bg-[#fbfbfd] pt-12 pb-20 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
             <span class="bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-blue-100">Estudio 1 Minuto Exacto (100% Gratis)</span>
@@ -114,7 +114,7 @@
                         <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white p-2"></div>
                     </div>
 
-                    <!-- 4. Guion y Selector de Subtítulos -->
+                    <!-- 4. Guion, Menú de Voces y Selector de Subtítulos -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-1">
                             <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion de 1 Minuto (Locución y Subtítulos)</label>
@@ -122,13 +122,30 @@
                         </div>
                         <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion para generar la voz automática y los subtítulos animados en pantalla..."></textarea>
                         
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Posición de Subtítulos</label>
-                            <select id="captionPosSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                <option value="bottom">Abajo (Estándar TikTok/Reels)</option>
-                                <option value="center">En Medio (Pantalla Completa)</option>
-                                <option value="none">Sin Subtítulos</option>
-                            </select>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Selección de Voz</label>
+                                <select id="googleVoiceSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
+                                    <optgroup label="Latinoamérica">
+                                        <option value="latam-fem-1">Latinoamérica - Femenina 1 (Suave)</option>
+                                        <option value="latam-fem-2">Latinoamérica - Femenina 2 (Dinámica)</option>
+                                        <option value="latam-masc-1">Latinoamérica - Masculina 1 (Narrador)</option>
+                                        <option value="latam-masc-2">Latinoamérica - Masculina 2 (Fuerte)</option>
+                                    </optgroup>
+                                    <optgroup label="España">
+                                        <option value="es-fem-1">España - Femenina (Castiza)</option>
+                                        <option value="es-masc-1">España - Masculina (Formal)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Posición de Subtítulos</label>
+                                <select id="captionPosSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
+                                    <option value="bottom">Abajo (Estándar TikTok/Reels)</option>
+                                    <option value="center">En Medio (Pantalla Completa)</option>
+                                    <option value="none">Sin Subtítulos</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -387,14 +404,15 @@
                     }
                 }
 
-                document.getElementById('statusText').textContent = "Conectando con Google AI Studio (Worker) para locución y subtítulos...";
+                document.getElementById('statusText').textContent = "Conectando con Cloudflare Worker para locución y subtítulos...";
 
                 let audioUrlToUse = null;
+                const selectedVoice = document.getElementById('googleVoiceSelect').value;
                 try {
                     const response = await fetch(CLOUDFLARE_WORKER_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ text: text })
+                        body: JSON.stringify({ text: text, voice: selectedVoice })
                     });
                     if (response.ok) {
                         const audioBlob = await response.blob();
@@ -448,7 +466,7 @@
                     downloadBtn.href = videoURL;
                     downloadBtn.download = 'ReelMatic_Pro_Free_' + (new Date().getTime()) + '.webm';
                     
-                    document.getElementById('statusText').textContent = "¡Video Generado con Éxito (Sujeto a disponibilidad)!";
+                    document.getElementById('statusText').textContent = "¡Video Generado con Éxito!";
                     document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-emerald-600";
                     document.getElementById('downloadContainer').classList.remove('hidden');
                     generateBtn.disabled = false;
