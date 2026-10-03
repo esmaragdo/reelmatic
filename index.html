@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ReelMatic Pro | Generador Automático de Videos de 1 Minuto 100% Gratis</title>
+    <title>ReelMatic Pro | Crea Shorts y Reels Virales con IA</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
@@ -30,19 +30,26 @@
     </script>
     
     <style>
-        body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; font-family: 'Inter', sans-serif; }
+        body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; }
         .apple-shadow { box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.04); }
+        .bento-shadow { box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08); }
         .apple-input { border: 1px solid #e5e5ea; transition: all 0.2s ease; background-color: #ffffff; }
         .apple-input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
+        .apple-btn-primary { background-color: #1d1d1f; color: white; transition: all 0.3s ease; }
+        .apple-btn-primary:hover { background-color: #000000; transform: scale(0.98); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .apple-btn-primary:disabled { background-color: #e5e5ea; color: #86868b; transform: scale(1); cursor: not-allowed; box-shadow: none; }
         .scrollbar-custom::-webkit-scrollbar { height: 6px; }
         .scrollbar-custom::-webkit-scrollbar-track { background: #f1f1f3; border-radius: 8px; }
         .scrollbar-custom::-webkit-scrollbar-thumb { background: #c7c7cc; border-radius: 8px; }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: #8e8e93; }
+        .text-gradient-dark { background: linear-gradient(180deg, #1d1d1f 0%, #434345 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-gradient-light { background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
         #deviceFrame, #screenRatio, #notch { transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
     </style>
 </head>
 <body class="antialiased selection:bg-apple-blue selection:text-white flex flex-col min-h-screen">
 
-    <!-- Navbar Limpio -->
     <nav class="w-full bg-[#f5f5f7]/80 backdrop-blur-md border-b border-gray-200/50 fixed top-0 z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
             <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
@@ -50,61 +57,242 @@
                 <span class="font-bold text-lg tracking-tight text-apple-dark">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
             </div>
             <div class="flex items-center gap-4">
+                <span class="hidden md:inline text-xs font-semibold text-gray-500" id="creditCounterHeader">Fichas disponibles: 3</span>
+                <a href="#pricing" class="hidden sm:inline-block text-sm font-semibold text-gray-500 hover:text-apple-dark transition-colors mr-2">Precios</a>
                 <a href="#app-workspace" class="bg-apple-dark text-white text-xs font-bold px-4 py-1.5 rounded-full hover:bg-black transition-colors">Crear Short</a>
             </div>
         </div>
     </nav>
 
-    <!-- APP WORKSPACE (Inicia directo en la parte blanca) -->
-    <div id="app-workspace" class="w-full bg-[#fbfbfd] pt-32 pb-20 relative scroll-mt-14">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
-            <span class="bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-blue-100">Estudio 1 Minuto Exacto</span>
-            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-2">
-                Generador Automático de Shorts y Reels.
+    <header class="w-full bg-black pt-32 flex flex-col items-center text-center relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-red-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+        
+        <div class="px-4 sm:px-6 w-full flex flex-col items-center z-10">
+            <div class="inline-block bg-white/10 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 border border-white/20 backdrop-blur-md">
+                <i class="fa-solid fa-bolt text-red-500 mr-1"></i> La era del formato largo y corto
+            </div>
+
+            <h1 class="text-6xl sm:text-7xl md:text-8xl font-extrabold tracking-tighter-apple text-gradient-light mb-6 relative z-10 max-w-4xl leading-[1.05]">
+                Domina los Shorts.<br/>Conquista el mundo.
+            </h1>
+            <p class="text-xl sm:text-2xl text-gray-400 font-medium tracking-tight-apple max-w-2xl mb-10 relative z-10">
+                Calibrado quirúrgicamente para el algoritmo. Crea YouTube Shorts, TikToks y Reels de <span class="text-white font-bold">3 Minutos</span> con retención máxima. Sin relleno, pura viralidad.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center gap-4 relative z-10">
+                <a href="#app-workspace" class="bg-white text-black font-semibold text-lg px-8 py-3.5 rounded-full hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                    Empezar a crear
+                </a>
+                <p class="text-sm text-gray-400 font-medium">Tienes <span class="text-white font-bold" id="freeBadgeText">3 Shorts gratis</span> hoy.</p>
+            </div>
+        </div>
+
+        <div class="mt-20 relative z-10 w-full bg-black">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBL3bBn_SW2WCnZ-EMfcfOtsupQ7zWTEwLhUZmxusqt3NBfeSFpNve_XEdgwpyfhFhTGyROLsWyQo782-VKEUWp3cA-4XftyAHUwwtfvxYfHt2SmYiDsAG9HSxrnM4hsF8p986URz15hN4NakpkJPNuNjlcIOgPbpqzcL8doR49bbwKhjmJuxdL4F0sFpH/s1600/yt.jpeg" alt="YouTube Creator Studio" class="w-full h-auto object-cover opacity-80" style="max-height: 75vh;"/>
+        </div>
+    </header>
+
+    <section class="w-full pt-16 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10 bg-[#f5f5f7]">
+        <div class="text-center mb-16 max-w-4xl mx-auto">
+            <span class="bg-red-50 text-red-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-flex items-center border border-red-200 shadow-sm">
+                <i class="fa-solid fa-stopwatch mr-1.5"></i> El fin de las líneas de tiempo
+            </span>
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-4 mb-6 leading-tight">
+                CapCut y Canva son editores.<br/>ReelMatic es un <span class="text-apple-blue">Generador.</span>
             </h2>
-            <p class="text-gray-500 text-sm mt-2">Selecciona tu formato, sube hasta 10 fotos, escribe tu guion y genera tu video optimizado de 1 minuto 100% gratis.</p>
+            <p class="text-lg md:text-xl text-gray-500 font-medium leading-relaxed max-w-3xl mx-auto">
+                Las herramientas tradicionales son geniales... si tienes horas para editar. Olvídate de grabar tu voz en off con el celular, de pelear para cuadrar el audio con la foto y de lidiar con complicadas líneas de tiempo en Final Cut o Premiere. 
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-[2rem] p-8 md:p-10 bento-shadow flex flex-col items-start hover:-translate-y-1 transition-transform duration-300 border border-gray-100">
+                <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-apple-dark text-xl mb-6 border border-gray-200">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <h3 class="text-2xl font-bold tracking-tight-apple mb-3 text-apple-dark">1. Carga tu materia prima.</h3>
+                <p class="text-gray-500 font-medium leading-relaxed">
+                    Sube hasta 10 fotos (puedes arrastrarlas o hacer clic), organízalas reordenando y pega tu guion completo. Nosotros nos encargamos de todo.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-8 md:p-10 bento-shadow flex flex-col items-start hover:-translate-y-1 transition-transform duration-300 border border-gray-100">
+                <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-apple-blue text-xl mb-6 border border-blue-100">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <h3 class="text-2xl font-bold tracking-tight-apple mb-3 text-apple-dark">2. Ensamblaje Plug & Play.</h3>
+                <p class="text-gray-500 font-medium leading-relaxed">
+                    Nuestra IA locuta tu guion con voces premium, genera subtítulos de alta retención automáticamente y mezcla tus fotos con efectos cinematográficos.
+                </p>
+            </div>
+
+            <div class="bg-apple-dark text-white rounded-[2.5rem] p-8 md:p-10 bento-shadow flex flex-col items-start hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border border-gray-800">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-apple-blue/20 blur-2xl rounded-full"></div>
+                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white text-xl mb-6 backdrop-blur-md border border-white/10">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="text-2xl font-bold tracking-tight-apple mb-3">3. Listo en 3 Minutos.</h3>
+                <p class="text-gray-300 font-medium leading-relaxed mb-4">
+                    Pasa de la idea al video publicado en cuestión de minutos. Paga por uso, sin ataduras, y mantén tus redes sociales alimentadas todos los días.
+                </p>
+                <div class="mt-auto inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg text-sm font-semibold backdrop-blur-md border border-white/10">
+                    <i class="fa-solid fa-check text-green-400"></i> Cero conocimiento técnico.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="w-full pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-[#f5f5f7]">
+        <div class="bg-white rounded-[3rem] bento-shadow overflow-hidden flex flex-col lg:flex-row border border-gray-100">
+            <div class="lg:w-1/2 p-10 md:p-16 flex flex-col justify-center">
+                <div class="inline-block bg-blue-50 text-apple-blue text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 w-max border border-blue-100">
+                    Tecnología de Redes
+                </div>
+                <h2 class="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter-apple text-apple-dark mb-4 leading-[1.05]">
+                    WebM es la nueva regla.
+                </h2>
+                <p class="text-xl md:text-2xl text-gray-400 font-bold tracking-tight-apple mb-8 uppercase">
+                    El MP4 quedó en el pasado.
+                </p>
+                <p class="text-lg text-gray-500 font-medium mb-8 leading-relaxed">
+                    Si sigues exportando en MP4 pesado, el algoritmo te está castigando. ReelMatic.pro renderiza nativamente en <strong>WebM</strong>, el estándar ultraligero que TikTok, YouTube Shorts y X priorizan hoy.
+                </p>
+            </div>
+            <div class="lg:w-1/2 bg-[#fbfbfd] p-10 md:p-16 flex items-center justify-center border-l border-gray-100 relative overflow-hidden">
+                <div class="relative z-10 flex items-center justify-center gap-8">
+                    <div class="flex flex-col items-center opacity-40 grayscale">
+                        <i class="fa-regular fa-file-video text-6xl text-gray-400 mb-3"></i>
+                        <span class="font-bold text-gray-500 tracking-wider">.MP4</span>
+                        <i class="fa-solid fa-xmark text-red-500 text-2xl mt-2"></i>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-3xl text-gray-300"></i>
+                    <div class="flex flex-col items-center scale-110">
+                        <div class="w-24 h-24 bg-white rounded-2xl apple-shadow flex items-center justify-center mb-3 border border-blue-100 relative">
+                            <div class="absolute inset-0 bg-blue-400/20 blur-xl rounded-full"></div>
+                            <i class="fa-solid fa-bolt text-5xl text-apple-blue relative z-10"></i>
+                        </div>
+                        <span class="font-extrabold text-apple-dark tracking-wider text-xl mt-2">.WEBM</span>
+                        <span class="text-xs font-bold text-green-500 uppercase mt-2 bg-green-50 px-2 py-1 rounded-md border border-green-200">Nativo Redes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="w-full py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-14 bg-[#f5f5f7]">
+        <div class="text-center mb-16 max-w-4xl mx-auto">
+            <span class="bg-green-50 text-green-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-flex items-center border border-green-200 shadow-sm">
+                <i class="fa-solid fa-unlock-keyhole mr-1.5"></i> Transparencia Total
+            </span>
+            <h2 class="text-4xl md:text-6xl font-extrabold tracking-tighter-apple text-apple-dark mt-4 mb-6 leading-tight">
+                La rebelión contra<br/>las suscripciones.
+            </h2>
+            <p class="text-lg text-gray-600 font-medium max-w-3xl mx-auto mb-8 leading-relaxed">
+                Aquí no hay letras chiquitas, ni contratos forzosos, ni cargos automáticos a medianoche que nunca pediste. Cero mensualidades atadas. <strong>Pagas únicamente por video y te lo llevas al instante</strong>. Cuando tus 3 videos gratis se agoten, puedes adquirir fichas adicionales de forma individual o en paquete. Todos los cobros son procesados de forma 100% segura mediante <strong>PayPal</strong>.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 border border-gray-200 apple-shadow flex flex-col relative">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold tracking-tight-apple text-apple-dark mb-2">1 Ficha de Video</h3>
+                    <p class="text-gray-500 font-medium text-sm">Ideal para una emergencia rápida. Pago único sin ataduras.</p>
+                </div>
+                <div class="mb-8">
+                    <span class="text-5xl font-black tracking-tighter-apple text-apple-dark">$1.99</span>
+                    <span class="text-gray-400 font-bold ml-1">USD</span>
+                </div>
+                <a href="https://www.paypal.com/ncp/payment/C36WFJD2FL3J2" class="w-full bg-gray-100 hover:bg-gray-200 text-apple-dark font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center text-center shadow-sm">
+                    Comprar 1 Ficha ($1.99 USD)
+                </a>
+            </div>
+
+            <div class="bg-apple-dark text-white rounded-[2.5rem] p-8 md:p-10 border border-gray-800 bento-shadow flex flex-col relative">
+                <div class="mb-6 relative z-10">
+                    <h3 class="text-2xl font-bold tracking-tight-apple mb-2">Paquete Creador</h3>
+                    <p class="text-gray-400 font-medium text-sm">3 fichas guardadas en tu navegador. Ahorro total.</p>
+                </div>
+                <div class="mb-8 relative z-10 flex items-end gap-2">
+                    <div>
+                        <span class="text-5xl font-black tracking-tighter-apple">$4.99</span>
+                        <span class="text-gray-400 font-bold ml-1">USD</span>
+                    </div>
+                </div>
+                <a href="https://www.paypal.com/ncp/payment/YETWMYF5UH6K8" class="w-full bg-white text-black font-semibold py-4 px-6 rounded-2xl transition-all hover:scale-[1.02] flex items-center justify-center text-center shadow-[0_0_20px_rgba(255,255,255,0.2)] relative z-10">
+                    Comprar Paquete 3 Fichas ($4.99 USD)
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div id="app-workspace" class="w-full bg-[#fbfbfd] border-t border-gray-200 py-20 relative scroll-mt-14">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter-apple text-apple-dark mt-4">
+                El Estudio de Shorts.
+            </h2>
         </div>
 
         <main class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
             <div class="lg:w-1/2 space-y-6 z-10 w-full">
+                <div id="errorAlert" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-4 rounded-2xl flex items-start gap-3 text-sm font-medium shadow-sm">
+                    <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
+                    <div>
+                        <strong class="block text-red-700 mb-1">Aviso del Sistema</strong>
+                        <span id="errorMsg" class="leading-relaxed">Mensaje de error</span>
+                    </div>
+                </div>
+
                 <div class="bg-white p-6 sm:p-8 rounded-[2rem] apple-shadow border border-gray-100 space-y-8">
                     
-                    <!-- 1. Formato (Vertical / Horizontal) -->
+                    <!-- PAYWALL BOX (BLOQUEO CON PAYPAL) -->
+                    <div id="paywallBox" class="hidden bg-blue-50 border border-blue-200 p-6 rounded-2xl text-center space-y-4 shadow-sm">
+                        <div class="w-12 h-12 bg-apple-blue text-white rounded-2xl mx-auto flex items-center justify-center text-xl shadow-md">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-apple-dark">Tus videos gratis se han agotado</h3>
+                        <p class="text-sm text-gray-600 font-medium">Has consumido tus 3 pruebas iniciales. Adquiere fichas mediante PayPal para seguir generando contenido viral al instante, sin mensualidades ni ataduras.</p>
+                        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                            <a href="https://www.paypal.com/ncp/payment/C36WFJD2FL3J2" class="flex-1 bg-apple-dark text-white font-semibold py-3 px-4 rounded-xl text-sm hover:bg-black transition-all text-center">Comprar 1 Ficha ($1.99)</a>
+                            <a href="https://www.paypal.com/ncp/payment/YETWMYF5UH6K8" class="flex-1 bg-apple-blue text-white font-semibold py-3 px-4 rounded-xl text-sm hover:bg-apple-blue-hover transition-all text-center">Paquete 3 Fichas ($4.99)</a>
+                        </div>
+                    </div>
+
                     <div class="space-y-4">
                         <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">1. Formato del Video</label>
                         <div class="grid grid-cols-2 gap-4">
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="videoFormat" value="vertical" class="peer sr-only" checked>
                                 <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
-                                    <i class="fa-solid fa-mobile-screen text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block"></i>
+                                    <i class="fa-solid fa-mobile-screen text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block transition-colors"></i>
                                     <span class="block text-sm font-bold text-apple-dark">Vertical (9:16)</span>
+                                    <span class="block text-xs text-gray-500 font-medium">TikTok, Shorts, Reels</span>
                                 </div>
                             </label>
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="videoFormat" value="horizontal" class="peer sr-only">
                                 <div class="p-4 border-2 border-gray-200 rounded-2xl peer-checked:border-apple-dark peer-checked:bg-gray-50 transition-all text-center hover:bg-gray-50">
-                                    <i class="fa-brands fa-youtube text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block"></i>
+                                    <i class="fa-brands fa-youtube text-2xl text-gray-400 peer-checked:text-apple-dark mb-2 block transition-colors"></i>
                                     <span class="block text-sm font-bold text-apple-dark">Horizontal (16:9)</span>
+                                    <span class="block text-xs text-gray-500 font-medium">YouTube, Web, TV</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <!-- 2. Título y Logo -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">2. Identidad de Marca</label>
                         <div class="flex flex-col sm:flex-row gap-4">
                             <div class="flex-1">
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Título Principal</label>
-                                <input type="text" id="videoTitle" maxlength="40" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark placeholder-gray-400" placeholder="Ej: 5 Trucos de Crecimiento...">
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Título del Video</label>
+                                <input type="text" id="videoTitle" maxlength="40" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark placeholder-gray-400 shadow-sm" placeholder="Ej: 5 Trucos Psicológicos...">
                             </div>
                             <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Logo Opcional</label>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Logo (Opcional - Cualquier Aspect Ratio)</label>
                                 <div class="flex items-center gap-3">
-                                    <div id="logoPreview" class="w-16 h-12 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden cursor-pointer hover:border-blue-500 transition-colors" onclick="document.getElementById('logoInput').click()">
+                                    <div id="logoPreview" class="w-16 h-12 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden cursor-pointer hover:border-apple-blue transition-colors" onclick="document.getElementById('logoInput').click()">
                                         <i class="fa-solid fa-image text-gray-400" id="logoPlaceholderIcon"></i>
                                     </div>
-                                    <button class="text-xs font-bold text-black bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200" onclick="document.getElementById('logoInput').click()">
+                                    <button class="text-xs font-bold text-apple-dark bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors border border-gray-200" onclick="document.getElementById('logoInput').click()">
                                         Subir Logo
                                     </button>
                                 </div>
@@ -113,109 +301,101 @@
                         </div>
                     </div>
 
-                    <!-- 3. Fotos -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
-                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Fotos (Hasta 10)</label>
-                            <span id="photoCount" class="text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">0 / 10</span>
+                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">3. Medios Visuales (Hasta 10 fotos)</label>
+                            <div class="flex items-center gap-3">
+                                <button id="addMorePhotosBtn" class="hidden text-xs font-bold text-apple-blue bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors border border-blue-100 shadow-sm" onclick="document.getElementById('imageInput').click()">
+                                    <i class="fa-solid fa-plus mr-1"></i> Añadir Más
+                                </button>
+                                <span id="photoCount" class="text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">0 / 10</span>
+                            </div>
                         </div>
+                        
+                        <!-- DROPZONE CON SOPORTE COMPLETO DRAG & DROP Y CLIC -->
                         <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-apple-blue hover:bg-blue-50/50 transition-all bg-[#fbfbfd]" id="dropZone" onclick="document.getElementById('imageInput').click()">
                             <i class="fa-regular fa-images text-4xl text-gray-400 mb-3"></i>
-                            <p class="text-sm font-semibold text-apple-dark">Haz clic o arrastra tus fotos aquí</p>
+                            <p class="text-sm font-semibold text-apple-dark mb-1">Haz clic o arrastra tus fotos aquí (Hasta 10)</p>
+                            <span class="text-xs text-gray-400 font-medium">Soporta PNG, JPG, WEBP</span>
                         </div>
                         <input type="file" id="imageInput" accept="image/*" multiple class="hidden"/>
-                        <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white p-2"></div>
+                        
+                        <!-- CONTENEDOR DE GALERÍA OPTIMIZADO PARA LAS 10 FOTOS COMPLETAS Y ORDENARLAS -->
+                        <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white apple-shadow"></div>
                     </div>
 
-                    <!-- 4. Guion y Selector de Voces de Google AI Studio -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
-                        <div class="flex justify-between items-end mb-1">
-                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion de 1 Minuto (Locución y Subtítulos)</label>
-                            <span id="charCount" class="text-[10px] font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200">0 / 1300 máx</span>
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="block text-[13px] font-bold text-apple-dark uppercase tracking-wide">4. Guion del Short</label>
+                            <span id="charCount" class="text-[11px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">0 / 3000 máx (~3 Minutos)</span>
                         </div>
-                        <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion para generar la voz automática y los subtítulos animados en pantalla..."></textarea>
-                        
-                        <!-- Menú de Voces y Posición de Subtítulos -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <textarea id="scriptText" maxlength="3000" rows="5" class="w-full apple-input rounded-2xl p-4 text-apple-dark placeholder-gray-400 resize-none text-base font-medium shadow-sm" placeholder="Escribe el guion completo que narrará la IA (hasta 3 minutos)..."></textarea>
+                        <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Voz de Google AI Studio</label>
-                                <select id="googleVoiceSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                    <optgroup label="Latinoamérica (Femeninas)">
-                                        <option value="es-US-Neural2-A">Español (US/LatAm) - Neural2 A (Femenina)</option>
-                                        <option value="es-MX-Neural2-A">Español (México) - Neural2 A (Femenina)</option>
-                                    </optgroup>
-                                    <optgroup label="Latinoamérica (Masculinas)">
-                                        <option value="es-US-Neural2-B">Español (US/LatAm) - Neural2 B (Masculina)</option>
-                                        <option value="es-US-Neural2-C">Español (US/LatAm) - Neural2 C (Masculina)</option>
-                                    </optgroup>
-                                    <optgroup label="España">
-                                        <option value="es-ES-Neural2-A">Español (España) - Neural2 A (Femenina)</option>
-                                        <option value="es-ES-Neural2-B">Español (España) - Neural2 B (Masculina)</option>
-                                    </optgroup>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Voces Premium (IA)</label>
+                                <select id="voiceSelect" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark appearance-none cursor-pointer bg-white">
+                                    <option value="Aoede">Femenina - Cálida (Aoede)</option>
+                                    <option value="Kore">Femenina - Firme (Kore)</option>
+                                    <option value="Puck">Masculina - Dinámica (Puck)</option>
+                                    <option value="Charon">Masculina - Info (Charon)</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Posición de Subtítulos</label>
-                                <select id="captionPosSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                    <option value="bottom">Abajo (Estándar TikTok/Reels)</option>
-                                    <option value="center">En Medio (Pantalla Completa)</option>
+                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase tracking-wider">Posición Subtítulos</label>
+                                <select id="captionPosSelect" class="w-full apple-input rounded-xl p-3 text-sm font-medium text-apple-dark appearance-none cursor-pointer bg-white">
+                                    <option value="bottom">Inferior (TikTok/Reels)</option>
+                                    <option value="center">Centro (Cine)</option>
                                     <option value="none">Sin Subtítulos</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Nota Técnica sobre .WEBM y HandBrake -->
-                    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 space-y-2 text-[11px] text-gray-600">
-                        <div class="flex items-center gap-2 font-bold text-black">
-                            <i class="fa-solid fa-circle-info text-blue-600"></i>
-                            <span>Nota Técnica sobre Formatos y Rendimiento (.WEBM)</span>
-                        </div>
-                        <p>
-                            ReelMatic genera tus videos en formato nativo <strong>.WEBM</strong> para garantizar compresión ultrarrápida y entrega instantánea en los servidores de TikTok y YouTube. Si alguna plataforma exige estrictamente formato .MP4 tradicional, te recomendamos convertirlo en segundos con la herramienta gratuita y de código abierto <a href="https://handbrake.fr/" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-semibold">HandBrake Converter</a>. (Sujeto a disponibilidad del servicio gratuito diario).
-                        </p>
-                    </div>
-
-                    <!-- Botón de Generación y Estatus -->
-                    <div class="pt-2 space-y-4">
-                        <button id="generateBtn" class="w-full bg-black text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm hover:bg-neutral-800 transition-all shadow-lg">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video Automático de 1 Minuto (Gratis)
+                    <div class="pt-4">
+                        <button id="generateBtn" class="w-full apple-btn-primary font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-base shadow-lg">
+                            <i class="fa-solid fa-bolt"></i> Renderizar Video Ahora (3 Minutos)
                         </button>
 
-                        <div id="statusBox" class="hidden mt-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
+                        <div id="statusBox" class="hidden mt-6 bg-[#fbfbfd] p-5 rounded-2xl border border-gray-100">
                             <div class="flex items-center gap-3 mb-3">
-                                <i id="statusIcon" class="fa-solid fa-circle-notch fa-spin text-black"></i>
-                                <span id="statusText" class="text-xs font-semibold text-black">Iniciando Generación...</span>
+                                <i id="statusIcon" class="fa-solid fa-circle-notch fa-spin text-gray-800"></i>
+                                <span id="statusText" class="text-sm font-semibold text-apple-dark">Iniciando Motor IA...</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                <div id="progressBar" class="bg-black h-2 rounded-full transition-all duration-300 w-0"></div>
+                                <div id="progressBar" class="bg-gray-800 h-2 rounded-full transition-all duration-300 w-0"></div>
                             </div>
                         </div>
 
-                        <!-- Contenedor de Descarga 100% Gratis -->
-                        <div id="downloadContainer" class="hidden mt-4 space-y-4">
-                            <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30 text-xs">
-                                <i class="fa-solid fa-download"></i> Descargar Video Generado (.WEBM)
+                        <div id="downloadContainer" class="hidden mt-6 space-y-4">
+                            <a id="downloadBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/30">
+                                <i class="fa-solid fa-download"></i> Descargar WebM (3 Minutos - Listo para Redes)
                             </a>
-                            <button id="resetBtn" class="w-full bg-gray-100 hover:bg-gray-200 text-black font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer border border-gray-200 text-xs">
-                                <i class="fa-solid fa-rotate-right"></i> Generar Otro Video
+                            
+                            <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl text-sm text-blue-800 flex items-start gap-3 shadow-sm">
+                                <i class="fa-solid fa-circle-info mt-0.5 text-apple-blue"></i>
+                                <div>
+                                    <strong class="block mb-1 font-bold">¿Necesitas formato MP4?</strong>
+                                    <p class="font-medium text-blue-700/80 leading-snug">El formato WebM es más ligero y el favorito del algoritmo. Si por alguna razón técnica requieres MP4, te recomendamos usar <a href="https://handbrake.fr/" target="_blank" rel="noopener noreferrer" class="underline font-bold hover:text-apple-blue transition-colors">HandBrake</a>, una herramienta profesional y 100% gratuita para Mac y Windows.</p>
+                                </div>
+                            </div>
+
+                            <button id="resetBtn" class="w-full bg-gray-100 hover:bg-gray-200 text-apple-dark font-semibold py-4 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 cursor-pointer border border-gray-200">
+                                <i class="fa-solid fa-rotate-right"></i> Crear Nuevo Video
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
-            <!-- Preview Device Frame -->
             <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
-                <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white border border-gray-200 apple-shadow max-w-sm w-full">
+                <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white apple-shadow border border-gray-100 mx-auto lg:mx-0 shadow-2xl transition-all duration-500 max-w-sm w-full">
                     <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5 transition-opacity">
                         <div class="w-16 h-4 bg-black rounded-full"></div>
                     </div>
-                    <div id="screenRatio" class="relative rounded-[2.2rem] overflow-hidden bg-black aspect-[9/16] w-full flex items-center justify-center shadow-inner">
-                        <div id="placeholderText" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 z-20 p-6 text-center">
-                            <i id="placeholderIcon" class="fa-brands fa-tiktok text-4xl mb-3 opacity-40"></i>
-                            <p id="placeholderDesc" class="text-xs font-medium tracking-wide">Sube tus fotos y guion para ver la vista previa en tiempo real</p>
+                    <div id="screenRatio" class="relative rounded-[2.2rem] overflow-hidden bg-black aspect-[9/16] w-full transition-all duration-500 flex items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+                        <div id="placeholderText" class="absolute inset-0 flex flex-col items-center justify-center text-gray-500 z-20 p-6 text-center">
+                            <i id="placeholderIcon" class="fa-brands fa-tiktok text-5xl mb-4 opacity-40 transition-all"></i>
+                            <p id="placeholderDesc" class="text-sm font-medium tracking-wide">Tu video de 3 minutos aparecerá aquí</p>
                         </div>
                         <canvas id="livePreviewCanvas" class="w-full h-full object-cover relative z-10 hidden"></canvas>
                         <video id="finalVideoPlayer" class="w-full h-full object-cover relative z-20 hidden" controls playsinline></video>
@@ -225,14 +405,83 @@
         </main>
     </div>
 
-    <!-- Footer -->
-    <footer class="w-full bg-white border-t border-gray-200 py-12 mt-auto text-center text-xs text-gray-500">
-        <p>&#169; 2026 ReelMatic Pro. Generador Automático de Videos 100% Gratuito (Sujeto a disponibilidad del servicio diario).</p>
+    <footer class="w-full bg-white border-t border-gray-200 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-apple-dark rounded-md flex items-center justify-center text-white font-bold text-xs">R</div>
+                <span class="font-bold text-sm tracking-tight text-apple-dark">ReelMatic<span class="text-gray-500 font-medium">.pro</span></span>
+            </div>
+            <div class="flex items-center gap-3">
+                <p class="text-xs text-gray-400 font-medium">&#169; 2026 ReelMatic Pro. Todos los derechos reservados.</p>
+                <a href="#" id="stealthPortalTrigger" class="text-xs text-gray-300 hover:text-gray-400 transition-colors" title="Portal de Acceso Rápido"><i class="fa-solid fa-circle-dot text-[8px]"></i></a>
+            </div>
+        </div>
     </footer>
 
-    <!-- Scripts -->
     <script>
-        const CLOUDFLARE_WORKER_URL = "https://reelmatic-api.esmaragdocamaz.workers.dev/";
+        // SISTEMA DE CRÉDITOS / FICHAS (ARCADE & PAYPAL SYNC)
+        function getCredits() {
+            let credits = localStorage.getItem('reelmatic_credits');
+            if (credits === null) {
+                credits = 3;
+                localStorage.setItem('reelmatic_credits', credits);
+            }
+            return parseInt(credits, 10);
+        }
+
+        function setCredits(val) {
+            localStorage.setItem('reelmatic_credits', val);
+            updateCreditsUI();
+        }
+
+        function updateCreditsUI() {
+            const credits = getCredits();
+            const counterHeader = document.getElementById('creditCounterHeader');
+            const freeBadge = document.getElementById('freeBadgeText');
+            const generateBtn = document.getElementById('generateBtn');
+            const paywallBox = document.getElementById('paywallBox');
+
+            if (counterHeader) counterHeader.textContent = `Fichas disponibles: ${credits}`;
+            if (freeBadge) freeBadge.textContent = `${credits} Shorts gratis`;
+
+            if (credits <= 0) {
+                if (generateBtn) generateBtn.disabled = true;
+                if (paywallBox) paywallBox.classList.remove('hidden');
+            } else {
+                if (generateBtn) generateBtn.disabled = false;
+                if (paywallBox) paywallBox.classList.add('hidden');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const plan = urlParams.get('plan');
+            
+            if (plan) {
+                const current = getCredits();
+                if (plan === 'single') {
+                    setCredits(current + 1);
+                } else if (plan === 'bundle') {
+                    setCredits(current + 3);
+                }
+                window.history.replaceState({}, document.title, window.location.pathname + "#app-workspace");
+            }
+            updateCreditsUI();
+
+            const stealthTrigger = document.getElementById('stealthPortalTrigger');
+            if (stealthTrigger) {
+                stealthTrigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const inputKey = prompt("Ingrese la llave maestra del sistema:");
+                    if (inputKey === "mago") {
+                        setCredits(999);
+                        alert("¡Acceso ilimitado concedido exitosamente!");
+                    } else if (inputKey !== null) {
+                        alert("Llave incorrecta.");
+                    }
+                });
+            }
+        });
 
         const formatRadios = document.querySelectorAll('input[name="videoFormat"]');
         const deviceFrame = document.getElementById('deviceFrame');
@@ -248,12 +497,15 @@
         const imageInput = document.getElementById('imageInput');
         const dropZone = document.getElementById('dropZone');
         const galleryContainer = document.getElementById('galleryContainer');
+        const addMorePhotosBtn = document.getElementById('addMorePhotosBtn');
         const generateBtn = document.getElementById('generateBtn');
         const scriptText = document.getElementById('scriptText');
         const charCount = document.getElementById('charCount');
         const liveCanvas = document.getElementById('livePreviewCanvas');
         const liveCtx = liveCanvas.getContext('2d', { willReadFrequently: true });
         const finalVideoPlayer = document.getElementById('finalVideoPlayer');
+        
+        const WORKER_URL = "https://reelmatic-api.esmaragdocamaz.workers.dev/";
 
         let loadedImages = []; 
         let loadedLogo = null;
@@ -261,100 +513,89 @@
         let finalCanvasW = 720; let finalCanvasH = 1280;
         let mediaRecorder;
         let recordedChunks = [];
+        let draggedItem = null;
         let captions = [];
 
-        function updateRealTimePreview() {
-            if (renderState.isActive) return;
-            if (loadedImages.length > 0 || (videoTitle && videoTitle.value.trim().length > 0)) {
-                document.getElementById('placeholderText').classList.add('hidden');
-                liveCanvas.classList.remove('hidden');
-                liveCanvas.width = finalCanvasW;
-                liveCanvas.height = finalCanvasH;
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
 
-                liveCtx.fillStyle = '#000';
-                liveCtx.fillRect(0, 0, finalCanvasW, finalCanvasH);
-
-                if (loadedImages.length > 0) {
-                    const img = loadedImages[0];
-                    const imgRatio = img.width / img.height;
-                    const canvasRatio = finalCanvasW / finalCanvasH;
-                    let drawW, drawH, drawX, drawY;
-
-                    if (imgRatio > canvasRatio) {
-                        drawH = finalCanvasH;
-                        drawW = img.width * (finalCanvasH / img.height);
-                        drawX = (finalCanvasW - drawW) / 2;
-                        drawY = 0;
-                    } else {
-                        drawW = finalCanvasW;
-                        drawH = img.height * (finalCanvasW / img.width);
-                        drawX = 0;
-                        drawY = (finalCanvasH - drawH) / 2;
-                    }
-                    liveCtx.drawImage(img, drawX, drawY, drawW, drawH);
-                }
-
-                if (videoTitle && videoTitle.value.trim()) {
-                    const titleStr = videoTitle.value.trim().toUpperCase();
-                    liveCtx.fillStyle = '#FFFFFF';
-                    liveCtx.font = '900 38px Inter, sans-serif';
-                    liveCtx.textAlign = 'left';
-                    liveCtx.shadowColor = 'rgba(0,0,0,0.8)';
-                    liveCtx.shadowBlur = 12;
-                    liveCtx.fillText(titleStr, 40, 80);
-                    liveCtx.shadowBlur = 0;
-                }
-
-                if (loadedLogo) {
-                    const maxLogoW = 140;
-                    const maxLogoH = 140;
-                    let lW = loadedLogo.width;
-                    let lH = loadedLogo.height;
-                    const lRatio = lW / lH;
-                    if (lW > maxLogoW) { lW = maxLogoW; lH = lW / lRatio; }
-                    if (lH > maxLogoH) { lH = maxLogoH; lW = lH * lRatio; }
-                    liveCtx.drawImage(loadedLogo, finalCanvasW - lW - 40, 40, lW, lH);
-                }
-            } else {
-                if (!renderState.isActive && finalVideoPlayer.classList.contains('hidden')) {
-                    document.getElementById('placeholderText').classList.remove('hidden');
-                    liveCanvas.classList.add('hidden');
-                }
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
             }
         }
 
-        if (videoTitle) {
-            videoTitle.addEventListener('input', updateRealTimePreview);
+        function pcmToWav(pcm16, sampleRate) {
+            const numChannels = 1;
+            const byteRate = sampleRate * numChannels * 2;
+            const blockAlign = numChannels * 2;
+            const buffer = new ArrayBuffer(44 + pcm16.byteLength);
+            const view = new DataView(buffer);
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + pcm16.byteLength, true);
+            writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, 16, true);
+            writeString(view, 36, 'data');
+            view.setUint32(40, pcm16.byteLength, true);
+
+            const offset = 44;
+            for (let i = 0; i < pcm16.length; i++) {
+                view.setInt16(offset + i * 2, pcm16[i], true);
+            }
+            return new Blob([view], { type: 'audio/wav' });
         }
 
-        if (formatRadios) {
+        if(formatRadios) {
             formatRadios.forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     if (e.target.value === 'horizontal') {
                         screenRatio.classList.replace('aspect-[9/16]', 'aspect-[16/9]');
-                        deviceFrame.classList.remove('max-w-sm');
-                        deviceFrame.classList.add('max-w-3xl'); 
+                        deviceFrame.classList.remove('max-w-sm', 'rounded-[3rem]', 'p-3');
+                        deviceFrame.classList.add('max-w-3xl', 'rounded-2xl', 'p-2'); 
                         notch.classList.add('opacity-0'); 
                         screenRatio.classList.replace('rounded-[2.2rem]', 'rounded-xl');
-                        placeholderIcon.className = "fa-brands fa-youtube text-4xl text-gray-400 mb-3 opacity-40";
+                        
+                        placeholderIcon.className = "fa-brands fa-youtube text-5xl text-gray-500 mb-4 opacity-40 transition-all";
                         placeholderDesc.textContent = "Formato Horizontal (16:9)";
                         finalCanvasW = 1280; finalCanvasH = 720;
                     } else {
                         screenRatio.classList.replace('aspect-[16/9]', 'aspect-[9/16]');
-                        deviceFrame.classList.remove('max-w-3xl');
-                        deviceFrame.classList.add('max-w-sm');
+                        deviceFrame.classList.remove('max-w-3xl', 'rounded-2xl', 'p-2');
+                        deviceFrame.classList.add('max-w-sm', 'rounded-[3rem]', 'p-3');
                         notch.classList.remove('opacity-0');
                         screenRatio.classList.replace('rounded-xl', 'rounded-[2.2rem]');
-                        placeholderIcon.className = "fa-brands fa-tiktok text-4xl text-gray-400 mb-3 opacity-40";
-                        placeholderDesc.textContent = "Sube tus fotos y guion para ver la vista previa en tiempo real";
+
+                        placeholderIcon.className = "fa-brands fa-tiktok text-5xl text-gray-500 mb-4 opacity-40 transition-all";
+                        placeholderDesc.textContent = "Tu video de 3 minutos aparecerá aquí";
                         finalCanvasW = 720; finalCanvasH = 1280;
                     }
-                    updateRealTimePreview();
                 });
             });
         }
 
-        if (logoInput) {
+        scriptText.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            charCount.textContent = `${currentLength} / 3000 máx (~3 Minutos)`;
+            if (currentLength > 2800) charCount.classList.add('text-red-500'); 
+            else charCount.classList.remove('text-red-500');
+        });
+
+        if(logoInput) {
             logoInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -363,21 +604,14 @@
                     logoPreview.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-contain p-1" alt="Logo"/>`;
                     loadedLogo = new Image();
                     loadedLogo.src = event.target.result;
-                    loadedLogo.onload = updateRealTimePreview;
                 };
                 reader.readAsDataURL(file);
             });
         }
 
-        scriptText.addEventListener('input', function() {
-            const currentLength = this.value.length;
-            charCount.textContent = `${currentLength} / 1300 máx`;
-            if (currentLength > 1200) charCount.classList.add('text-red-500'); 
-            else charCount.classList.remove('text-red-500');
-        });
-
-        imageInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files).slice(0, 10 - loadedImages.length);
+        // MANEJO DE FOTOS (CLIC Y DRAG & DROP)
+        function handleImageFiles(filesList) {
+            const files = Array.from(filesList).slice(0, 10 - loadedImages.length);
             if (files.length === 0) return;
             dropZone.classList.add('hidden'); 
             galleryContainer.classList.remove('hidden');
@@ -391,86 +625,174 @@
                     img.onload = () => {
                         loadedImages.push(img);
                         document.getElementById('photoCount').textContent = `${loadedImages.length} / 10`;
+                        
+                        if(loadedImages.length > 0 && loadedImages.length < 10) {
+                            addMorePhotosBtn.classList.remove('hidden');
+                        } else {
+                            addMorePhotosBtn.classList.add('hidden');
+                        }
 
                         const card = document.createElement('div');
-                        card.className = "flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-gray-200 relative cursor-grab bg-white group";
-                        card.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-cover pointer-events-none" alt="Preview"/>`;
+                        card.className = "flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden snap-center border border-gray-200 shadow-sm relative cursor-grab active:cursor-grabbing bg-white flex flex-col justify-between group";
+                        
+                        card.innerHTML = `
+                            <img src="${event.target.result}" class="w-full h-full object-cover pointer-events-none" alt="Preview"/>
+                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                <i class="fa-solid fa-arrows-up-down-left-right text-white text-sm"></i>
+                            </div>
+                        `;
+                        
                         card.imageObj = img;
+                        card.draggable = true;
+
+                        card.addEventListener('dragstart', function(e) { 
+                            draggedItem = this; 
+                            setTimeout(() => this.classList.add('opacity-40', 'border-apple-blue', 'border-2'), 0); 
+                        });
+                        
+                        card.addEventListener('dragend', function() { 
+                            this.classList.remove('opacity-40', 'border-apple-blue', 'border-2'); 
+                            draggedItem = null; 
+                        });
+                        
+                        card.addEventListener('dragover', function(e) { 
+                            e.preventDefault(); 
+                            this.classList.add('scale-105', 'ring-2', 'ring-apple-blue');
+                        });
+                        
+                        card.addEventListener('dragleave', function(e) { 
+                            this.classList.remove('scale-105', 'ring-2', 'ring-apple-blue');
+                        });
+                        
+                        card.addEventListener('drop', function(e) {
+                            e.preventDefault();
+                            this.classList.remove('scale-105', 'ring-2', 'ring-apple-blue');
+                            if (draggedItem && draggedItem !== this) {
+                                let allItems = Array.from(galleryContainer.querySelectorAll('div[draggable="true"]'));
+                                let draggedIdx = allItems.indexOf(draggedItem);
+                                let targetIdx = allItems.indexOf(this);
+                                
+                                if (draggedIdx < targetIdx) {
+                                    this.parentNode.insertBefore(draggedItem, this.nextSibling);
+                                } else {
+                                    this.parentNode.insertBefore(draggedItem, this);
+                                }
+                            }
+                        });
+
                         galleryContainer.appendChild(card);
-                        updateRealTimePreview();
                     }
                 };
                 reader.readAsDataURL(file);
             });
+        }
+
+        imageInput.addEventListener('change', (e) => {
+            handleImageFiles(e.target.files);
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-apple-blue', 'bg-blue-50');
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-apple-blue', 'bg-blue-50');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-apple-blue', 'bg-blue-50');
+            if (e.dataTransfer && e.dataTransfer.files) {
+                handleImageFiles(e.dataTransfer.files);
+            }
         });
 
         generateBtn.addEventListener('click', async () => {
-            if (loadedImages.length === 0) {
-                alert("Sube al menos una foto.");
+            const currentCredits = getCredits();
+            if (currentCredits <= 0) {
+                alert("Tus fichas se han agotado. Adquiere más créditos en nuestra sección de precios con PayPal para continuar.");
                 return;
             }
 
             const text = scriptText.value.trim();
-            if (!text) {
-                alert("Escribe un guion para generar la voz automática y los subtítulos.");
-                return;
+            const sortedGalleryItems = Array.from(galleryContainer.querySelectorAll('div[draggable="true"]'));
+            if (sortedGalleryItems.length > 0) {
+                loadedImages = sortedGalleryItems.map(item => item.imageObj);
+            }
+            
+            if (loadedImages.length === 0) return alert("Sube al menos una foto.");
+            if (!text) return alert("Escribe un guion.");
+
+            if (currentCredits < 999) {
+                setCredits(currentCredits - 1);
+            }
+
+            const words = text.split(/\s+/);
+            captions = [];
+            let currentChunk = [];
+            let currentLen = 0;
+            for (let i = 0; i < words.length; i++) {
+                currentChunk.push(words[i]);
+                currentLen += words[i].length;
+                if (currentLen > 25 || i === words.length - 1) {
+                    captions.push(currentChunk.join(" "));
+                    currentChunk = [];
+                    currentLen = 0;
+                }
             }
 
             generateBtn.disabled = true;
             document.getElementById('statusBox').classList.remove('hidden');
             document.getElementById('placeholderText').classList.add('hidden');
             document.getElementById('progressBar').style.width = "0%";
+            document.getElementById('statusText').textContent = "Generando voz larga con IA (3 Minutos)...";
+            document.getElementById('statusIcon').className = "fa-solid fa-circle-notch fa-spin text-gray-800";
 
             try {
-                const words = text.split(/\s+/);
-                captions = [];
-                let currentChunk = [];
-                let currentLen = 0;
-                for (let i = 0; i < words.length; i++) {
-                    currentChunk.push(words[i]);
-                    currentLen += words[i].length;
-                    if (currentLen > 25 || i === words.length - 1) {
-                        captions.push(currentChunk.join(" "));
-                        currentChunk = [];
-                        currentLen = 0;
+                const voiceName = document.getElementById('voiceSelect').value;
+                const payload = {
+                    contents: [{ parts: [{ text: text }] }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } } }
                     }
-                }
+                };
 
-                document.getElementById('statusText').textContent = "Conectando con Google AI Studio (Worker) para locución y subtítulos...";
-
-                let audioUrlToUse = null;
-                const selectedVoice = document.getElementById('googleVoiceSelect').value;
+                const response = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const responseText = await response.text();
+                let result;
                 try {
-                    const response = await fetch(CLOUDFLARE_WORKER_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ text: text, voice: selectedVoice })
-                    });
-                    if (response.ok) {
-                        const audioBlob = await response.blob();
-                        audioUrlToUse = URL.createObjectURL(audioBlob);
-                    }
-                } catch(err) {
-                    console.log("Usando respaldo de voz del navegador...");
+                    result = JSON.parse(responseText);
+                } catch(e) {
+                    throw new Error("El servidor tardó demasiado o la respuesta no es válida. Prueba con un guion ligeramente más corto.");
                 }
 
-                if (!audioUrlToUse) {
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'es-ES';
-                    window.speechSynthesis.speak(utterance);
-                }
+                if (!response.ok) throw new Error(result.error || "Fallo en la conexión con el servidor");
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                if (!part || !part.inlineData) throw new Error("No se pudo generar el audio.");
 
-                const audioEl = new Audio(audioUrlToUse || 'https://actions.google.com/sounds/v1/ambiences/rain_heavy.ogg');
+                const sampleRate = parseInt(part.inlineData.mimeType.match(/rate=(\d+)/)[1], 10);
+                const pcmData = base64ToArrayBuffer(part.inlineData.data);
+                const pcm16 = new Int16Array(pcmData);
+                const wavBlob = pcmToWav(pcm16, sampleRate);
+                const audioUrl = URL.createObjectURL(wavBlob);
+
+                const audioEl = new Audio(audioUrl);
                 audioEl.crossOrigin = "anonymous";
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const audioDest = audioCtx.createMediaStreamDestination();
-                const source = audioEl ? audioCtx.createMediaElementSource(audioEl) : null;
-                if(source) {
-                    source.connect(audioDest);
-                    source.connect(audioCtx.destination); 
-                }
+                const dest = audioCtx.createMediaStreamDestination();
+                const source = audioCtx.createMediaElementSource(audioEl);
+                source.connect(dest);
+                source.connect(audioCtx.destination); 
 
-                document.getElementById('statusText').textContent = "Ensamblando video final (WebM)...";
+                document.getElementById('statusText').textContent = "Renderizando y Mezclando Video de 3 Minutos...";
                 liveCanvas.width = finalCanvasW;
                 liveCanvas.height = finalCanvasH;
                 liveCanvas.classList.remove('hidden');
@@ -480,7 +802,7 @@
                 const canvasStream = liveCanvas.captureStream(30);
                 const combinedStream = new MediaStream([
                     ...canvasStream.getVideoTracks(),
-                    ...audioDest.stream.getAudioTracks()
+                    ...dest.stream.getAudioTracks()
                 ]);
 
                 mediaRecorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
@@ -496,32 +818,33 @@
                     
                     const downloadBtn = document.getElementById('downloadBtn');
                     downloadBtn.href = videoURL;
-                    downloadBtn.download = 'ReelMatic_Pro_Free_' + (new Date().getTime()) + '.webm';
+                    downloadBtn.download = 'ReelMatic_Pro_3Min_' + (new Date().getTime()) + '.webm';
                     
-                    document.getElementById('statusText').textContent = "¡Video Generado con Éxito!";
-                    document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-emerald-600";
+                    document.getElementById('statusText').textContent = "¡Renderizado Completo!";
+                    document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-green-500";
                     document.getElementById('downloadContainer').classList.remove('hidden');
                     generateBtn.disabled = false;
                 };
 
                 audioEl.onloadedmetadata = () => {
-                    const advertisedDuration = Math.max(audioEl.duration * 1000, 15000);
-                    const durationPerImage = advertisedDuration / loadedImages.length;
+                    const advertisedDuration = 180000;
+                    const totalDuration = Math.max(audioEl.duration * 1000, advertisedDuration + 30000);
+                    const durationPerImage = totalDuration / loadedImages.length;
                     
                     renderState.isActive = true;
                     renderState.startTime = performance.now();
                     mediaRecorder.start();
-                    audioEl.play().catch(e => console.log("Audio autoplay prevented"));
+                    audioEl.play();
 
                     function drawFrame(now) {
                         if (!renderState.isActive) return;
                         const elapsed = now - renderState.startTime;
-                        const progress = elapsed / advertisedDuration;
+                        const progress = elapsed / totalDuration;
                         document.getElementById('progressBar').style.width = `${Math.min(progress * 100, 100)}%`;
 
-                        if (elapsed >= advertisedDuration || audioEl.ended) {
+                        if (elapsed >= totalDuration) {
                             renderState.isActive = false;
-                            try { mediaRecorder.stop(); } catch(e){}
+                            mediaRecorder.stop();
                             return;
                         }
 
@@ -561,16 +884,17 @@
                         }
 
                         const crossfadeDuration = 800;
+
                         if (imageIndex > 0 && imageElapsed < crossfadeDuration) {
                             const prevProgress = (durationPerImage + imageElapsed) / durationPerImage; 
                             drawKenBurns(loadedImages[imageIndex - 1], prevProgress, 1);
+                            
                             const alpha = imageElapsed / crossfadeDuration;
                             drawKenBurns(loadedImages[imageIndex], imgProgress, alpha);
                         } else {
                             drawKenBurns(loadedImages[imageIndex], imgProgress, 1);
                         }
 
-                        const videoTitle = document.getElementById('videoTitle');
                         if(videoTitle) {
                             const titleStr = videoTitle.value.trim().toUpperCase();
                             if (titleStr) {
@@ -579,7 +903,15 @@
                                 liveCtx.textAlign = 'left';
                                 liveCtx.shadowColor = 'rgba(0,0,0,0.8)';
                                 liveCtx.shadowBlur = 12;
-                                liveCtx.fillText(titleStr, 40, 80);
+                                
+                                const titleWords = titleStr.split(' ');
+                                if (titleWords.length > 4) {
+                                    const mid = Math.ceil(titleWords.length / 2);
+                                    liveCtx.fillText(titleWords.slice(0, mid).join(' '), 40, 70);
+                                    liveCtx.fillText(titleWords.slice(mid).join(' '), 40, 120);
+                                } else {
+                                    liveCtx.fillText(titleStr, 40, 80);
+                                }
                                 liveCtx.shadowBlur = 0;
                             }
                         }
@@ -590,26 +922,47 @@
                             let lW = loadedLogo.width;
                             let lH = loadedLogo.height;
                             const lRatio = lW / lH;
-                            if (lW > maxLogoW) { lW = maxLogoW; lH = lW / lRatio; }
-                            if (lH > maxLogoH) { lH = maxLogoH; lW = lH * lRatio; }
-                            liveCtx.drawImage(loadedLogo, finalCanvasW - lW - 40, 40, lW, lH);
+                            if (lW > maxLogoW) {
+                                lW = maxLogoW;
+                                lH = lW / lRatio;
+                            }
+                            if (lH > maxLogoH) {
+                                lH = maxLogoH;
+                                lW = lH * lRatio;
+                            }
+                            const logoX = finalCanvasW - lW - 40;
+                            const logoY = 40;
+                            liveCtx.drawImage(loadedLogo, logoX, logoY, lW, lH);
                         }
 
-                        const captionPos = document.getElementById('captionPosSelect').value;
-                        if (captionPos !== 'none' && captions.length > 0) {
-                            const captionIndex = Math.min(Math.floor((elapsed / advertisedDuration) * captions.length), captions.length - 1);
+                        const captionStyle = document.getElementById('captionPosSelect').value;
+                        if (captionStyle !== 'none' && captions.length > 0) {
+                            const captionIndex = Math.min(Math.floor((elapsed / totalDuration) * captions.length), captions.length - 1);
                             const currentCaption = captions[captionIndex].toUpperCase();
                             
                             liveCtx.fillStyle = '#FFFFFF'; 
-                            liveCtx.font = '900 52px Inter, sans-serif';
+                            liveCtx.font = '900 55px Inter, sans-serif';
                             liveCtx.textAlign = 'center';
                             liveCtx.lineWidth = 12; 
                             liveCtx.strokeStyle = '#000000';
                             liveCtx.lineJoin = 'round'; 
                             
-                            let capY = (captionPos === 'center') ? (finalCanvasH / 2) : (finalCanvasH * 0.82);
-                            liveCtx.strokeText(currentCaption, finalCanvasW / 2, capY);
-                            liveCtx.fillText(currentCaption, finalCanvasW / 2, capY);
+                            let capY = captionStyle === 'center' ? finalCanvasH / 2 : finalCanvasH * 0.82;
+                            
+                            const capWords = currentCaption.split(' ');
+                            if (capWords.length > 2) {
+                                const mid = Math.ceil(capWords.length / 2);
+                                const l1 = capWords.slice(0, mid).join(' ');
+                                const l2 = capWords.slice(mid).join(' ');
+                                
+                                liveCtx.strokeText(l1, finalCanvasW / 2, capY - 35);
+                                liveCtx.fillText(l1, finalCanvasW / 2, capY - 35);
+                                liveCtx.strokeText(l2, finalCanvasW / 2, capY + 35);
+                                liveCtx.fillText(l2, finalCanvasW / 2, capY + 35);
+                            } else {
+                                liveCtx.strokeText(currentCaption, finalCanvasW / 2, capY);
+                                liveCtx.fillText(currentCaption, finalCanvasW / 2, capY);
+                            }
                         }
 
                         requestAnimationFrame(drawFrame);
@@ -618,24 +971,35 @@
                 };
 
             } catch (error) {
-                alert("Error en el proceso: " + error.message);
+                alert(error.message);
                 document.getElementById('statusBox').classList.add('hidden');
                 generateBtn.disabled = false;
+                updateCreditsUI();
             }
         });
 
         document.getElementById('resetBtn').addEventListener('click', () => {
             loadedImages = [];
             loadedLogo = null;
+            draggedItem = null;
+            
             galleryContainer.innerHTML = '';
             galleryContainer.classList.add('hidden');
             dropZone.classList.remove('hidden');
             document.getElementById('photoCount').textContent = '0 / 10';
-            document.getElementById('imageInput').value = '';
+            document.getElementById('addMorePhotosBtn').classList.add('hidden');
+            imageInput.value = '';
+
             scriptText.value = '';
-            document.getElementById('videoTitle').value = '';
-            logoPreview.innerHTML = '<i class="fa-solid fa-image text-gray-400" id="logoPlaceholderIcon"></i>';
-            document.getElementById('logoInput').value = '';
+            document.getElementById('charCount').textContent = '0 / 3000 máx (~3 Minutos)';
+            document.getElementById('charCount').classList.remove('text-red-500');
+            if(videoTitle) videoTitle.value = '';
+            
+            if(logoPreview) {
+                logoPreview.innerHTML = '<i class="fa-solid fa-image text-gray-400" id="logoPlaceholderIcon"></i>';
+                document.getElementById('logoInput').value = '';
+            }
+
             document.getElementById('downloadContainer').classList.add('hidden');
             document.getElementById('statusBox').classList.add('hidden');
             document.getElementById('progressBar').style.width = "0%";
@@ -644,7 +1008,9 @@
             finalVideoPlayer.pause();
             finalVideoPlayer.src = '';
             document.getElementById('placeholderText').classList.remove('hidden');
+            
             generateBtn.disabled = false;
+            updateCreditsUI();
         });
     </script>
 </body>
