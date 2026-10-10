@@ -52,7 +52,7 @@
             </div>
             <div class="flex items-center gap-4">
                 <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
-                    Google AI Studio Conectado
+                    <i class="fa-solid fa-microphone-lines mr-1"></i> Web Speech API (100% Gratis e Ilimitado)
                 </span>
             </div>
         </div>
@@ -67,13 +67,12 @@
                 Crea tu Short de 1 Minuto.
             </h1>
             <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto font-medium">
-                Sube hasta 10 fotos, reordénalas arrastrándolas, añade tu título y guion optimizado por Google AI Studio.
+                Sube hasta 10 fotos, reordénalas arrastrándolas o con flechas, añade tu título y guion con voz natural instantánea.
             </p>
         </div>
 
         <main class="px-6 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
             
-            <!-- Columna Izquierda: Controles del Estudio -->
             <div class="lg:w-1/2 space-y-6 z-10 w-full">
                 <div class="bento-card p-6 sm:p-10 rounded-[2.5rem] space-y-8 bg-white apple-shadow">
                     
@@ -124,7 +123,7 @@
                     <!-- Fotos (Hasta 10 con reordenamiento y borrado) -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-2">
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">3. Fotos (Hasta 10 - Arrastra para Reordenar)</label>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">3. Fotos (Hasta 10 - Reordena con Arrastrar)</label>
                             <div class="flex items-center gap-2">
                                 <button id="addMorePhotosBtn" class="hidden text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors cursor-pointer" onclick="document.getElementById('imageInput').click()">
                                     <i class="fa-solid fa-plus"></i> Añadir Más
@@ -140,23 +139,15 @@
                         <div id="galleryContainer" class="hidden flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-custom snap-x px-1 border border-gray-200 rounded-2xl bg-white p-2"></div>
                     </div>
 
-                    <!-- Guion y Voz de Google -->
+                    <!-- Guion y Voz Nativa -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex justify-between items-end mb-1">
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">4. Guion Exacto de 1 Minuto (Google AI Studio)</label>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">4. Guion Exacto de 1 Minuto (Web Speech API)</label>
                             <span id="charCount" class="text-[10px] font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200">0 / 1300 máx</span>
                         </div>
-                        <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion. La duración del video se ajustará exactamente a 60 segundos (1 minuto)..."></textarea>
+                        <textarea id="scriptText" maxlength="1300" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe tu guion. La duración del video se ajustará exactamente a 60 segundos..."></textarea>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                            <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Voz / Locución</label>
-                                <select id="googleVoiceSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                    <option value="es-ES">Español España (Natural)</option>
-                                    <option value="es-MX" selected>Español México (Latino)</option>
-                                    <option value="es-US">Español US (Neutro)</option>
-                                </select>
-                            </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Posición de Subtítulos</label>
                                 <select id="captionPosSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
@@ -171,7 +162,7 @@
                     <!-- Botón de Generación y Estatus -->
                     <div class="pt-2 space-y-4">
                         <button id="generateBtn" class="w-full bg-black text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm hover:bg-neutral-800 transition-all shadow-lg cursor-pointer">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video Exacto de 1 Minuto (Google AI)
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Video Exacto de 1 Minuto (Voz Natural)
                         </button>
 
                         <div id="statusBox" class="hidden mt-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
@@ -197,7 +188,6 @@
                 </div>
             </div>
 
-            <!-- Columna Derecha: Vista Previa Dispositivo -->
             <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
                 <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white border border-gray-200 apple-shadow max-w-sm w-full">
                     <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5 transition-opacity">
@@ -218,8 +208,6 @@
     </div>
 
     <script>
-        const CLOUDFLARE_WORKER_URL = "https://reelmatic-api.esmaragdocamaz.workers.dev/";
-
         const formatRadios = document.querySelectorAll('input[name="videoFormat"]');
         const deviceFrame = document.getElementById('deviceFrame');
         const screenRatio = document.getElementById('screenRatio');
@@ -457,7 +445,7 @@
             handleImageFiles(e.target.files);
         });
 
-        generateBtn.addEventListener('click', async () => {
+        generateBtn.addEventListener('click', () => {
             updateGalleryOrder();
             if (loadedImages.length === 0) {
                 alert("Sube al menos una foto.");
@@ -475,206 +463,205 @@
             document.getElementById('placeholderText').classList.add('hidden');
             document.getElementById('progressBar').style.width = "0%";
 
-            try {
-                document.getElementById('statusText').textContent = "Conectando con Google AI Studio (Worker)...";
+            document.getElementById('statusText').textContent = "Configurando Web Speech API...";
 
-                const response = await fetch(CLOUDFLARE_WORKER_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: rawText })
-                });
-
-                if (!response.ok) {
-                    const errData = await response.text();
-                    throw new Error("El Worker rechazó la petición: " + errData);
+            // Procesar texto para subtítulos sincronizados
+            const words = rawText.split(/\s+/);
+            captions = [];
+            let currentChunk = [];
+            let currentLen = 0;
+            for (let i = 0; i < words.length; i++) {
+                currentChunk.push(words[i]);
+                currentLen += words[i].length;
+                if (currentLen > 25 || i === words.length - 1) {
+                    captions.push(currentChunk.join(" "));
+                    currentChunk = [];
+                    currentLen = 0;
                 }
-
-                const jsonRes = await response.json();
-                const spokenText = jsonRes.text || rawText;
-
-                const words = spokenText.split(/\s+/);
-                captions = [];
-                let currentChunk = [];
-                let currentLen = 0;
-                for (let i = 0; i < words.length; i++) {
-                    currentChunk.push(words[i]);
-                    currentLen += words[i].length;
-                    if (currentLen > 25 || i === words.length - 1) {
-                        captions.push(currentChunk.join(" "));
-                        currentChunk = [];
-                        currentLen = 0;
-                    }
-                }
-
-                const utterance = new SpeechSynthesisUtterance(spokenText);
-                const selectedVoiceLang = document.getElementById('googleVoiceSelect').value;
-                utterance.lang = selectedVoiceLang;
-                
-                const voices = window.speechSynthesis.getVoices();
-                const targetVoice = voices.find(v => v.lang.startsWith(selectedVoiceLang));
-                if (targetVoice) utterance.voice = targetVoice;
-
-                window.speechSynthesis.speak(utterance);
-
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                gainNode.gain.value = 0.0001; // Silencioso para mantener la captura activa sin ruidos
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                const audioDest = audioCtx.createMediaStreamDestination();
-                gainNode.connect(audioDest);
-                oscillator.start();
-
-                document.getElementById('statusText').textContent = "Ensamblando video final (Exactamente 60 Segundos)...";
-                liveCanvas.width = finalCanvasW;
-                liveCanvas.height = finalCanvasH;
-                liveCanvas.classList.remove('hidden');
-                finalVideoPlayer.classList.add('hidden');
-                recordedChunks = [];
-
-                const canvasStream = liveCanvas.captureStream(30);
-                const combinedStream = new MediaStream([
-                    ...canvasStream.getVideoTracks(),
-                    ...audioDest.stream.getAudioTracks()
-                ]);
-
-                mediaRecorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
-                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
-                
-                mediaRecorder.onstop = () => {
-                    try { oscillator.stop(); } catch(e){}
-                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                    const videoURL = URL.createObjectURL(blob);
-                    
-                    finalVideoPlayer.src = videoURL;
-                    finalVideoPlayer.classList.remove('hidden');
-                    liveCanvas.classList.add('hidden');
-                    
-                    const downloadBtn = document.getElementById('downloadBtn');
-                    downloadBtn.href = videoURL;
-                    downloadBtn.download = 'ReelMatic_Pro_1Minuto_' + (new Date().getTime()) + '.webm';
-                    
-                    document.getElementById('statusText').textContent = "¡Video de 1 Minuto Generado con Éxito!";
-                    document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-emerald-600";
-                    document.getElementById('downloadContainer').classList.remove('hidden');
-                    generateBtn.disabled = false;
-                };
-
-                // Duración fija y estricta de 60 segundos exactos (1 minuto)
-                const advertisedDuration = 60000;
-                const durationPerImage = advertisedDuration / loadedImages.length;
-                
-                renderState.isActive = true;
-                renderState.startTime = performance.now();
-                mediaRecorder.start();
-
-                function drawFrame(now) {
-                    if (!renderState.isActive) return;
-                    const elapsed = now - renderState.startTime;
-                    const progress = elapsed / advertisedDuration;
-                    document.getElementById('progressBar').style.width = `${Math.min(progress * 100, 100)}%`;
-
-                    if (elapsed >= advertisedDuration || !window.speechSynthesis.speaking) {
-                        renderState.isActive = false;
-                        try { window.speechSynthesis.cancel(); } catch(e){}
-                        try { mediaRecorder.stop(); } catch(e){}
-                        return;
-                    }
-
-                    const imageIndex = Math.min(Math.floor(elapsed / durationPerImage), loadedImages.length - 1);
-                    const imageElapsed = elapsed % durationPerImage;
-                    const imgProgress = imageElapsed / durationPerImage;
-                    
-                    liveCtx.fillStyle = '#000';
-                    liveCtx.fillRect(0, 0, finalCanvasW, finalCanvasH);
-
-                    function drawKenBurns(img, progress, alpha) {
-                        if (!img) return;
-                        const scale = 1 + (progress * 0.1);
-                        const imgRatio = img.width / img.height;
-                        const canvasRatio = finalCanvasW / finalCanvasH;
-                        let drawW, drawH, drawX, drawY;
-
-                        if (imgRatio > canvasRatio) {
-                            drawH = finalCanvasH;
-                            drawW = img.width * (finalCanvasH / img.height);
-                            drawX = (finalCanvasW - drawW) / 2;
-                            drawY = 0;
-                        } else {
-                            drawW = finalCanvasW;
-                            drawH = img.height * (finalCanvasW / img.width);
-                            drawX = 0;
-                            drawY = (finalCanvasH - drawH) / 2;
-                        }
-
-                        liveCtx.save();
-                        liveCtx.globalAlpha = alpha;
-                        liveCtx.translate(finalCanvasW/2, finalCanvasH/2);
-                        liveCtx.scale(scale, scale);
-                        liveCtx.translate(-finalCanvasW/2, -finalCanvasH/2);
-                        liveCtx.drawImage(img, drawX, drawY, drawW, drawH);
-                        liveCtx.restore();
-                    }
-
-                    const crossfadeDuration = 800;
-                    if (imageIndex > 0 && imageElapsed < crossfadeDuration) {
-                        const prevProgress = (durationPerImage + imageElapsed) / durationPerImage; 
-                        drawKenBurns(loadedImages[imageIndex - 1], prevProgress, 1);
-                        const alpha = imageElapsed / crossfadeDuration;
-                        drawKenBurns(loadedImages[imageIndex], imgProgress, alpha);
-                    } else {
-                        drawKenBurns(loadedImages[imageIndex], imgProgress, 1);
-                    }
-
-                    const titleVal = videoTitle ? videoTitle.value.trim().toUpperCase() : "";
-                    if (titleVal) {
-                        liveCtx.fillStyle = '#FFFFFF';
-                        liveCtx.font = '900 38px Inter, sans-serif';
-                        liveCtx.textAlign = 'left';
-                        liveCtx.shadowColor = 'rgba(0,0,0,0.8)';
-                        liveCtx.shadowBlur = 12;
-                        liveCtx.fillText(titleVal, 40, 80);
-                        liveCtx.shadowBlur = 0;
-                    }
-
-                    if (loadedLogo) {
-                        const maxLogoW = 140;
-                        const maxLogoH = 140;
-                        let lW = loadedLogo.width;
-                        let lH = loadedLogo.height;
-                        const lRatio = lW / lH;
-                        if (lW > maxLogoW) { lW = maxLogoW; lH = lW / lRatio; }
-                        if (lH > maxLogoH) { lH = maxLogoH; lW = lH * lRatio; }
-                        liveCtx.drawImage(loadedLogo, finalCanvasW - lW - 40, 40, lW, lH);
-                    }
-
-                    const captionPos = document.getElementById('captionPosSelect').value;
-                    if (captionPos !== 'none' && captions.length > 0) {
-                        const captionIndex = Math.min(Math.floor((elapsed / advertisedDuration) * captions.length), captions.length - 1);
-                        const currentCaption = captions[captionIndex].toUpperCase();
-                        
-                        liveCtx.fillStyle = '#FFFFFF'; 
-                        liveCtx.font = '900 52px Inter, sans-serif';
-                        liveCtx.textAlign = 'center';
-                        liveCtx.lineWidth = 12; 
-                        liveCtx.strokeStyle = '#000000';
-                        liveCtx.lineJoin = 'round'; 
-                        
-                        let capY = (captionPos === 'center') ? (finalCanvasH / 2) : (finalCanvasH * 0.82);
-                        liveCtx.strokeText(currentCaption, finalCanvasW / 2, capY);
-                        liveCtx.fillText(currentCaption, finalCanvasW / 2, capY);
-                    }
-
-                    requestAnimationFrame(drawFrame);
-                }
-                requestAnimationFrame(drawFrame);
-
-            } catch (error) {
-                alert("Error en el proceso: " + error.message);
-                document.getElementById('statusBox').classList.add('hidden');
-                generateBtn.disabled = false;
             }
+
+            // Integración de Web Speech API provista por el usuario
+            const synth = window.speechSynthesis;
+            let voices = synth.getVoices();
+
+            const utterThis = new SpeechSynthesisUtterance(rawText);
+            utterThis.lang = 'es-MX';
+
+            const preferredVoice = voices.find(v => 
+                v.lang.includes('es') && (
+                    v.name.toLowerCase().includes('male') || 
+                    v.name.toLowerCase().includes('pablo') || 
+                    v.name.toLowerCase().includes('raul') || 
+                    v.name.toLowerCase().includes('carlos') || 
+                    v.name.toLowerCase().includes('microsoft es') ||
+                    v.name.toLowerCase().includes('sabina') ||
+                    v.name.toLowerCase().includes('helena')
+                )
+            ) || voices.find(v => v.lang.includes('es'));
+
+            if (preferredVoice) {
+                utterThis.voice = preferredVoice;
+            }
+
+            utterThis.rate = 1.0;
+            utterThis.pitch = 1.0;
+
+            synth.speak(utterThis);
+
+            // Audio Context silencioso para capturar el stream sin ruidos (hum)
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            gainNode.gain.value = 0.0001; // Cero zumbido
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            const audioDest = audioCtx.createMediaStreamDestination();
+            gainNode.connect(audioDest);
+            oscillator.start();
+
+            document.getElementById('statusText').textContent = "Ensamblando video final (Exactamente 60 Segundos)...";
+            liveCanvas.width = finalCanvasW;
+            liveCanvas.height = finalCanvasH;
+            liveCanvas.classList.remove('hidden');
+            finalVideoPlayer.classList.add('hidden');
+            recordedChunks = [];
+
+            const canvasStream = liveCanvas.captureStream(30);
+            const combinedStream = new MediaStream([
+                ...canvasStream.getVideoTracks(),
+                ...audioDest.stream.getAudioTracks()
+            ]);
+
+            mediaRecorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
+            mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+            
+            mediaRecorder.onstop = () => {
+                try { oscillator.stop(); } catch(e){}
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                const videoURL = URL.createObjectURL(blob);
+                
+                finalVideoPlayer.src = videoURL;
+                finalVideoPlayer.classList.remove('hidden');
+                liveCanvas.classList.add('hidden');
+                
+                const downloadBtn = document.getElementById('downloadBtn');
+                downloadBtn.href = videoURL;
+                downloadBtn.download = 'ReelMatic_Pro_1Minuto_' + (new Date().getTime()) + '.webm';
+                
+                document.getElementById('statusText').textContent = "¡Video de 1 Minuto Generado con Éxito!";
+                document.getElementById('statusIcon').className = "fa-solid fa-circle-check text-emerald-600";
+                document.getElementById('downloadContainer').classList.remove('hidden');
+                generateBtn.disabled = false;
+            };
+
+            // Duración estricta de 60 segundos exactos (1 minuto)
+            const advertisedDuration = 60000;
+            const durationPerImage = advertisedDuration / loadedImages.length;
+            
+            renderState.isActive = true;
+            renderState.startTime = performance.now();
+            mediaRecorder.start();
+
+            function drawFrame(now) {
+                if (!renderState.isActive) return;
+                const elapsed = now - renderState.startTime;
+                const progress = elapsed / advertisedDuration;
+                document.getElementById('progressBar').style.width = `${Math.min(progress * 100, 100)}%`;
+
+                if (elapsed >= advertisedDuration || !window.speechSynthesis.speaking) {
+                    renderState.isActive = false;
+                    try { window.speechSynthesis.cancel(); } catch(e){}
+                    try { mediaRecorder.stop(); } catch(e){}
+                    return;
+                }
+
+                const imageIndex = Math.min(Math.floor(elapsed / durationPerImage), loadedImages.length - 1);
+                const imageElapsed = elapsed % durationPerImage;
+                const imgProgress = imageElapsed / durationPerImage;
+                
+                liveCtx.fillStyle = '#000';
+                liveCtx.fillRect(0, 0, finalCanvasW, finalCanvasH);
+
+                function drawKenBurns(img, progress, alpha) {
+                    if (!img) return;
+                    const scale = 1 + (progress * 0.1);
+                    const imgRatio = img.width / img.height;
+                    const canvasRatio = finalCanvasW / finalCanvasH;
+                    let drawW, drawH, drawX, drawY;
+
+                    if (imgRatio > canvasRatio) {
+                        drawH = finalCanvasH;
+                        drawW = img.width * (finalCanvasH / img.height);
+                        drawX = (finalCanvasW - drawW) / 2;
+                        drawY = 0;
+                    } else {
+                        drawW = finalCanvasW;
+                        drawH = img.height * (finalCanvasW / img.width);
+                        drawX = 0;
+                        drawY = (finalCanvasH - drawH) / 2;
+                    }
+
+                    liveCtx.save();
+                    liveCtx.globalAlpha = alpha;
+                    liveCtx.translate(finalCanvasW/2, finalCanvasH/2);
+                    liveCtx.scale(scale, scale);
+                    liveCtx.translate(-finalCanvasW/2, -finalCanvasH/2);
+                    liveCtx.drawImage(img, drawX, drawY, drawW, drawH);
+                    liveCtx.restore();
+                }
+
+                const crossfadeDuration = 800;
+                if (imageIndex > 0 && imageElapsed < crossfadeDuration) {
+                    const prevProgress = (durationPerImage + imageElapsed) / durationPerImage; 
+                    drawKenBurns(loadedImages[imageIndex - 1], prevProgress, 1);
+                    const alpha = imageElapsed / crossfadeDuration;
+                    drawKenBurns(loadedImages[imageIndex], imgProgress, alpha);
+                } else {
+                    drawKenBurns(loadedImages[imageIndex], imgProgress, 1);
+                }
+
+                const titleVal = videoTitle ? videoTitle.value.trim().toUpperCase() : "";
+                if (titleVal) {
+                    liveCtx.fillStyle = '#FFFFFF';
+                    liveCtx.font = '900 38px Inter, sans-serif';
+                    liveCtx.textAlign = 'left';
+                    liveCtx.shadowColor = 'rgba(0,0,0,0.8)';
+                    liveCtx.shadowBlur = 12;
+                    liveCtx.fillText(titleVal, 40, 80);
+                    liveCtx.shadowBlur = 0;
+                }
+
+                if (loadedLogo) {
+                    const maxLogoW = 140;
+                    const maxLogoH = 140;
+                    let lW = loadedLogo.width;
+                    let lH = loadedLogo.height;
+                    const lRatio = lW / lH;
+                    if (lW > maxLogoW) { lW = maxLogoW; lH = lW / lRatio; }
+                    if (lH > maxLogoH) { lH = maxLogoH; lW = lH * lRatio; }
+                    liveCtx.drawImage(loadedLogo, finalCanvasW - lW - 40, 40, lW, lH);
+                }
+
+                const captionPos = document.getElementById('captionPosSelect').value;
+                if (captionPos !== 'none' && captions.length > 0) {
+                    const captionIndex = Math.min(Math.floor((elapsed / advertisedDuration) * captions.length), captions.length - 1);
+                    const currentCaption = captions[captionIndex].toUpperCase();
+                    
+                    liveCtx.fillStyle = '#FFFFFF'; 
+                    liveCtx.font = '900 52px Inter, sans-serif';
+                    liveCtx.textAlign = 'center';
+                    liveCtx.lineWidth = 12; 
+                    liveCtx.strokeStyle = '#000000';
+                    liveCtx.lineJoin = 'round'; 
+                    
+                    let capY = (captionPos === 'center') ? (finalCanvasH / 2) : (finalCanvasH * 0.82);
+                    liveCtx.strokeText(currentCaption, finalCanvasW / 2, capY);
+                    liveCtx.fillText(currentCaption, finalCanvasW / 2, capY);
+                }
+
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
         });
 
         document.getElementById('resetBtn').addEventListener('click', () => {
