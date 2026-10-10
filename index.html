@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ReelMatic Prompter & Hook Studio | Teleprompter Profesional para Creadores</title>
+    <title>ReelMatic Prompter & Camera Studio | Teleprompter con Grabación Integrada</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
@@ -48,7 +48,7 @@
             </div>
             <div class="flex items-center gap-4">
                 <span class="text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-200">
-                    <i class="fa-solid fa-camera-retro mr-1"></i> Prompter & Hooks Studio
+                    <i class="fa-solid fa-video mr-1"></i> Prompter + Cámara Integrada
                 </span>
             </div>
         </div>
@@ -57,19 +57,19 @@
     <div id="app-workspace" class="w-full bg-[#f5f5f7] pt-28 pb-20 relative flex-1">
         <div class="max-w-7xl mx-auto px-6 mb-10 text-center space-y-3">
             <span class="text-xs font-bold uppercase tracking-widest text-blue-600 bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">
-                <i class="fa-solid fa-bolt mr-1 text-blue-600"></i> Herramientas Profesionales para Creadores
+                <i class="fa-solid fa-bolt mr-1 text-blue-600"></i> Grabación y Lectura Simultánea
             </span>
             <h1 class="text-4xl sm:text-5xl font-black tracking-tighter-apple text-gradient leading-tight">
-                Teleprompter & Generador de Ganchos.
+                Teleprompter con Cámara en Directo.
             </h1>
             <p class="text-gray-600 text-sm sm:text-base max-w-xl mx-auto font-medium">
-                Graba sin trabas con nuestro teleprompter flotante y descubre ganchos virales probados para retener a tu audiencia.
+                Activa tu cámara web o frontal, ajusta el texto y graba tu video con el prompter flotando justo encima del lente.
             </p>
         </div>
 
         <main class="px-6 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8">
             
-            <!-- Columna Izquierda: Generador de Ganchos (Hooks) -->
+            <!-- Columna Izquierda: Generador de Ganchos & Guion -->
             <div class="space-y-6 w-full">
                 <div class="bento-card p-6 sm:p-8 rounded-[2.5rem] space-y-6 bg-white apple-shadow">
                     <div class="flex items-center justify-between">
@@ -106,65 +106,73 @@
                     </div>
                 </div>
 
-                <!-- Tarjeta de Consejos para Grabar -->
+                <!-- Editor de Guion -->
                 <div class="bento-card p-6 sm:p-8 rounded-[2.5rem] space-y-4 bg-white apple-shadow">
                     <h3 class="text-sm font-bold text-black flex items-center gap-2">
-                        <i class="fa-solid fa-lightbulb text-amber-500"></i> Tips de Retención para el Primer Segundo
+                        <i class="fa-solid fa-file-lines text-blue-600"></i> Tu Guion Completo
                     </h3>
-                    <ul class="space-y-2 text-xs text-gray-600 font-medium">
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-0.5"></i> Empieza directamente con el conflicto o beneficio, sin presentaciones largas ("Hola a todos").</li>
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-0.5"></i> Mantén el texto centrado en el teleprompter para mirar directo al lente de la cámara.</li>
-                    </ul>
+                    <textarea id="teleprompterInput" rows="5" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe o pega aquí tu guion completo para que ruede en la cámara..."></textarea>
                 </div>
             </div>
 
-            <!-- Columna Derecha: Teleprompter Profesional -->
+            <!-- Columna Derecha: Teleprompter con Cámara Integrada -->
             <div class="space-y-6 w-full">
                 <div class="bento-card p-6 sm:p-8 rounded-[2.5rem] space-y-6 bg-white apple-shadow flex flex-col">
                     <div class="flex items-center justify-between">
                         <h2 class="text-lg font-bold text-black flex items-center gap-2">
-                            <i class="fa-solid fa-desktop text-blue-600"></i> Teleprompter Flotante
+                            <i class="fa-solid fa-camera text-blue-600"></i> Cámara & Teleprompter
                         </h2>
                         <div class="flex items-center gap-2">
-                            <button id="mirrorBtn" class="text-xs font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg border border-gray-200 transition-all cursor-pointer" title="Modo Espejo para Cristales físicos">
-                                <i class="fa-solid fa-arrows-left-right mr-1"></i> Espejo
-                            </button>
-                            <button id="fullscreenBtn" class="text-xs font-bold text-white bg-black hover:bg-neutral-800 px-3 py-1.5 rounded-lg transition-all cursor-pointer">
-                                <i class="fa-solid fa-expand"></i>
+                            <button id="camToggleBtn" class="text-xs font-bold text-white bg-black hover:bg-neutral-800 px-3 py-1.5 rounded-lg transition-all cursor-pointer">
+                                <i class="fa-solid fa-video mr-1"></i> Activar Cámara
                             </button>
                         </div>
                     </div>
 
-                    <!-- Editor de Guion -->
-                    <div class="space-y-2">
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase">Guion o Texto del Teleprompter</label>
-                        <textarea id="teleprompterInput" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Pega aquí tu guion o envía un gancho desde la izquierda..."></textarea>
-                    </div>
-
-                    <!-- Controles de Reproducción -->
-                    <div class="grid grid-cols-3 gap-3">
+                    <!-- Controles de Velocidad y Estilo -->
+                    <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Velocidad</label>
                             <input type="range" id="speedRange" min="1" max="10" value="3" class="w-full accent-blue-600 cursor-pointer">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Tamaño Letra</label>
-                            <input type="range" id="fontSizeRange" min="20" max="64" value="36" class="w-full accent-blue-600 cursor-pointer">
-                        </div>
-                        <div class="flex items-end">
-                            <button id="startStopBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-play" id="playIcon"></i> <span id="playText">Iniciar</span>
-                            </button>
+                            <input type="range" id="fontSizeRange" min="20" max="54" value="30" class="w-full accent-blue-600 cursor-pointer">
                         </div>
                     </div>
 
-                    <!-- Visor del Prompter -->
-                    <div id="prompterScreen" class="relative rounded-2xl bg-black text-white h-64 overflow-hidden p-6 flex flex-col justify-center items-center shadow-inner border border-gray-800">
+                    <!-- Botón de Reproducción del Prompter -->
+                    <div class="flex gap-3">
+                        <button id="startStopBtn" class="flex-1 bg-apple-blue hover:bg-apple-blue-hover text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-play" id="playIcon"></i> <span id="playText">Iniciar Teleprompter</span>
+                        </button>
+                        <button id="recordVideoBtn" class="hidden bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-circle"></i> <span id="recordText">Grabar Video</span>
+                        </button>
+                    </div>
+
+                    <!-- Visor con Cámara Web y Prompter Superpuesto -->
+                    <div id="prompterContainer" class="relative rounded-2xl bg-black text-h-96 h-[400px] overflow-hidden flex flex-col justify-center items-center shadow-inner border border-gray-800">
+                        <!-- Video de la Cámara Web -->
+                        <video id="webcamElement" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover transform -scale-x-100"></video>
+                        
+                        <!-- Capa semitransparente para legibilidad -->
+                        <div class="absolute inset-0 bg-black/40 pointer-events-none"></div>
+
                         <!-- Guía visual central -->
-                        <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-16 border-y-2 border-amber-400/40 pointer-events-none bg-amber-400/5"></div>
-                        <div id="prompterContent" class="w-full text-center font-bold tracking-tight overflow-y-auto max-h-full scrollbar-none transition-transform" style="font-size: 36px; line-height: 1.4;">
-                            Tu texto aparecerá aquí al iniciar el teleprompter...
+                        <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-16 border-y-2 border-amber-400/50 pointer-events-none bg-amber-400/10"></div>
+                        
+                        <!-- Contenido Desplazable del Prompter -->
+                        <div id="prompterContent" class="absolute inset-x-0 p-8 text-center font-bold tracking-tight overflow-y-auto max-h-full scrollbar-none transition-transform text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" style="font-size: 30px; line-height: 1.4; top: 20px;">
+                            Activa tu cámara arriba y escribe tu guion para comenzar a grabar y leer simultáneamente...
                         </div>
+                    </div>
+
+                    <!-- Contenedor de Descarga de Grabación -->
+                    <div id="downloadRecordingContainer" class="hidden space-y-2 pt-2">
+                        <a id="downloadRecordingBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md">
+                            <i class="fa-solid fa-download"></i> Descargar Video Grabado (.WEBM)
+                        </a>
                     </div>
                 </div>
             </div>
@@ -214,11 +222,20 @@
         const playText = document.getElementById('playText');
         const speedRange = document.getElementById('speedRange');
         const fontSizeRange = document.getElementById('fontSizeRange');
-        const mirrorBtn = document.getElementById('mirrorBtn');
+        
+        const camToggleBtn = document.getElementById('camToggleBtn');
+        const webcamElement = document.getElementById('webcamElement');
+        const recordVideoBtn = document.getElementById('recordVideoBtn');
+        const recordText = document.getElementById('recordText');
+        const downloadRecordingContainer = document.getElementById('downloadRecordingContainer');
+        const downloadRecordingBtn = document.getElementById('downloadRecordingBtn');
 
         let isScrolling = false;
         let scrollInterval = null;
-        let isMirrored = false;
+        let mediaStream = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let isRecording = false;
 
         generateHookBtn.addEventListener('click', () => {
             const niche = nicheSelect.value;
@@ -235,30 +252,42 @@
         });
 
         teleprompterInput.addEventListener('input', () => {
-            prompterContent.textContent = teleprompterInput.value || "Tu texto aparecerá aquí al iniciar el teleprompter...";
+            prompterContent.textContent = teleprompterInput.value || "Activa tu cámara arriba y escribe tu guion para comenzar a leer y grabar...";
         });
 
         fontSizeRange.addEventListener('input', () => {
             prompterContent.style.fontSize = `${fontSizeRange.value}px`;
         });
 
-        mirrorBtn.addEventListener('click', () => {
-            isMirrored = !isMirrored;
-            if (isMirrored) {
-                prompterContent.style.transform = "scaleX(-1)";
-                mirrorBtn.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-300');
-            } else {
-                prompterContent.style.transform = "scaleX(1)";
-                mirrorBtn.classList.remove('bg-blue-50', 'text-blue-700', 'border-blue-300');
+        // Activar Cámara Web / Frontal
+        camToggleBtn.addEventListener('click', async () => {
+            try {
+                if (!mediaStream) {
+                    mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: true });
+                    webcamElement.srcObject = mediaStream;
+                    camToggleBtn.innerHTML = `<i class="fa-solid fa-video-slash mr-1"></i> Apagar Cámara`;
+                    camToggleBtn.classList.replace('bg-black', 'bg-red-600');
+                    recordVideoBtn.classList.remove('hidden');
+                } else {
+                    mediaStream.getTracks().forEach(track => track.stop());
+                    mediaStream = null;
+                    webcamElement.srcObject = null;
+                    camToggleBtn.innerHTML = `<i class="fa-solid fa-video mr-1"></i> Activar Cámara`;
+                    camToggleBtn.classList.replace('bg-red-600', 'bg-black');
+                    recordVideoBtn.classList.add('hidden');
+                }
+            } catch (err) {
+                alert("No se pudo acceder a la cámara. Asegúrate de dar permisos en tu navegador.");
             }
         });
 
+        // Iniciar / Pausar Teleprompter
         startStopBtn.addEventListener('click', () => {
             isScrolling = !isScrolling;
             if (isScrolling) {
                 playIcon.className = "fa-solid fa-pause";
                 playText.textContent = "Pausar";
-                startStopBtn.classList.replace('bg-apple-blue', 'bg-red-600');
+                startStopBtn.classList.replace('bg-apple-blue', 'bg-amber-600');
                 
                 const speed = parseInt(speedRange.value);
                 scrollInterval = setInterval(() => {
@@ -267,15 +296,49 @@
                         clearInterval(scrollInterval);
                         isScrolling = false;
                         playIcon.className = "fa-solid fa-play";
-                        playText.textContent = "Iniciar";
-                        startStopBtn.classList.replace('bg-red-600', 'bg-apple-blue');
+                        playText.textContent = "Iniciar Teleprompter";
+                        startStopBtn.classList.replace('bg-amber-600', 'bg-apple-blue');
                     }
                 }, 50);
             } else {
                 clearInterval(scrollInterval);
                 playIcon.className = "fa-solid fa-play";
-                playText.textContent = "Iniciar";
-                startStopBtn.classList.replace('bg-red-600', 'bg-apple-blue');
+                playText.textContent = "Iniciar Teleprompter";
+                startStopBtn.classList.replace('bg-amber-600', 'bg-apple-blue');
+            }
+        });
+
+        // Grabar Video de la Cámara con el Audio del Micrófono
+        recordVideoBtn.addEventListener('click', () => {
+            if (!mediaStream) return;
+
+            if (!isRecording) {
+                recordedChunks = [];
+                try {
+                    mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/webm' });
+                } catch (e) {
+                    mediaRecorder = new MediaRecorder(mediaStream);
+                }
+
+                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+                
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                    const url = URL.createObjectURL(blob);
+                    downloadRecordingBtn.href = url;
+                    downloadRecordingBtn.download = 'ReelMatic_Grabacion_' + (new Date().getTime()) + '.webm';
+                    downloadRecordingContainer.classList.remove('hidden');
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                recordVideoBtn.innerHTML = `<i class="fa-solid fa-stop"></i> <span>Detener Grabación</span>`;
+                recordVideoBtn.classList.replace('bg-red-600', 'bg-neutral-800');
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                recordVideoBtn.innerHTML = `<i class="fa-solid fa-circle"></i> <span id="recordText">Grabar Video</span>`;
+                recordVideoBtn.classList.replace('bg-neutral-800', 'bg-red-600');
             }
         });
     </script>
