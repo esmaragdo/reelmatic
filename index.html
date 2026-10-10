@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ReelMatic Subtitle Studio | Subtítulos Dinámicos para Reels y Shorts</title>
+    <title>ReelMatic Prompter & Hook Studio | Teleprompter Profesional para Creadores</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
@@ -30,8 +30,8 @@
     </script>
     
     <style>
-        body { background-color: #f5f5f7; color: #1d1d1f; overflow-x: hidden; font-family: 'Inter', sans-serif; }
-        .apple-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
+        body { background-color: #f5f5f7; color: #1d1d1f; font-family: 'Inter', sans-serif; }
+        .apple-shadow { box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
         .bento-card { background: #ffffff; border: 1px solid rgba(0,0,0,0.08); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
         .apple-input { border: 1px solid #d2d2d7; background-color: #ffffff; color: #1d1d1f; transition: all 0.2s ease; }
         .apple-input:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 4px rgba(0,113,227,0.15); }
@@ -48,97 +48,123 @@
             </div>
             <div class="flex items-center gap-4">
                 <span class="text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-200">
-                    <i class="fa-solid fa-closed-captioning mr-1"></i> Subtitle Studio
+                    <i class="fa-solid fa-camera-retro mr-1"></i> Prompter & Hooks Studio
                 </span>
             </div>
         </div>
     </nav>
 
-    <div id="app-workspace" class="w-full bg-[#f5f5f7] pt-28 pb-20 relative">
-        <div class="max-w-7xl mx-auto px-6 mb-12 text-center space-y-4">
+    <div id="app-workspace" class="w-full bg-[#f5f5f7] pt-28 pb-20 relative flex-1">
+        <div class="max-w-7xl mx-auto px-6 mb-10 text-center space-y-3">
             <span class="text-xs font-bold uppercase tracking-widest text-blue-600 bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">
-                <i class="fa-solid fa-bolt mr-1.5 text-blue-600"></i> Subtítulos Estilo Hormozi Dinámicos
+                <i class="fa-solid fa-bolt mr-1 text-blue-600"></i> Herramientas Profesionales para Creadores
             </span>
-            <h1 class="text-4xl sm:text-6xl font-black tracking-tighter-apple text-gradient leading-tight">
-                Subtítulos virales instantáneos.
+            <h1 class="text-4xl sm:text-5xl font-black tracking-tighter-apple text-gradient leading-tight">
+                Teleprompter & Generador de Ganchos.
             </h1>
-            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto font-medium">
-                Sube tu video, escribe tu transcripción y añade subtítulos automáticos impactantes en segundos.
+            <p class="text-gray-600 text-sm sm:text-base max-w-xl mx-auto font-medium">
+                Graba sin trabas con nuestro teleprompter flotante y descubre ganchos virales probados para retener a tu audiencia.
             </p>
         </div>
 
-        <main class="px-6 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+        <main class="px-6 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8">
             
-            <!-- Controles Izquierda -->
-            <div class="lg:w-1/2 space-y-6 z-10 w-full">
-                <div class="bento-card p-6 sm:p-10 rounded-[2.5rem] space-y-8 bg-white apple-shadow">
-                    
-                    <!-- 1. Subir Video con Aviso de Duración -->
+            <!-- Columna Izquierda: Generador de Ganchos (Hooks) -->
+            <div class="space-y-6 w-full">
+                <div class="bento-card p-6 sm:p-8 rounded-[2.5rem] space-y-6 bg-white apple-shadow">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-bold text-black flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-blue-600"></i> Generador de Ganchos Virales
+                        </h2>
+                        <span class="text-[11px] bg-gray-100 text-gray-600 font-bold px-2.5 py-1 rounded-lg">500+ Fórmulas</span>
+                    </div>
+
                     <div class="space-y-4">
-                        <div class="flex justify-between items-end">
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">1. Sube tu Video (MP4 / MOV / WEBM)</label>
-                            <span class="text-[11px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-semibold">
-                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Máx recomendado: 1 a 3 minutos
-                            </span>
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Selecciona tu Nicho</label>
+                            <select id="nicheSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium bg-white cursor-pointer">
+                                <option value="marketing">Marketing & Negocios</option>
+                                <option value="fitness">Fitness & Salud</option>
+                                <option value="finanzas">Finanzas Personales & Crypto</option>
+                                <option value="educacion">Educación & Productividad</option>
+                                <option value="lifestyle">Lifestyle & Creación de Contenido</option>
+                            </select>
                         </div>
-                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50/50 transition-all bg-gray-50/50" id="dropZone" onclick="document.getElementById('videoInput').click()">
-                            <i class="fa-solid fa-file-video text-3xl text-gray-400 mb-2"></i>
-                            <p class="text-xs font-semibold text-black" id="videoFileName">Haz clic o arrastra tu video aquí (Límite 3 min)</p>
-                        </div>
-                        <input type="file" id="videoInput" accept="video/mp4, video/quicktime, video/webm" class="hidden"/>
-                    </div>
-
-                    <!-- 2. Transcripción -->
-                    <div class="space-y-4 pt-6 border-t border-gray-100">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">2. Transcripción / Palabras Clave</label>
-                        <textarea id="transcriptText" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Escribe o pega el texto que se dirá en el video. El sistema lo dividirá en bloques dinámicos..."></textarea>
-                    </div>
-
-                    <!-- 3. Estilo de Subtítulos -->
-                    <div class="space-y-4 pt-6 border-t border-gray-100">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest">3. Estilo Visual</label>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Color de Texto</label>
-                                <select id="textColorSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                    <option value="#FFFFFF">Blanco Brillante</option>
-                                    <option value="#FACC15">Amarillo Viral</option>
-                                    <option value="#4ADE80">Verde Neón</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mb-2 uppercase">Posición</label>
-                                <select id="positionSelect" class="w-full apple-input rounded-xl p-3 text-xs font-medium appearance-none cursor-pointer bg-white">
-                                    <option value="bottom">Inferior (TikTok/Reels)</option>
-                                    <option value="center">Centro (Pantalla Completa)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Botón de Reproducción -->
-                    <div class="pt-2 space-y-4">
-                        <button id="processBtn" class="w-full bg-black text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm hover:bg-neutral-800 transition-all shadow-lg cursor-pointer">
-                            <i class="fa-solid fa-play"></i> Aplicar Subtítulos e Iniciar Reproducción
+                        <button id="generateHookBtn" class="w-full bg-black hover:bg-neutral-800 text-white font-bold py-3 px-6 rounded-xl text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Gancho Irresistible
                         </button>
                     </div>
 
+                    <div id="hookResultContainer" class="hidden bg-blue-50/60 border border-blue-200 p-5 rounded-2xl space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Gancho Recomendado</span>
+                            <button id="sendToPrompterBtn" class="text-xs font-bold text-blue-700 hover:underline flex items-center gap-1 cursor-pointer">
+                                <i class="fa-solid fa-arrow-right"></i> Enviar al Teleprompter
+                            </button>
+                        </div>
+                        <p id="hookText" class="text-sm font-bold text-black leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Consejos para Grabar -->
+                <div class="bento-card p-6 sm:p-8 rounded-[2.5rem] space-y-4 bg-white apple-shadow">
+                    <h3 class="text-sm font-bold text-black flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb text-amber-500"></i> Tips de Retención para el Primer Segundo
+                    </h3>
+                    <ul class="space-y-2 text-xs text-gray-600 font-medium">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-0.5"></i> Empieza directamente con el conflicto o beneficio, sin presentaciones largas ("Hola a todos").</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-0.5"></i> Mantén el texto centrado en el teleprompter para mirar directo al lente de la cámara.</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- Vista Previa Derecha (Device Frame) -->
-            <div class="lg:w-1/2 w-full flex justify-center lg:justify-end relative mt-8 lg:mt-0 sticky top-20">
-                <div id="deviceFrame" class="relative rounded-[3rem] p-3 bg-white border border-gray-200 apple-shadow max-w-sm w-full">
-                    <div id="notch" class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-white rounded-b-3xl z-20 flex justify-center items-end pb-1.5">
-                        <div class="w-16 h-4 bg-black rounded-full"></div>
-                    </div>
-                    <div id="screenRatio" class="relative rounded-[2.2rem] overflow-hidden bg-black aspect-[9/16] w-full flex items-center justify-center shadow-inner">
-                        <div id="placeholderText" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 z-20 p-6 text-center">
-                            <i class="fa-solid fa-clapperboard text-4xl mb-3 opacity-40"></i>
-                            <p class="text-xs font-medium tracking-wide">Sube un video de hasta 3 minutos para ver los subtítulos en tiempo real</p>
+            <!-- Columna Derecha: Teleprompter Profesional -->
+            <div class="space-y-6 w-full">
+                <div class="bento-card p-6 sm:p-8 rounded-[2.5rem] space-y-6 bg-white apple-shadow flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-bold text-black flex items-center gap-2">
+                            <i class="fa-solid fa-desktop text-blue-600"></i> Teleprompter Flotante
+                        </h2>
+                        <div class="flex items-center gap-2">
+                            <button id="mirrorBtn" class="text-xs font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg border border-gray-200 transition-all cursor-pointer" title="Modo Espejo para Cristales físicos">
+                                <i class="fa-solid fa-arrows-left-right mr-1"></i> Espejo
+                            </button>
+                            <button id="fullscreenBtn" class="text-xs font-bold text-white bg-black hover:bg-neutral-800 px-3 py-1.5 rounded-lg transition-all cursor-pointer">
+                                <i class="fa-solid fa-expand"></i>
+                            </button>
                         </div>
-                        <video id="sourceVideo" class="hidden" playsinline preload="auto"></video>
-                        <canvas id="previewCanvas" class="w-full h-full object-cover relative z-10 hidden"></canvas>
+                    </div>
+
+                    <!-- Editor de Guion -->
+                    <div class="space-y-2">
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase">Guion o Texto del Teleprompter</label>
+                        <textarea id="teleprompterInput" rows="4" class="w-full apple-input rounded-2xl p-4 text-xs font-medium placeholder-gray-400 resize-none" placeholder="Pega aquí tu guion o envía un gancho desde la izquierda..."></textarea>
+                    </div>
+
+                    <!-- Controles de Reproducción -->
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Velocidad</label>
+                            <input type="range" id="speedRange" min="1" max="10" value="3" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 mb-1 uppercase">Tamaño Letra</label>
+                            <input type="range" id="fontSizeRange" min="20" max="64" value="36" class="w-full accent-blue-600 cursor-pointer">
+                        </div>
+                        <div class="flex items-end">
+                            <button id="startStopBtn" class="w-full bg-apple-blue hover:bg-apple-blue-hover text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-play" id="playIcon"></i> <span id="playText">Iniciar</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visor del Prompter -->
+                    <div id="prompterScreen" class="relative rounded-2xl bg-black text-white h-64 overflow-hidden p-6 flex flex-col justify-center items-center shadow-inner border border-gray-800">
+                        <!-- Guía visual central -->
+                        <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-16 border-y-2 border-amber-400/40 pointer-events-none bg-amber-400/5"></div>
+                        <div id="prompterContent" class="w-full text-center font-bold tracking-tight overflow-y-auto max-h-full scrollbar-none transition-transform" style="font-size: 36px; line-height: 1.4;">
+                            Tu texto aparecerá aquí al iniciar el teleprompter...
+                        </div>
                     </div>
                 </div>
             </div>
@@ -147,112 +173,111 @@
     </div>
 
     <script>
-        const videoInput = document.getElementById('videoInput');
-        const videoFileName = document.getElementById('videoFileName');
-        const sourceVideo = document.getElementById('sourceVideo');
-        const transcriptText = document.getElementById('transcriptText');
-        const processBtn = document.getElementById('processBtn');
-        const placeholderText = document.getElementById('placeholderText');
-        const previewCanvas = document.getElementById('previewCanvas');
-        const ctx = previewCanvas.getContext('2d', { willReadFrequently: true });
+        const hooksData = {
+            marketing: [
+                "Nadie te está comprando en TikTok por este único error...",
+                "El secreto de $10,000 dólares que las agencias de marketing no quieren que sepas.",
+                "Deja de hacer esto en tus redes sociales si quieres ver resultados reales este mes."
+            ],
+            fitness: [
+                "Si quieres quemar grasa abdominal sin dejar los carbohidratos, haz esto hoy.",
+                "El mayor mito del gimnasio que te está haciendo perder el tiempo y el dinero.",
+                "Tres ejercicios que transformarán tu físico en menos de 4 semanas."
+            ],
+            finanzas: [
+                "Cómo pasé de cero ahorros a generar mi primera fuente de ingresos pasivos.",
+                "El error financiero que comete el 95% de los jóvenes antes de cumplir 30 años.",
+                "Tres reglas de oro para proteger tu dinero contra la inflación este año."
+            ],
+            educacion: [
+                "La técnica de estudio secreta que usan los estudiantes de Harvard para memorizar todo.",
+                "Si tienes problemas de concentración al leer, prueba este sencillo truco mental.",
+                "Por qué el sistema educativo tradicional te está enseñando mal a aprender."
+            ],
+            lifestyle: [
+                "Mi rutina matutina de 15 minutos que duplicó mi productividad diaria.",
+                "Cómo organizar tu semana en 10 minutos para no volver a estresarte.",
+                "El hábito diario que cambió por completo mi estilo de vida y energía mental."
+            ]
+        };
+
+        const nicheSelect = document.getElementById('nicheSelect');
+        const generateHookBtn = document.getElementById('generateHookBtn');
+        const hookResultContainer = document.getElementById('hookResultContainer');
+        const hookText = document.getElementById('hookText');
+        const sendToPrompterBtn = document.getElementById('sendToPrompterBtn');
         
-        let subChunks = [];
-        let isPlaying = false;
+        const teleprompterInput = document.getElementById('teleprompterInput');
+        const prompterContent = document.getElementById('prompterContent');
+        const startStopBtn = document.getElementById('startStopBtn');
+        const playIcon = document.getElementById('playIcon');
+        const playText = document.getElementById('playText');
+        const speedRange = document.getElementById('speedRange');
+        const fontSizeRange = document.getElementById('fontSizeRange');
+        const mirrorBtn = document.getElementById('mirrorBtn');
 
-        videoInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            // Validar límite técnico de duración (máx 3 minutos)
-            const tempVid = document.createElement('video');
-            tempVid.src = URL.createObjectURL(file);
-            tempVid.onloadedmetadata = () => {
-                if (tempVid.duration > 185) {
-                    alert("El video dura más de 3 minutos. Para un rendimiento óptimo en el navegador, te sugerimos subir clips de máximo 3 minutos.");
-                }
-            };
+        let isScrolling = false;
+        let scrollInterval = null;
+        let isMirrored = false;
 
-            videoFileName.innerHTML = `<strong class="text-blue-600">${file.name}</strong>`;
-            const url = URL.createObjectURL(file);
-            sourceVideo.src = url;
-            sourceVideo.load();
-            
-            sourceVideo.onloadedmetadata = () => {
-                placeholderText.classList.add('hidden');
-                previewCanvas.classList.remove('hidden');
-                previewCanvas.width = sourceVideo.videoWidth || 720;
-                previewCanvas.height = sourceVideo.videoHeight || 1280;
+        generateHookBtn.addEventListener('click', () => {
+            const niche = nicheSelect.value;
+            const list = hooksData[niche];
+            const randomHook = list[Math.floor(Math.random() * list.length)];
+            hookText.textContent = randomHook;
+            hookResultContainer.classList.remove('hidden');
+        });
+
+        sendToPrompterBtn.addEventListener('click', () => {
+            teleprompterInput.value = hookText.textContent;
+            prompterContent.textContent = hookText.textContent;
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+
+        teleprompterInput.addEventListener('input', () => {
+            prompterContent.textContent = teleprompterInput.value || "Tu texto aparecerá aquí al iniciar el teleprompter...";
+        });
+
+        fontSizeRange.addEventListener('input', () => {
+            prompterContent.style.fontSize = `${fontSizeRange.value}px`;
+        });
+
+        mirrorBtn.addEventListener('click', () => {
+            isMirrored = !isMirrored;
+            if (isMirrored) {
+                prompterContent.style.transform = "scaleX(-1)";
+                mirrorBtn.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-300');
+            } else {
+                prompterContent.style.transform = "scaleX(1)";
+                mirrorBtn.classList.remove('bg-blue-50', 'text-blue-700', 'border-blue-300');
+            }
+        });
+
+        startStopBtn.addEventListener('click', () => {
+            isScrolling = !isScrolling;
+            if (isScrolling) {
+                playIcon.className = "fa-solid fa-pause";
+                playText.textContent = "Pausar";
+                startStopBtn.classList.replace('bg-apple-blue', 'bg-red-600');
                 
-                ctx.drawImage(sourceVideo, 0, 0, previewCanvas.width, previewCanvas.height);
-            };
+                const speed = parseInt(speedRange.value);
+                scrollInterval = setInterval(() => {
+                    prompterContent.scrollTop += speed;
+                    if (prompterContent.scrollTop + prompterContent.clientHeight >= prompterContent.scrollHeight) {
+                        clearInterval(scrollInterval);
+                        isScrolling = false;
+                        playIcon.className = "fa-solid fa-play";
+                        playText.textContent = "Iniciar";
+                        startStopBtn.classList.replace('bg-red-600', 'bg-apple-blue');
+                    }
+                }, 50);
+            } else {
+                clearInterval(scrollInterval);
+                playIcon.className = "fa-solid fa-play";
+                playText.textContent = "Iniciar";
+                startStopBtn.classList.replace('bg-red-600', 'bg-apple-blue');
+            }
         });
-
-        processBtn.addEventListener('click', () => {
-            if (!sourceVideo.src) {
-                alert("Por favor sube un video primero.");
-                return;
-            }
-            
-            const rawText = transcriptText.value.trim();
-            if (!rawText) {
-                alert("Escribe o pega la transcripción para generar los subtítulos.");
-                return;
-            }
-
-            const words = rawText.split(/\s+/);
-            subChunks = [];
-            let chunk = [];
-            for (let i = 0; i < words.length; i++) {
-                chunk.push(words[i]);
-                if (chunk.length >= 4 || i === words.length - 1) {
-                    subChunks.push(chunk.join(" "));
-                    chunk = [];
-                }
-            }
-
-            sourceVideo.currentTime = 0;
-            sourceVideo.play();
-            isPlaying = true;
-            requestAnimationFrame(renderLoop);
-        });
-
-        function renderLoop() {
-            if (!isPlaying) return;
-
-            if (sourceVideo.paused || sourceVideo.ended) {
-                isPlaying = false;
-                return;
-            }
-
-            ctx.drawImage(sourceVideo, 0, 0, previewCanvas.width, previewCanvas.height);
-
-            if (subChunks.length > 0) {
-                const duration = sourceVideo.duration || 1;
-                const currentTime = sourceVideo.currentTime;
-                const progress = currentTime / duration;
-                const index = Math.min(Math.floor(progress * subChunks.length), subChunks.length - 1);
-                const currentText = subChunks[index].toUpperCase();
-
-                const textColor = document.getElementById('textColorSelect').value;
-                const pos = document.getElementById('positionSelect').value;
-
-                ctx.save();
-                ctx.font = '900 56px Inter, sans-serif';
-                ctx.textAlign = 'center';
-                ctx.lineWidth = 14;
-                ctx.strokeStyle = '#000000';
-                ctx.lineJoin = 'round';
-
-                const capY = (pos === 'center') ? (previewCanvas.height / 2) : (previewCanvas.height * 0.82);
-
-                ctx.strokeText(currentText, previewCanvas.width / 2, capY);
-                ctx.fillStyle = textColor;
-                ctx.fillText(currentText, previewCanvas.width / 2, capY);
-                ctx.restore();
-            }
-
-            requestAnimationFrame(renderLoop);
-        }
     </script>
 </body>
 </html>
