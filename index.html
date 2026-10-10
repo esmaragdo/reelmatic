@@ -67,7 +67,7 @@
                 Crea tu Short de 1 Minuto.
             </h1>
             <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto font-medium">
-                Sube hasta 10 fotos, reordénalas arrastrándolas o con flechas, añade tu título y guion con voz natural instantánea.
+                Sube hasta 10 fotos, reordénalas arrastrándolas, añade tu título y guion con voz natural instantánea.
             </p>
         </div>
 
@@ -480,8 +480,9 @@
                 }
             }
 
-            // Integración de Web Speech API provista por el usuario
+            // Integración de Web Speech API optimizada
             const synth = window.speechSynthesis;
+            synth.cancel(); // Cancelar cualquier audio anterior
             let voices = synth.getVoices();
 
             const utterThis = new SpeechSynthesisUtterance(rawText);
@@ -506,18 +507,16 @@
             utterThis.rate = 1.0;
             utterThis.pitch = 1.0;
 
-            synth.speak(utterThis);
-
-            // Audio Context silencioso para capturar el stream sin ruidos (hum)
+            // Audio Context silencioso robusto para capturar el stream con fallback
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-            gainNode.gain.value = 0.0001; // Cero zumbido
+            gainNode.gain.value = 0.00001; // Casi cero zumbido
             oscillator.connect(gainNode);
             gainNode.connect(audioCtx.destination);
             const audioDest = audioCtx.createMediaStreamDestination();
             gainNode.connect(audioDest);
-            oscillator.start();
+            try { oscillator.start(); } catch(e){}
 
             document.getElementById('statusText').textContent = "Ensamblando video final (Exactamente 60 Segundos)...";
             liveCanvas.width = finalCanvasW;
@@ -554,7 +553,10 @@
                 generateBtn.disabled = false;
             };
 
-            // Duración estricta de 60 segundos exactos (1 minuto)
+            // Disparamos la locución
+            synth.speak(utterThis);
+
+            // Duración estricta de 60 segundos exactos (1 minuto) con respaldo garantizado
             const advertisedDuration = 60000;
             const durationPerImage = advertisedDuration / loadedImages.length;
             
@@ -568,9 +570,9 @@
                 const progress = elapsed / advertisedDuration;
                 document.getElementById('progressBar').style.width = `${Math.min(progress * 100, 100)}%`;
 
-                if (elapsed >= advertisedDuration || !window.speechSynthesis.speaking) {
+                if (elapsed >= advertisedDuration) {
                     renderState.isActive = false;
-                    try { window.speechSynthesis.cancel(); } catch(e){}
+                    try { synth.cancel(); } catch(e){}
                     try { mediaRecorder.stop(); } catch(e){}
                     return;
                 }
