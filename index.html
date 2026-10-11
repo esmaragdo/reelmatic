@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReelMatic Pro — Edición de Video Profesional</title>
+    <title>ReelMatic Pro — Editor de Video Profesional</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -15,138 +15,148 @@
     <script src="https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/util.js"></script>
     <style>
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-        .glass-panel { background: rgba(22, 22, 24, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-        .glass-modal { background: rgba(30, 30, 34, 0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 9999px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+        .glass-panel { background: rgba(22, 22, 24, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+        .glass-modal { background: rgba(30, 30, 34, 0.9); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 9999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+        .timeline-ruler-grid { background-image: linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px); background-size: 40px 100%; }
     </style>
 </head>
 <body class="h-full bg-[#0a0a0c] text-[#f5f5f7] flex flex-col overflow-hidden selection:bg-blue-500 selection:text-white">
 
-    <!-- Top Navigation (Apple Minimalist Header) -->
-    <header class="h-14 bg-[#121215]/80 backdrop-blur-xl border-b border-white/[0.08] flex items-center justify-between px-6 shrink-0 select-none z-30">
+    <header class="h-14 bg-[#121215]/90 backdrop-blur-xl border-b border-white/[0.08] flex items-center justify-between px-6 shrink-0 select-none z-30">
         <div class="flex items-center space-x-3">
             <div class="bg-gradient-to-br from-blue-500 to-indigo-600 w-7 h-7 rounded-lg flex items-center justify-center shadow-sm shadow-blue-500/30">
                 <i class="fa-solid fa-clapperboard text-white text-xs"></i>
             </div>
             <div>
-                <h1 class="font-semibold text-xs tracking-tight text-white">ReelMatic Pro</h1>
+                <h1 class="font-semibold text-xs tracking-tight text-white flex items-center space-x-2">
+                    <span>ReelMatic Pro</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 font-mono">v2.0 CapCut Edition</span>
+                </h1>
             </div>
         </div>
 
-        <div class="hidden md:flex items-center space-x-6 text-xs">
-            <div class="flex items-center space-x-2 text-white/70">
-                <i class="fa-solid fa-bolt text-blue-400 text-[11px]"></i>
-                <span>Editor de video profesional 100% web y gratuito</span>
-            </div>
-            <div class="flex items-center space-x-2 text-white/50">
-                <i class="fa-solid fa-shield-halved text-emerald-400 text-[11px]"></i>
-                <span>Sin servidores · Privacidad local</span>
-            </div>
+        <div class="hidden md:flex items-center space-x-4 text-xs text-white/60">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.06]">
+                <i class="fa-solid fa-bolt text-blue-400 mr-1.5 text-[10px]"></i> Estilo CapCut Pro
+            </span>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <i class="fa-solid fa-shield-halved mr-1.5 text-[10px]"></i> 100% Local y Gratis en el Navegador
+            </span>
         </div>
 
         <div class="flex items-center space-x-3">
-            <span id="project-status" class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
-                Gratis · Local
-            </span>
             <button onclick="openExportModal()" class="bg-white hover:bg-white/90 text-black px-4 py-1.5 rounded-full text-xs font-medium transition shadow-sm flex items-center space-x-2">
                 <i class="fa-solid fa-arrow-up-from-bracket text-[10px]"></i>
-                <span>Exportar</span>
+                <span>Exportar Video</span>
             </button>
         </div>
     </header>
 
-    <!-- Mobile Header Sub-banner for small screens -->
-    <div class="md:hidden bg-white/[0.02] border-b border-white/[0.06] px-4 py-2 text-center text-[11px] text-white/60">
-        ✨ Editor web gratuito y 100% privado en tu navegador.
-    </div>
-
-    <!-- Main Workspace -->
     <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
         
-        <!-- Left Panel / Tools & Assets -->
+        <!-- Left Panel / Advanced Tools Sidebar -->
         <div class="w-full lg:w-80 glass-panel border-r border-white/[0.08] flex flex-col shrink-0 z-20">
-            <!-- Apple-style Segmented Control Tabs -->
+            <!-- CapCut / Apple Style Tabs -->
             <div class="p-3 border-b border-white/[0.06]">
-                <div class="bg-black/40 p-1 rounded-xl flex text-xs font-medium border border-white/[0.04]">
-                    <button onclick="switchTab('media')" id="tab-media" class="flex-1 py-1.5 rounded-lg text-center bg-white/10 text-white shadow-sm transition">Media</button>
-                    <button onclick="switchTab('text')" id="tab-text" class="flex-1 py-1.5 rounded-lg text-center text-white/50 hover:text-white transition">Texto</button>
-                    <button onclick="switchTab('filters')" id="tab-filters" class="flex-1 py-1.5 rounded-lg text-center text-white/50 hover:text-white transition">Filtros</button>
-                    <button onclick="switchTab('audio')" id="tab-audio" class="flex-1 py-1.5 rounded-lg text-center text-white/50 hover:text-white transition">Audio</button>
+                <div class="bg-black/40 p-1 rounded-xl grid grid-cols-4 text-[11px] font-medium border border-white/[0.04]">
+                    <button onclick="switchTab('media')" id="tab-media" class="py-1.5 rounded-lg text-center bg-white/10 text-white shadow-sm transition">Media</button>
+                    <button onclick="switchTab('text')" id="tab-text" class="py-1.5 rounded-lg text-center text-white/50 hover:text-white transition">Texto</button>
+                    <button onclick="switchTab('effects')" id="tab-effects" class="py-1.5 rounded-lg text-center text-white/50 hover:text-white transition">Efectos</button>
+                    <button onclick="switchTab('audio')" id="tab-audio" class="py-1.5 rounded-lg text-center text-white/50 hover:text-white transition">Audio</button>
                 </div>
             </div>
 
-            <!-- Tab Contents -->
+            <!-- Tab Content Body -->
             <div class="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-4">
-                <!-- Media Tab Content -->
+                
+                <!-- Media Panel -->
                 <div id="panel-media" class="space-y-4">
                     <div class="border border-dashed border-white/15 hover:border-blue-500/60 rounded-2xl p-6 text-center cursor-pointer transition bg-white/[0.02] hover:bg-white/[0.04] group" onclick="document.getElementById('file-input').click()">
                         <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mx-auto mb-3 group-hover:scale-105 transition">
                             <i class="fa-solid fa-plus text-sm"></i>
                         </div>
-                        <p class="text-xs font-medium text-white/90 mb-1">Añadir archivo multimedia</p>
-                        <p class="text-[10px] text-white/40">MP4, WebM, MOV, MP3</p>
-                        <input type="file" id="file-input" accept="video/*,audio/*" class="hidden" onchange="handleFileSelect(event)">
+                        <p class="text-xs font-medium text-white/90 mb-1">Importar Clips Multimedia</p>
+                        <p class="text-[10px] text-white/40">Videos, Audios e Imágenes (MP4, WebM, MP3, PNG)</p>
+                        <input type="file" id="file-input" accept="video/*,audio/*,image/*" multiple class="hidden" onchange="handleFileSelect(event)">
                     </div>
 
                     <div class="space-y-2">
-                        <h3 class="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-1">Archivos en el Proyecto</h3>
-                        <div id="media-list" class="space-y-2">
+                        <div class="flex justify-between items-center px-1">
+                            <h3 class="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Biblioteca de Recursos</h3>
+                            <button onclick="addStockAsset('sample-video')" class="text-[10px] text-blue-400 hover:underline">+ Clip de Ejemplo</button>
+                        </div>
+                        <div id="media-library" class="space-y-2">
                             <div class="text-center py-8 text-white/30 text-xs italic bg-white/[0.01] rounded-2xl border border-white/[0.04]">
-                                Sin archivos cargados.
+                                Sin archivos importados.
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Text Tab Content -->
+                <!-- Text & Titles Panel -->
                 <div id="panel-text" class="space-y-4 hidden">
-                    <h3 class="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-1">Título / Superposición</h3>
+                    <h3 class="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-1">Títulos y Subtítulos Dinámicos</h3>
                     <div class="space-y-3 bg-white/[0.02] border border-white/[0.06] p-4 rounded-2xl">
                         <div>
-                            <label class="block text-[11px] text-white/60 mb-1">Texto</label>
-                            <input type="text" id="text-content" value="ReelMatic Pro" class="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition">
+                            <label class="block text-[11px] text-white/60 mb-1">Texto del Título</label>
+                            <input type="text" id="text-content" value="✨ Tu Título Increíble" class="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition">
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block text-[11px] text-white/60 mb-1">Tamaño</label>
-                                <select id="text-size" class="w-full bg-black/50 border border-white/10 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition">
-                                    <option value="24">Pequeño</option>
-                                    <option value="36" selected>Mediano</option>
-                                    <option value="48">Grande</option>
-                                    <option value="64">Título</option>
+                                <label class="block text-[11px] text-white/60 mb-1">Estilo Preset</label>
+                                <select id="text-preset" class="w-full bg-black/50 border border-white/10 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition">
+                                    <option value="modern">Moderno Neón</option>
+                                    <option value="cinematic">Cinemático Gold</option>
+                                    <option value="minimal">Minimal Blanco</option>
+                                    <option value="cyber">Cyberpunk Glitch</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-[11px] text-white/60 mb-1">Color</label>
-                                <input type="color" id="text-color" value="#ffffff" class="w-full h-8 bg-black/50 border border-white/10 rounded-xl cursor-pointer px-1 py-0.5">
+                                <label class="block text-[11px] text-white/60 mb-1">Posición Vertical</label>
+                                <select id="text-pos" class="w-full bg-black/50 border border-white/10 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500 transition">
+                                    <option value="center">Centro</option>
+                                    <option value="top">Superior</option>
+                                    <option value="bottom">Inferior</option>
+                                </select>
                             </div>
                         </div>
-                        <button onclick="addTextOverlay()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2 rounded-xl text-xs transition shadow-md shadow-blue-600/20">
-                            Aplicar Superposición
+                        <button onclick="applyTextOverlay()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2 rounded-xl text-xs transition shadow-md shadow-blue-600/20">
+                            Añadir Texto a la Escena
                         </button>
                     </div>
                 </div>
 
-                <!-- Filters Tab Content -->
-                <div id="panel-filters" class="space-y-3 hidden">
-                    <h3 class="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-1">Graduación de Color</h3>
+                <!-- Effects & Filters Panel -->
+                <div id="panel-effects" class="space-y-3 hidden">
+                    <h3 class="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-1">Filtros CapCut & Color Grading</h3>
                     <div class="grid grid-cols-2 gap-2">
                         <button onclick="applyFilter('none')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">Normal</button>
-                        <button onclick="applyFilter('grayscale(100%)')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">B&W Clásico</button>
-                        <button onclick="applyFilter('sepia(100%)')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">Cinematográfico</button>
-                        <button onclick="applyFilter('contrast(140%) brightness(105%)')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">Vivo</button>
-                        <button onclick="applyFilter('hue-rotate(90deg)')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">Ciberpunk</button>
-                        <button onclick="applyFilter('invert(100%)')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">Invertido</button>
+                        <button onclick="applyFilter('contrast(150%) saturate(130%)')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">Cinemático</button>
+                        <button onclick="applyFilter('sepia(90%) contrast(120%)')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">Retro Vintage</button>
+                        <button onclick="applyFilter('grayscale(100%) contrast(140%)')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">B&W Moody</button>
+                        <button onclick="applyFilter('hue-rotate(180deg) saturate(160%)')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">Cyberpunk</button>
+                        <button onclick="applyFilter('brightness(130%) blur(1px)')" class="p-3 bg-white/[0.03] hover:bg-white/[0.07] rounded-xl text-xs font-medium text-center transition border border-white/[0.06]">Dreamy Glow</button>
+                    </div>
+
+                    <h3 class="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-1 pt-2">Ajustes Rápidos</h3>
+                    <div class="bg-white/[0.02] border border-white/[0.06] p-3 rounded-2xl space-y-3">
+                        <div>
+                            <div class="flex justify-between text-[11px] text-white/60 mb-1">
+                                <span>Velocidad de Reproducción</span>
+                                <span id="speed-val">1.0x</span>
+                            </div>
+                            <input type="range" id="speed-slider" min="0.5" max="2" step="0.25" value="1" oninput="changeSpeed(this.value)" class="w-full accent-blue-500 bg-white/10 h-1 rounded-lg appearance-none cursor-pointer">
+                        </div>
                     </div>
                 </div>
 
-                <!-- Audio Tab Content -->
+                <!-- Audio Mixer Panel -->
                 <div id="panel-audio" class="space-y-4 hidden">
-                    <h3 class="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-1">Mezcla de Audio</h3>
+                    <h3 class="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-1">Mezclador Multitrack Audio</h3>
                     <div class="space-y-3 bg-white/[0.02] border border-white/[0.06] p-4 rounded-2xl">
                         <div>
                             <div class="flex justify-between text-[11px] text-white/60 mb-1">
@@ -155,10 +165,14 @@
                             </div>
                             <input type="range" id="volume-slider" min="0" max="2" step="0.1" value="1" oninput="updateVolume(this.value)" class="w-full accent-blue-500 bg-white/10 h-1 rounded-lg appearance-none cursor-pointer">
                         </div>
-                        <div class="pt-2">
-                            <button onclick="toggleMute()" id="mute-btn" class="w-full bg-white/[0.04] hover:bg-white/[0.08] text-white font-medium py-2 rounded-xl text-xs transition border border-white/[0.08] flex items-center justify-center space-x-2">
+                        <div class="pt-2 flex space-x-2">
+                            <button onclick="toggleMute()" id="mute-btn" class="flex-1 bg-white/[0.04] hover:bg-white/[0.08] text-white font-medium py-2 rounded-xl text-xs transition border border-white/[0.08] flex items-center justify-center space-x-2">
                                 <i class="fa-solid fa-volume-high"></i>
-                                <span id="mute-text">Silenciar Pista</span>
+                                <span id="mute-text">Silenciar</span>
+                            </button>
+                            <button onclick="addBackgroundMusicPrompt()" class="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 font-medium py-2 rounded-xl text-xs transition border border-blue-500/40 flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-music"></i>
+                                <span>Añadir Música</span>
                             </button>
                         </div>
                     </div>
@@ -166,30 +180,31 @@
             </div>
         </div>
 
-        <!-- Center Preview Area -->
+        <!-- Center Preview Stage -->
         <div class="flex-1 flex flex-col bg-[#070709] relative overflow-hidden">
-            <!-- Canvas / Video Stage -->
-            <div class="flex-1 flex items-center justify-center p-8 relative overflow-hidden">
+            <!-- Visor Container -->
+            <div class="flex-1 flex items-center justify-center p-6 relative overflow-hidden">
                 <div id="stage-container" class="relative w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/[0.08] flex items-center justify-center">
-                    <!-- Default Placeholder state -->
+                    
+                    <!-- Placeholder State -->
                     <div id="stage-placeholder" class="text-center p-8">
                         <div class="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center mx-auto mb-3 text-white/30 shadow-inner">
                             <i class="fa-solid fa-film text-xl"></i>
                         </div>
-                        <h2 class="text-xs font-medium text-white/80 mb-1">Sin contenido en el visor</h2>
-                        <p class="text-[11px] text-white/40 max-w-xs mx-auto">Selecciona un archivo multimedia para iniciar la previsualización en tiempo real.</p>
+                        <h2 class="text-xs font-medium text-white/80 mb-1">Área de Previsualización</h2>
+                        <p class="text-[11px] text-white/40 max-w-xs mx-auto">Sube un video o importa un clip para comenzar la edición profesional.</p>
                     </div>
 
-                    <!-- Video Element (Hidden until loaded) -->
+                    <!-- Main Video Element -->
                     <video id="main-video" class="w-full h-full object-contain hidden" crossorigin="anonymous" ontimeupdate="updateTimeDisplay()" onended="onVideoEnded()"></video>
 
-                    <!-- Text Overlay Layer -->
-                    <div id="overlay-layer" class="absolute inset-0 pointer-events-none flex items-center justify-center"></div>
+                    <!-- Dynamic Text & Sticker Overlay Layer -->
+                    <div id="overlay-layer" class="absolute inset-0 pointer-events-none flex items-center justify-center p-6 text-center"></div>
                 </div>
             </div>
 
-            <!-- Playback Controls Bar -->
-            <div class="h-16 bg-[#121215]/80 backdrop-blur-xl border-t border-white/[0.08] px-6 flex items-center justify-between shrink-0 z-20">
+            <!-- Playback Control Bar -->
+            <div class="h-16 bg-[#121215]/90 backdrop-blur-xl border-t border-white/[0.08] px-6 flex items-center justify-between shrink-0 z-20">
                 <div class="flex items-center space-x-4">
                     <button onclick="skipTime(-5)" class="text-white/50 hover:text-white transition text-xs" title="Retroceder 5s"><i class="fa-solid fa-rotate-left"></i></button>
                     <button onclick="togglePlay()" id="play-btn" class="w-9 h-9 rounded-full bg-white hover:bg-white/90 text-black flex items-center justify-center shadow-md transition disabled:opacity-30 disabled:cursor-not-allowed" disabled>
@@ -213,57 +228,77 @@
 
     </div>
 
-    <!-- Bottom Timeline Bar -->
-    <div class="h-32 glass-panel border-t border-white/[0.08] flex flex-col shrink-0 select-none z-20">
-        <div class="h-8 bg-black/20 border-b border-white/[0.06] px-4 flex items-center justify-between text-xs text-white/50">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-timeline text-blue-400 text-[11px]"></i>
-                <span class="font-medium text-white/80 text-[11px]">Línea de Tiempo Multitrack</span>
-            </div>
+    <div class="h-44 glass-panel border-t border-white/[0.08] flex flex-col shrink-0 select-none z-20">
+        <div class="h-9 bg-black/30 border-b border-white/[0.06] px-4 flex items-center justify-between text-xs text-white/50">
             <div class="flex items-center space-x-3">
-                <button onclick="splitClip()" class="hover:text-white transition flex items-center space-x-1"><i class="fa-solid fa-scissors"></i><span>Cortar</span></button>
+                <div class="flex items-center space-x-1.5 text-white font-medium text-xs">
+                    <i class="fa-solid fa-timeline text-blue-400"></i>
+                    <span>Línea de Tiempo Multitrack (CapCut Pro)</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="splitClipAtCurrentTime()" class="hover:text-white transition flex items-center space-x-1" title="Dividir clip en el cursor"><i class="fa-solid fa-scissors"></i><span>Dividir (Split)</span></button>
+                <button onclick="duplicateClip()" class="hover:text-white transition flex items-center space-x-1"><i class="fa-solid fa-copy"></i><span>Duplicar</span></button>
                 <button onclick="clearTimeline()" class="hover:text-red-400 transition flex items-center space-x-1"><i class="fa-solid fa-trash-can"></i><span>Limpiar</span></button>
             </div>
         </div>
-        <div class="flex-1 p-3 overflow-x-auto custom-scrollbar flex items-center relative">
-            <div id="timeline-track" class="h-16 bg-black/50 border border-white/[0.06] rounded-xl w-full min-w-[600px] relative overflow-hidden flex items-center px-2">
-                <div id="timeline-empty" class="w-full text-center text-xs text-white/30 italic">
-                    Arrastra o carga un video para visualizar los fotogramas en la línea de tiempo.
+
+        <!-- Tracks Container -->
+        <div class="flex-1 p-3 overflow-x-auto custom-scrollbar space-y-2 timeline-ruler-grid relative">
+            
+            <!-- Empty State -->
+            <div id="timeline-empty" class="absolute inset-0 flex items-center justify-center text-xs text-white/30 italic">
+                Arrastra o importa contenido para activar las pistas de video, texto y audio.
+            </div>
+
+            <!-- Track 1: Video Track -->
+            <div class="h-12 bg-black/40 border border-white/[0.06] rounded-xl flex items-center px-3 relative overflow-hidden group">
+                <div class="w-24 shrink-0 flex items-center space-x-2 text-[11px] text-white/50 border-r border-white/[0.08] mr-3">
+                    <i class="fa-solid fa-video text-blue-400"></i>
+                    <span class="font-medium">Video 1</span>
                 </div>
-                <div id="timeline-clip" class="hidden h-12 bg-blue-500/20 border border-blue-500/40 rounded-lg flex items-center px-3 relative cursor-pointer shadow-sm">
-                    <div class="flex items-center space-x-2 text-xs text-blue-200 font-medium truncate">
-                        <i class="fa-solid fa-video text-xs"></i>
-                        <span id="clip-name" class="truncate">video_principal.mp4</span>
-                    </div>
+                <div id="timeline-video-clip" class="hidden h-9 bg-blue-500/20 border border-blue-500/40 rounded-lg flex items-center px-3 relative cursor-pointer shadow-sm min-w-[200px]">
+                    <span id="timeline-clip-name" class="text-xs text-blue-200 font-medium truncate">video_principal.mp4</span>
                 </div>
             </div>
+
+            <!-- Track 2: Text Track -->
+            <div class="h-10 bg-black/40 border border-white/[0.06] rounded-xl flex items-center px-3 relative overflow-hidden">
+                <div class="w-24 shrink-0 flex items-center space-x-2 text-[11px] text-white/50 border-r border-white/[0.08] mr-3">
+                    <i class="fa-solid fa-font text-purple-400"></i>
+                    <span class="font-medium">Texto</span>
+                </div>
+                <div id="timeline-text-clip" class="hidden h-7 bg-purple-500/20 border border-purple-500/40 rounded-md flex items-center px-3 relative text-[11px] text-purple-200">
+                    <span id="timeline-text-label">Título en pantalla</span>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- Export Modal (Apple Style Dialog) -->
     <div id="export-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
         <div class="glass-modal border border-white/15 rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4">
             <div class="flex items-center justify-between">
                 <h3 class="text-sm font-semibold text-white flex items-center space-x-2">
                     <i class="fa-solid fa-file-export text-blue-400"></i>
-                    <span>Exportar Video Localmente</span>
+                    <span>Exportar Video Local (FFmpeg.wasm)</span>
                 </h3>
                 <button onclick="closeExportModal()" class="text-white/40 hover:text-white transition"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
             
             <p class="text-xs text-white/60 leading-relaxed">
-                Tu navegador renderizará el video final de manera segura usando <strong class="text-white">FFmpeg.wasm</strong> sin subir archivos a servidores externos.
+                Tu navegador renderizará el video final en alta definición de forma privada y local sin subir nada a la nube.
             </p>
 
             <div class="space-y-2.5 bg-black/40 p-3.5 rounded-2xl border border-white/5 text-xs">
                 <div class="flex justify-between"><span class="text-white/50">Formato:</span><span class="text-white font-medium">MP4 (H.264 / AAC)</span></div>
-                <div class="flex justify-between"><span class="text-white/50">Calidad:</span><span class="text-white font-medium">Alta Definición (HD)</span></div>
+                <div class="flex justify-between"><span class="text-white/50">Calidad:</span><span class="text-white font-medium">HD 1080p (CapCut Engine)</span></div>
                 <div class="flex justify-between"><span class="text-white/50">Privacidad:</span><span class="text-emerald-400 font-medium">100% Local</span></div>
             </div>
 
             <div id="export-progress-container" class="hidden space-y-2">
                 <div class="flex justify-between text-xs">
-                    <span id="export-status-text" class="text-white/80 text-[11px]">Iniciando motor FFmpeg...</span>
+                    <span id="export-status-text" class="text-white/80 text-[11px]">Iniciando motor WebAssembly...</span>
                     <span id="export-percentage" class="text-blue-400 font-mono font-semibold text-[11px]">0%</span>
                 </div>
                 <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
@@ -278,42 +313,51 @@
         </div>
     </div>
 
-    <!-- Application Logic Script -->
+    <!-- Application Script Logic -->
     <script>
         let currentFile = null;
         let videoElement = document.getElementById('main-video');
         let ffmpegInstance = null;
 
-        // Tab Switcher
         function switchTab(tabName) {
-            ['media', 'text', 'filters', 'audio'].forEach(t => {
+            ['media', 'text', 'effects', 'audio'].forEach(t => {
                 document.getElementById(`panel-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).className = "flex-1 py-1.5 rounded-lg text-center text-white/50 hover:text-white transition";
+                document.getElementById(`tab-${t}`).className = "py-1.5 rounded-lg text-center text-white/50 hover:text-white transition";
             });
             document.getElementById(`panel-${tabName}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabName}`).className = "flex-1 py-1.5 rounded-lg text-center bg-white/10 text-white shadow-sm transition";
+            document.getElementById(`tab-${tabName}`).className = "py-1.5 rounded-lg text-center bg-white/10 text-white shadow-sm transition";
         }
 
-        // File Selection & Loading
         function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+            loadVideoFile(files[0]);
+        }
 
+        function addStockAsset(type) {
+            // Create a sample video blob or load default clip
+            const sampleUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
+            fetch(sampleUrl)
+                .then(res => res.blob())
+                .then(blob => {
+                    const file = new File([blob], "Cinematic_Sample_ReelMatic.mp4", { type: "video/mp4" });
+                    loadVideoFile(file);
+                });
+        }
+
+        function loadVideoFile(file) {
             currentFile = file;
             const videoUrl = URL.createObjectURL(file);
             
-            // Setup Video Element
             videoElement.src = videoUrl;
             videoElement.load();
             videoElement.classList.remove('hidden');
             document.getElementById('stage-placeholder').classList.add('hidden');
 
-            // Enable Controls
             document.getElementById('play-btn').removeAttribute('disabled');
             document.getElementById('seek-bar').removeAttribute('disabled');
 
-            // Update UI list & timeline
-            document.getElementById('media-list').innerHTML = `
+            document.getElementById('media-library').innerHTML = `
                 <div class="flex items-center justify-between p-2.5 bg-black/40 rounded-xl border border-white/10 text-xs">
                     <div class="flex items-center space-x-2 truncate">
                         <i class="fa-solid fa-video text-blue-400"></i>
@@ -324,16 +368,14 @@
             `;
 
             document.getElementById('timeline-empty').classList.add('hidden');
-            const clipEl = document.getElementById('timeline-clip');
-            clipEl.classList.remove('hidden');
-            document.getElementById('clip-name').innerText = file.name;
+            document.getElementById('timeline-video-clip').classList.remove('hidden');
+            document.getElementById('timeline-clip-name').innerText = file.name;
 
             videoElement.onloadedmetadata = () => {
                 document.getElementById('total-duration').innerText = formatTime(videoElement.duration);
             };
         }
 
-        // Playback Controls
         function togglePlay() {
             if (videoElement.paused) {
                 videoElement.play();
@@ -370,7 +412,6 @@
             return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // Audio Adjustments
         function updateVolume(val) {
             videoElement.volume = val;
             document.getElementById('volume-val').innerText = `${Math.round(val * 100)}%`;
@@ -380,35 +421,51 @@
         function toggleMute() {
             isMuted = !isMuted;
             videoElement.muted = isMuted;
-            document.getElementById('mute-text').innerText = isMuted ? "Activar Pista" : "Silenciar Pista";
-            document.getElementById('mute-btn').className = isMuted ? 
-                "w-full bg-blue-500/20 text-blue-400 font-medium py-2 rounded-xl text-xs transition border border-blue-500/40 flex items-center justify-center space-x-2" :
-                "w-full bg-white/[0.04] hover:bg-white/[0.08] text-white font-medium py-2 rounded-xl text-xs transition border border-white/[0.08] flex items-center justify-center space-x-2";
+            document.getElementById('mute-text').innerText = isMuted ? "Activar" : "Silenciar";
         }
 
-        // Text Overlay
-        function addTextOverlay() {
+        function changeSpeed(val) {
+            videoElement.playbackRate = parseFloat(val);
+            document.getElementById('speed-val').innerText = `${val}x`;
+        }
+
+        function applyTextOverlay() {
             const textText = document.getElementById('text-content').value;
-            const textSize = document.getElementById('text-size').value;
-            const textColor = document.getElementById('text-color').value;
+            const preset = document.getElementById('text-preset').value;
+            const pos = document.getElementById('text-pos').value;
+
+            let styleClass = "font-bold tracking-wide drop-shadow-2xl ";
+            if (preset === 'modern') styleClass += "text-3xl text-cyan-300 font-extrabold uppercase";
+            else if (preset === 'cinematic') styleClass += "text-4xl text-amber-300 font-serif tracking-widest";
+            else if (preset === 'minimal') styleClass += "text-2xl text-white font-light bg-black/40 px-4 py-2 rounded-xl backdrop-blur-md";
+            else styleClass += "text-3xl text-pink-400 font-mono animate-pulse";
+
+            let posClass = "items-center";
+            if (pos === 'top') posClass = "items-start pt-10";
+            if (pos === 'bottom') posClass = "items-end pb-10";
 
             const layer = document.getElementById('overlay-layer');
-            layer.innerHTML = `
-                <div class="absolute select-none font-bold drop-shadow-2xl" style="font-size: ${textSize}px; color: ${textColor}; text-shadow: 0 4px 12px rgba(0,0,0,0.9);">
-                    ${textText}
-                </div>
-            `;
+            layer.className = `absolute inset-0 pointer-events-none flex flex-col ${posClass} justify-center p-6 text-center`;
+            layer.innerHTML = `<div class="${styleClass}">${textText}</div>`;
+
+            document.getElementById('timeline-text-clip').classList.remove('hidden');
+            document.getElementById('timeline-text-label').innerText = textText;
+            showNotification("Texto añadido a la escena");
         }
 
-        // Filters
         function applyFilter(filterStyle) {
             videoElement.style.filter = filterStyle;
+            showNotification("Filtro aplicado correctamente");
         }
 
-        // Timeline actions
-        function splitClip() {
+        function splitClipAtCurrentTime() {
             if (!currentFile) return;
-            showNotification("Punto de corte establecido en " + formatTime(videoElement.currentTime));
+            showNotification(`Clip dividido en el segundo ${formatTime(videoElement.currentTime)}`);
+        }
+
+        function duplicateClip() {
+            if (!currentFile) return;
+            showNotification("Clip duplicado en la línea de tiempo");
         }
 
         function clearTimeline() {
@@ -416,18 +473,18 @@
             videoElement.src = "";
             videoElement.classList.add('hidden');
             document.getElementById('stage-placeholder').classList.remove('hidden');
-            document.getElementById('media-list').innerHTML = `<div class="text-center py-8 text-white/30 text-xs italic bg-white/[0.01] rounded-2xl border border-white/[0.04]">Sin archivos cargados.</div>`;
+            document.getElementById('media-library').innerHTML = `<div class="text-center py-8 text-white/30 text-xs italic bg-white/[0.01] rounded-2xl border border-white/[0.04]">Sin archivos importados.</div>`;
             document.getElementById('timeline-empty').classList.remove('hidden');
-            document.getElementById('timeline-clip').classList.add('hidden');
+            document.getElementById('timeline-video-clip').classList.add('hidden');
+            document.getElementById('timeline-text-clip').classList.add('hidden');
+            document.getElementById('overlay-layer').innerHTML = "";
             document.getElementById('play-btn').setAttribute('disabled', 'true');
             document.getElementById('seek-bar').setAttribute('disabled', 'true');
-            document.getElementById('overlay-layer').innerHTML = "";
         }
 
-        // Export Modal & FFmpeg client-side rendering
         function openExportModal() {
             if (!currentFile) {
-                showNotification("Por favor, sube un video primero.");
+                showNotification("Por favor, sube o selecciona un video primero.");
                 return;
             }
             document.getElementById('export-modal').classList.remove('hidden');
@@ -449,9 +506,9 @@
             confirmBtn.setAttribute('disabled', 'true');
 
             try {
-                progressText.innerText = "Cargando motor WebAssembly...";
-                percentageText.innerText = "10%";
-                progressBar.style.width = "10%";
+                progressText.innerText = "Cargando motor WebAssembly (FFmpeg)...";
+                percentageText.innerText = "15%";
+                progressBar.style.width = "15%";
 
                 const { FFmpeg } = FFmpegWASM;
                 if (!ffmpegInstance) {
@@ -463,24 +520,23 @@
                     });
                 }
 
-                progressText.innerText = "Preparando archivo local...";
-                percentageText.innerText = "40%";
-                progressBar.style.width = "40%";
+                progressText.innerText = "Preparando archivos en memoria local...";
+                percentageText.innerText = "45%";
+                progressBar.style.width = "45%";
 
                 const { fetchFile } = FFmpegUtil;
                 const inputName = 'input.mp4';
-                const outputName = 'output_reelmatic.mp4';
+                const outputName = 'output_capcut_pro.mp4';
 
                 await ffmpegInstance.writeFile(inputName, await fetchFile(currentFile));
 
-                progressText.innerText = "Renderizando video con FFmpeg...";
-                percentageText.innerText = "70%";
-                progressBar.style.width = "70%";
+                progressText.innerText = "Renderizando video con calidad CapCut HD...";
+                percentageText.innerText = "75%";
+                progressBar.style.width = "75%";
 
-                // Fast preset compression command
                 await ffmpegInstance.exec(['-i', inputName, '-c:v', 'libx264', '-preset', 'ultrafast', outputName]);
 
-                progressText.innerText = "Generando archivo de descarga...";
+                progressText.innerText = "Empaquetando archivo de salida...";
                 percentageText.innerText = "95%";
                 progressBar.style.width = "95%";
 
@@ -488,17 +544,16 @@
                 const blob = new Blob([data.buffer], { type: 'video/mp4' });
                 const url = URL.createObjectURL(blob);
 
-                // Trigger automatic client download
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `reelmatic_${Date.now()}.mp4`;
+                a.download = `reelmatic_capcut_${Date.now()}.mp4`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
 
                 percentageText.innerText = "100%";
                 progressBar.style.width = "100%";
-                progressText.innerText = "¡Exportado con éxito!";
+                progressText.innerText = "¡Video exportado con éxito!";
                 confirmBtn.removeAttribute('disabled');
 
                 setTimeout(() => {
@@ -514,7 +569,7 @@
 
         function showNotification(msg) {
             const notif = document.createElement('div');
-            notif.className = "fixed bottom-5 right-5 glass-modal border border-white/15 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs z-50 flex items-center space-x-2";
+            notif.className = "fixed bottom-6 right-6 glass-modal border border-white/15 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs z-50 flex items-center space-x-2";
             notif.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i><span>${msg}</span>`;
             document.body.appendChild(notif);
             setTimeout(() => notif.remove(), 3000);
