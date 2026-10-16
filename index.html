@@ -75,7 +75,7 @@
             const [motionStyle, setMotionStyle] = useState("dynamic"); // "classic" | "dynamic" | "spring"
 
             // 5. Backgrounds & Color Palettes
-            const [bgColorChoice, setBgColorChoice] = useState("grey"); // "white" | "black" | "grey"
+            const [bgColorChoice, setBgColorChoice] = useState("white"); // "white" | "grey" | "black"
             const [paletteChoice, setPaletteChoice] = useState("minimal"); // "minimal" | "vibrant" | "neon"
 
             const [isRecording, setIsRecording] = useState(false);
@@ -111,25 +111,40 @@
                 const height = 1080;
                 
                 // --- 5. Background Colors & Palettes ---
-                let bgHex = '#e8e8e8'; // Grey default
-                if (cfg.bg === 'white') bgHex = '#f8fafc';
-                if (cfg.bg === 'black') bgHex = '#0c0d12';
+                let bgHex = '#f8fafc'; // Default Blanco
+                let isDark = false;
+
+                if (cfg.bg === 'grey') {
+                    bgHex = '#334155'; // Gris Cobalto más oscuro (Slate 700)
+                    isDark = true;
+                } else if (cfg.bg === 'black') {
+                    bgHex = '#0c0d12'; // Negro Profundo
+                    isDark = true;
+                }
 
                 ctx.fillStyle = bgHex;
                 ctx.fillRect(0, 0, width, height);
 
                 // Vignette / Gradient depth
-                const gradient = ctx.createRadialGradient(width/2, height/2, height*0.4, width/2, height/2, width*0.8);
+                const gradient = ctx.createRadialGradient(width/2, height/2, height*0.3, width/2, height/2, width*0.85);
                 gradient.addColorStop(0, 'rgba(0,0,0,0)');
-                gradient.addColorStop(1, cfg.bg === 'black' ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.25)');
+                
+                if (cfg.bg === 'grey') {
+                    gradient.addColorStop(1, 'rgba(15, 23, 42, 0.95)'); // Degradado cobalto más profundo en los bordes
+                } else if (cfg.bg === 'black') {
+                    gradient.addColorStop(1, 'rgba(0,0,0,0.8)');
+                } else {
+                    gradient.addColorStop(1, 'rgba(0,0,0,0.25)'); // Sombra sutil para blanco
+                }
+                
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, width, height);
 
                 // Colors based on palettes & bg
-                let primaryColor = cfg.bg === 'black' ? '#ffffff' : '#000000';
+                let primaryColor = isDark ? '#ffffff' : '#000000';
                 let accentColor = primaryColor;
                 let boxBgColor = primaryColor;
-                let boxTextColor = cfg.bg === 'black' ? '#000000' : '#ffffff';
+                let boxTextColor = isDark ? '#000000' : '#ffffff';
 
                 if (cfg.palette === 'vibrant') {
                     accentColor = '#3b82f6';
@@ -209,7 +224,7 @@
                         ctx.translate(180 + slideX, 220);
                         ctx.rotate(tiltAngle);
                         ctx.font = '500 22px Montserrat';
-                        ctx.fillStyle = primaryColor;
+                        ctx.fillStyle = isDark && cfg.bg === 'black' ? '#ffffff' : '#000000'; // Ajuste color texto pie foto
                         ctx.textBaseline = 'top';
                         ctx.textAlign = 'center';
                         ctx.fillText(texts.photoCaption, 260, 560);
@@ -637,8 +652,8 @@
                                         <label className="text-[10px] font-semibold text-slate-400 uppercase">Fondo</label>
                                         <select value={bgColorChoice} onChange={e => setBgColorChoice(e.target.value)}
                                             className="w-full bg-[#13151c] border border-white/10 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
-                                            <option value="grey">Gris</option>
                                             <option value="white">Blanco</option>
+                                            <option value="grey">Gris</option>
                                             <option value="black">Negro</option>
                                         </select>
                                     </div>
