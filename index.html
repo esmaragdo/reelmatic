@@ -57,8 +57,15 @@
             const [logoText, setLogoText] = useState("ReelMatic.Pro");
             const [sourceText, setSourceText] = useState("Fuente: Organización Mundial del Turismo");
             
+            // Animation Toggles for continuous video feeling
+            const [animateLogo, setAnimateLogo] = useState(true);
+            const [animateSource, setAnimateSource] = useState(true);
+
             // 1. Source alignment
             const [sourceAlign, setSourceAlign] = useState("left"); // "left" | "right"
+
+            // Text Order layout
+            const [textOrder, setTextOrder] = useState("standard"); // "standard" | "subtitleTop" | "blockBottom"
 
             // 2. Framed Photo (Polaroid)
             const [useFramedPhoto, setUseFramedPhoto] = useState(false);
@@ -111,14 +118,14 @@
                 const height = 1080;
                 
                 // --- 5. Background Colors & Palettes ---
-                let bgHex = '#f8fafc'; // Default Blanco
+                let bgHex = '#f8fafc'; // White default
                 let isDark = false;
 
                 if (cfg.bg === 'grey') {
-                    bgHex = '#334155'; // Gris Cobalto más oscuro (Slate 700)
+                    bgHex = '#334155'; // Darker Slate 700
                     isDark = true;
                 } else if (cfg.bg === 'black') {
-                    bgHex = '#0c0d12'; // Negro Profundo
+                    bgHex = '#0c0d12'; // Deep Black
                     isDark = true;
                 }
 
@@ -126,15 +133,15 @@
                 ctx.fillRect(0, 0, width, height);
 
                 // Vignette / Gradient depth
-                const gradient = ctx.createRadialGradient(width/2, height/2, height*0.3, width/2, height/2, width*0.85);
+                const gradient = ctx.createRadialGradient(width/2, height/2, height*0.4, width/2, height/2, width*0.8);
                 gradient.addColorStop(0, 'rgba(0,0,0,0)');
                 
                 if (cfg.bg === 'grey') {
-                    gradient.addColorStop(1, 'rgba(15, 23, 42, 0.95)'); // Degradado cobalto más profundo en los bordes
+                    gradient.addColorStop(1, 'rgba(15, 23, 42, 0.95)'); // Deep cobalt edges
                 } else if (cfg.bg === 'black') {
                     gradient.addColorStop(1, 'rgba(0,0,0,0.8)');
                 } else {
-                    gradient.addColorStop(1, 'rgba(0,0,0,0.25)'); // Sombra sutil para blanco
+                    gradient.addColorStop(1, 'rgba(0,0,0,0.15)');
                 }
                 
                 ctx.fillStyle = gradient;
@@ -183,6 +190,21 @@
                 const startX = hasVisualLeft ? width * 0.46 : width * 0.25;
                 const startY = height * 0.35;
 
+                // --- TEXT ORDER CALCULATIONS ---
+                let baseY1 = startY;
+                let baseY2 = startY + 160;
+                let baseY3 = startY + 280;
+
+                if (cfg.textOrder === "subtitleTop") {
+                    baseY2 = startY - 60; 
+                    baseY1 = startY + 40; 
+                    baseY3 = startY + 200; 
+                } else if (cfg.textOrder === "blockBottom") {
+                    baseY2 = startY - 80; 
+                    baseY3 = startY + 20; 
+                    baseY1 = startY + 220; 
+                }
+
                 // --- 2. FRAMED PHOTO (POLAROID) ---
                 if (cfg.useFramed) {
                     const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
@@ -218,13 +240,13 @@
                     }
                     ctx.restore();
 
-                    // Parallel Rotated Caption (Mini pie de foto inclinado en paralelo)
+                    // Parallel Rotated Caption
                     if (texts.photoCaption) {
                         ctx.save();
                         ctx.translate(180 + slideX, 220);
                         ctx.rotate(tiltAngle);
                         ctx.font = '500 22px Montserrat';
-                        ctx.fillStyle = isDark && cfg.bg === 'black' ? '#ffffff' : '#000000'; // Ajuste color texto pie foto
+                        ctx.fillStyle = primaryColor;
                         ctx.textBaseline = 'top';
                         ctx.textAlign = 'center';
                         ctx.fillText(texts.photoCaption, 260, 560);
@@ -232,7 +254,7 @@
                     }
                 }
 
-                // --- 3. TRANSPARENT CHARACTER (Elevated to avoid footer/source collision) ---
+                // --- 3. TRANSPARENT CHARACTER ---
                 if (cfg.useChar) {
                     const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
                     const slideX = (1 - animProgress) * -400;
@@ -240,7 +262,7 @@
                     ctx.save();
                     ctx.translate(120 + slideX, 0);
 
-                    // Elevated vertical positioning (y = 120 instead of bottom)
+                    // Elevated vertical positioning
                     const charW = 460;
                     const charH = 680;
                     const charX = 80;
@@ -263,7 +285,7 @@
                         ctx.fillText("Personaje Transparente", charX + 90, charY + 340);
                     }
 
-                    // Name & Role Badge (Floating card at bottom of character cutout)
+                    // Name & Role Badge
                     if (texts.charName) {
                         const cardX = charX + 40;
                         const cardY = charY + charH - 130;
@@ -303,17 +325,17 @@
                     const boxH = 130;
 
                     ctx.beginPath();
-                    ctx.rect(startX, startY, boxW, boxH);
+                    ctx.rect(startX, baseY1, boxW, boxH);
                     ctx.clip();
 
                     const slideOffset = (1 - animP) * boxW;
                     
                     ctx.fillStyle = boxBoxColor(boxBgColor, accentColor);
-                    ctx.fillRect(startX - slideOffset, startY, boxW, boxH);
+                    ctx.fillRect(startX - slideOffset, baseY1, boxW, boxH);
                     
                     ctx.fillStyle = boxTextColor;
                     ctx.textBaseline = 'top';
-                    ctx.fillText(texts.t1, startX + padX - slideOffset, startY + padY);
+                    ctx.fillText(texts.t1, startX + padX - slideOffset, baseY1 + padY);
                     ctx.restore();
                 }
 
@@ -330,11 +352,10 @@
                     
                     const yOffset = (1 - easeVal) * 50;
                     const line2X = startX + 20;
-                    const line2Y = startY + 160 + yOffset;
 
                     ctx.fillStyle = primaryColor;
                     ctx.textBaseline = 'top';
-                    ctx.fillText(texts.t2, line2X, line2Y);
+                    ctx.fillText(texts.t2, line2X, baseY2 + yOffset);
                     ctx.restore();
                 }
 
@@ -347,27 +368,25 @@
                     
                     const textMetrics = ctx.measureText(texts.t3);
                     const line3X = startX + 150;
-                    const line3Y = startY + 280;
-
                     const yOffset = (1 - easeVal) * 30;
 
                     ctx.fillStyle = primaryColor;
                     ctx.textBaseline = 'top';
-                    ctx.fillText(texts.t3, line3X, line3Y + yOffset);
+                    ctx.fillText(texts.t3, line3X, baseY3 + yOffset);
 
                     if (t4 > 0) {
                         const lineW = textMetrics.width * (cfg.motion === 'spring' ? elasticOut(t4) : easeOutExpo(t4));
                         ctx.fillStyle = accentColor;
-                        ctx.fillRect(line3X, line3Y + yOffset + 130, lineW, 8);
+                        ctx.fillRect(line3X, baseY3 + yOffset + 130, lineW, 8);
                     }
 
                     ctx.restore();
                 }
 
-                // --- 1. FUENTE (Alineación izquierda o derecha configurable) ---
-                if (tSource > 0 && texts.source) {
+                // --- 1. FUENTE (Con Switch de Animación y Alineación) ---
+                if ((tSource > 0 || !cfg.animateSource) && texts.source) {
                     ctx.save();
-                    const easeVal = easeOutQuart(tSource);
+                    const easeVal = cfg.animateSource ? easeOutQuart(Math.min(1, tSource)) : 1;
                     ctx.globalAlpha = easeVal * 0.75;
                     ctx.font = '500 26px Montserrat';
                     ctx.fillStyle = primaryColor;
@@ -384,11 +403,11 @@
                     ctx.restore();
                 }
 
-                // --- LOGO ---
-                if (tLogo > 0) {
+                // --- LOGO (Con Switch de Animación) ---
+                if ((tLogo > 0 || !cfg.animateLogo) && texts.logo) {
                     ctx.save();
-                    const easeVal = easeOutBack(tLogo);
-                    ctx.globalAlpha = Math.min(1, tLogo * 2);
+                    const easeVal = cfg.animateLogo ? easeOutBack(Math.min(1, tLogo)) : 1;
+                    ctx.globalAlpha = cfg.animateLogo ? Math.min(1, tLogo * 2) : 1;
                     ctx.font = '700 30px Montserrat';
                     const logoMetrics = ctx.measureText(texts.logo);
                     const padX = 20;
@@ -426,9 +445,12 @@
                     useChar: useCharacter,
                     charImgObj: characterImg,
                     sourceAlign: sourceAlign,
+                    textOrder: textOrder,
                     motion: motionStyle,
                     bg: bgColorChoice,
-                    palette: paletteChoice
+                    palette: paletteChoice,
+                    animateLogo: animateLogo,
+                    animateSource: animateSource
                 };
 
                 setIsPlaying(true);
@@ -487,7 +509,7 @@
                 };
                 
                 animationRef.current = requestAnimationFrame(animate);
-            }, [drawFrame, isPlaying, text1, text2, text3, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, useCharacter, characterImg, sourceAlign, motionStyle, bgColorChoice, paletteChoice]);
+            }, [drawFrame, isPlaying, text1, text2, text3, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, useCharacter, characterImg, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, animateLogo, animateSource]);
 
             // File upload handlers
             const handleFramedPhotoUpload = (e) => {
@@ -526,10 +548,10 @@
                     if (!canvas) return;
                     const ctx = canvas.getContext('2d');
                     drawFrame(ctx, 5000, { t1: text1, t2: text2, t3: text3, logo: logoText, source: sourceText, photoCaption, charName, charRole }, {
-                        useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, useChar: useCharacter, charImgObj: characterImg, sourceAlign: sourceAlign, motion: motionStyle, bg: bgColorChoice, palette: paletteChoice
+                        useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, useChar: useCharacter, charImgObj: characterImg, sourceAlign: sourceAlign, textOrder: textOrder, motion: motionStyle, bg: bgColorChoice, palette: paletteChoice, animateLogo: animateLogo, animateSource: animateSource
                     });
                 });
-            }, [text1, text2, text3, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, useCharacter, characterImg, sourceAlign, motionStyle, bgColorChoice, paletteChoice, drawFrame]);
+            }, [text1, text2, text3, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, useCharacter, characterImg, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, animateLogo, animateSource, drawFrame]);
 
             return (
                 <div className="flex-1 flex flex-col h-screen overflow-hidden">
@@ -578,12 +600,24 @@
                                 <div className="pt-4 border-t border-white/10 space-y-3">
                                     <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Detalles & Créditos</h2>
                                     <div className="space-y-1">
-                                        <label className="text-[11px] font-medium text-slate-400">Texto del Logo</label>
+                                        <div className="flex items-center justify-between">
+                                            <label className="text-[11px] font-medium text-slate-400">Texto del Logo</label>
+                                            <label className="flex items-center gap-1.5 cursor-pointer">
+                                                <span className="text-[10px] text-slate-500">Animar</span>
+                                                <input type="checkbox" checked={animateLogo} onChange={e => setAnimateLogo(e.target.checked)} className="w-3 h-3 accent-blue-500" />
+                                            </label>
+                                        </div>
                                         <input type="text" value={logoText} onChange={e => setLogoText(e.target.value)} disabled={isRecording}
                                             className="w-full bg-[#13151c] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[11px] font-medium text-slate-400">Texto de la Fuente</label>
+                                        <div className="flex items-center justify-between">
+                                            <label className="text-[11px] font-medium text-slate-400">Texto de la Fuente</label>
+                                            <label className="flex items-center gap-1.5 cursor-pointer">
+                                                <span className="text-[10px] text-slate-500">Animar</span>
+                                                <input type="checkbox" checked={animateSource} onChange={e => setAnimateSource(e.target.checked)} className="w-3 h-3 accent-blue-500" />
+                                            </label>
+                                        </div>
                                         <input type="text" value={sourceText} onChange={e => setSourceText(e.target.value)} disabled={isRecording}
                                             className="w-full bg-[#13151c] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
                                     </div>
@@ -636,7 +670,7 @@
                                     </div>
                                 </div>
 
-                                <div className="pt-4 border-t border-white/10 grid grid-cols-3 gap-3">
+                                <div className="pt-4 border-t border-white/10 grid grid-cols-2 gap-3">
                                     {/* 4. Motion Variants */}
                                     <div className="space-y-1">
                                         <label className="text-[10px] font-semibold text-slate-400 uppercase">Movimiento</label>
@@ -645,6 +679,16 @@
                                             <option value="classic">Clásico</option>
                                             <option value="dynamic">Dinámico</option>
                                             <option value="spring">Spring</option>
+                                        </select>
+                                    </div>
+                                    {/* Orden Textos */}
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-semibold text-slate-400 uppercase">Orden Textos</label>
+                                        <select value={textOrder} onChange={e => setTextOrder(e.target.value)}
+                                            className="w-full bg-[#13151c] border border-white/10 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                                            <option value="standard">Estándar</option>
+                                            <option value="subtitleTop">Subtítulo Arriba</option>
+                                            <option value="blockBottom">Bloque Abajo</option>
                                         </select>
                                     </div>
                                     {/* 5. Background Color */}
