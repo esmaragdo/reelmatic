@@ -56,6 +56,11 @@
             const [logoText, setLogoText] = useState("ReelMatic.Pro");
             const [sourceText, setSourceText] = useState("Fuente: Organización Mundial del Turismo");
             
+            const [isQuoteMode, setIsQuoteMode] = useState(false);
+            const [quoteParagraph, setQuoteParagraph] = useState("La innovación distingue a los líderes de los seguidores. El diseño no es solo lo que parece, es cómo funciona.");
+            const [quoteAuthorName, setQuoteAuthorName] = useState("Steve Jobs");
+            const [quoteAuthorRole, setQuoteAuthorRole] = useState("Fundador de Apple");
+
             const [animateLogo, setAnimateLogo] = useState(true);
             const [animateSource, setAnimateSource] = useState(true);
 
@@ -224,7 +229,6 @@
 
                 if (cfg.useVideoOverlayBackdrop) {
                     ctx.save();
-                    // Left half clean placeholder for video overlay (representing 50% screen width) - Completely clean without borders or text
                     const boxW = width * 0.48;
                     const boxH = height * 0.88;
                     const boxX = 60;
@@ -287,20 +291,6 @@
                 
                 let startX = hasVisualLeft ? width * 0.52 : width * 0.22;
                 const startY = height * 0.35;
-
-                let baseY1 = startY;
-                let baseY2 = startY + 160;
-                let baseY3 = startY + 280;
-
-                if (cfg.textOrder === "subtitleTop") {
-                    baseY2 = startY - 60; 
-                    baseY1 = startY + 40; 
-                    baseY3 = startY + 200; 
-                } else if (cfg.textOrder === "blockBottom") {
-                    baseY2 = startY - 80; 
-                    baseY3 = startY + 20; 
-                    baseY1 = startY + 220; 
-                }
 
                 if (cfg.useFramed && !cfg.useVideoOverlayBackdrop) {
                     const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
@@ -956,77 +946,152 @@
                     }
                 }
 
-                if (t1 > 0) {
-                    ctx.save();
-                    const animP = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
-                    ctx.font = '800 85Montserrat'; // Perfectly scaled down to eliminate any overflow
-                    const maxAllowedWidth = width - startX - 80;
-                    const padX = 30;
-                    const padY = 22;
-                    const boxH = 110;
-
-                    ctx.save();
-                    ctx.font = '800 85px Montserrat';
-                    const measuredW = ctx.measureText(texts.t1).width;
-                    const boxW = Math.min(measuredW + (padX * 2), maxAllowedWidth);
-
-                    ctx.beginPath();
-                    ctx.rect(startX, baseY1, maxAllowedWidth, boxH + 10);
-                    ctx.clip();
-
-                    const slideOffset = (1 - animP) * boxW;
-                    
-                    ctx.fillStyle = boxBoxColor(boxBgColor, accentColor);
-                    ctx.fillRect(startX - slideOffset, baseY1, boxW, boxH);
-                    
-                    ctx.fillStyle = boxTextColor;
-                    ctx.textBaseline = 'top';
-                    ctx.font = '800 85px Montserrat';
-                    ctx.fillText(texts.t1, startX + padX - slideOffset, baseY1 + padY);
-                    ctx.restore();
-                    ctx.restore();
-                }
-
-                function boxBoxColor(def, acc) {
-                    return cfg.palette !== 'minimal' ? acc : def;
-                }
-
-                if (t2 > 0) {
-                    ctx.save();
-                    const easeVal = cfg.motion === 'spring' ? elasticOut(t2) : easeOutExpo(t2);
-                    ctx.globalAlpha = easeVal;
-                    ctx.font = '300 64px Montserrat'; // Perfectly balanced font size for second line
-                    
-                    const yOffset = (1 - easeVal) * 50;
-                    const line2X = startX + 10;
-
-                    ctx.fillStyle = primaryColor;
-                    ctx.textBaseline = 'top';
-                    ctx.fillText(texts.t2, line2X, baseY2 + yOffset);
-                    ctx.restore();
-                }
-
-                if (t3 > 0) {
-                    ctx.save();
-                    const easeVal = cfg.motion === 'spring' ? elasticOut(t3) : easeOutExpo(t3);
-                    ctx.globalAlpha = easeVal;
-                    ctx.font = '800 85px Montserrat'; // Scaled for safety and zero overflow
-                    
-                    const textMetrics = ctx.measureText(texts.t3);
-                    const line3X = startX + 80;
-                    const yOffset = (1 - easeVal) * 30;
-
-                    ctx.fillStyle = primaryColor;
-                    ctx.textBaseline = 'top';
-                    ctx.fillText(texts.t3, line3X, baseY3 + yOffset);
-
-                    if (t4 > 0) {
-                        const lineW = Math.min(textMetrics.width * (cfg.motion === 'spring' ? elasticOut(t4) : easeOutExpo(t4)), width - line3X - 80);
+                if (cfg.isQuoteMode) {
+                    if (t1 > 0) {
+                        ctx.save();
+                        const easeVal = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        ctx.globalAlpha = easeVal * 0.25;
+                        ctx.font = '900 220px Montserrat';
                         ctx.fillStyle = accentColor;
-                        ctx.fillRect(line3X, baseY3 + yOffset + 105, lineW, 8);
+                        ctx.textBaseline = 'top';
+                        ctx.fillText("“", startX - 50, height * 0.22);
+                        ctx.restore();
                     }
 
-                    ctx.restore();
+                    if (t2 > 0) {
+                        ctx.save();
+                        const easeVal = cfg.motion === 'spring' ? elasticOut(t2) : easeOutExpo(t2);
+                        ctx.globalAlpha = easeVal;
+                        ctx.font = 'italic 500 36px Montserrat';
+                        ctx.fillStyle = primaryColor;
+                        ctx.textBaseline = 'top';
+
+                        const maxTextW = width - startX - 120;
+                        const words = (texts.quoteParagraph || "").split(" ");
+                        let line = "";
+                        let lines = [];
+                        const lineHeight = 52;
+
+                        for (let n = 0; n < words.length; n++) {
+                            const testLine = line + words[n] + " ";
+                            const metrics = ctx.measureText(testLine);
+                            if (metrics.width > maxTextW && n > 0) {
+                                lines.push(line);
+                                line = words[n] + " ";
+                            } else {
+                                line = testLine;
+                            }
+                        }
+                        lines.push(line);
+
+                        let startYText = height * 0.32;
+                        for (let i = 0; i < lines.length; i++) {
+                            ctx.fillText(lines[i], startX, startYText + (i * lineHeight));
+                        }
+                        ctx.restore();
+                    }
+
+                    if (t3 > 0) {
+                        ctx.save();
+                        const easeVal = cfg.motion === 'spring' ? elasticOut(t3) : easeOutExpo(t3);
+                        ctx.globalAlpha = easeVal;
+                        
+                        let authorY = height * 0.70;
+                        ctx.font = '800 32px Montserrat';
+                        ctx.fillStyle = accentColor;
+                        ctx.textBaseline = 'top';
+                        ctx.fillText(`— ${texts.quoteAuthorName}`, startX, authorY);
+
+                        if (texts.quoteAuthorRole) {
+                            ctx.font = '500 18px Montserrat';
+                            ctx.fillStyle = primaryColor;
+                            ctx.globalAlpha = easeVal * 0.75;
+                            ctx.fillText(texts.quoteAuthorRole, startX, authorY + 42);
+                        }
+                        ctx.restore();
+                    }
+                } else {
+                    let baseY1 = startY;
+                    let baseY2 = startY + 160;
+                    let baseY3 = startY + 280;
+
+                    if (cfg.textOrder === "subtitleTop") {
+                        baseY2 = startY - 60; 
+                        baseY1 = startY + 40; 
+                        baseY3 = startY + 200; 
+                    } else if (cfg.textOrder === "blockBottom") {
+                        baseY2 = startY - 80; 
+                        baseY3 = startY + 20; 
+                        baseY1 = startY + 220; 
+                    }
+
+                    if (t1 > 0) {
+                        ctx.save();
+                        const animP = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        const maxAllowedWidth = width - startX - 80;
+                        const padX = 30;
+                        const padY = 22;
+                        const boxH = 110;
+
+                        ctx.save();
+                        ctx.font = '800 85px Montserrat';
+                        const measuredW = ctx.measureText(texts.t1).width;
+                        const boxW = Math.min(measuredW + (padX * 2), maxAllowedWidth);
+
+                        ctx.beginPath();
+                        ctx.rect(startX, baseY1, maxAllowedWidth, boxH + 10);
+                        ctx.clip();
+
+                        const slideOffset = (1 - animP) * boxW;
+                        
+                        ctx.fillStyle = cfg.palette !== 'minimal' ? accentColor : boxBgColor;
+                        ctx.fillRect(startX - slideOffset, baseY1, boxW, boxH);
+                        
+                        ctx.fillStyle = boxTextColor;
+                        ctx.textBaseline = 'top';
+                        ctx.font = '800 85px Montserrat';
+                        ctx.fillText(texts.t1, startX + padX - slideOffset, baseY1 + padY);
+                        ctx.restore();
+                        ctx.restore();
+                    }
+
+                    if (t2 > 0) {
+                        ctx.save();
+                        const easeVal = cfg.motion === 'spring' ? elasticOut(t2) : easeOutExpo(t2);
+                        ctx.globalAlpha = easeVal;
+                        ctx.font = '300 64px Montserrat';
+                        
+                        const yOffset = (1 - easeVal) * 50;
+                        const line2X = startX + 10;
+
+                        ctx.fillStyle = primaryColor;
+                        ctx.textBaseline = 'top';
+                        ctx.fillText(texts.t2, line2X, baseY2 + yOffset);
+                        ctx.restore();
+                    }
+
+                    if (t3 > 0) {
+                        ctx.save();
+                        const easeVal = cfg.motion === 'spring' ? elasticOut(t3) : easeOutExpo(t3);
+                        ctx.globalAlpha = easeVal;
+                        ctx.font = '800 85px Montserrat';
+                        
+                        const textMetrics = ctx.measureText(texts.t3);
+                        const line3X = startX + 80;
+                        const yOffset = (1 - easeVal) * 30;
+
+                        ctx.fillStyle = primaryColor;
+                        ctx.textBaseline = 'top';
+                        ctx.fillText(texts.t3, line3X, baseY3 + yOffset);
+
+                        if (t4 > 0) {
+                            const lineW = Math.min(textMetrics.width * (cfg.motion === 'spring' ? elasticOut(t4) : easeOutExpo(t4)), width - line3X - 80);
+                            ctx.fillStyle = accentColor;
+                            ctx.fillRect(line3X, baseY3 + yOffset + 105, lineW, 8);
+                        }
+
+                        ctx.restore();
+                    }
                 }
 
                 if ((tSource > 0 || !cfg.animateSource) && texts.source) {
@@ -1082,8 +1147,13 @@
                 const startTime = performance.now();
                 const duration = 5000;
                 
-                const currentTexts = { t1: text1, t2: text2, t3: text3, logo: logoText, source: sourceText, photoCaption, charName, charRole };
+                const currentTexts = { 
+                    t1: text1, t2: text2, t3: text3, 
+                    quoteParagraph, quoteAuthorName, quoteAuthorRole,
+                    logo: logoText, source: sourceText, photoCaption, charName, charRole 
+                };
                 const currentCfg = {
+                    isQuoteMode,
                     useFramed: useFramedPhoto,
                     framedImgObj: framedPhotoImg,
                     frameVariant: frameVariant,
@@ -1158,7 +1228,7 @@
                 };
                 
                 animationRef.current = requestAnimationFrame(animate);
-            }, [drawFrame, isPlaying, text1, text2, text3, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource]);
+            }, [drawFrame, isPlaying, isQuoteMode, text1, text2, text3, quoteParagraph, quoteAuthorName, quoteAuthorRole, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource]);
 
             const handleFramedPhotoUpload = (e) => {
                 const file = e.target.files[0];
@@ -1195,11 +1265,21 @@
                     const canvas = canvasRef.current;
                     if (!canvas) return;
                     const ctx = canvas.getContext('2d');
-                    drawFrame(ctx, 5000, { t1: text1, t2: text2, t3: text3, logo: logoText, source: sourceText, photoCaption, charName, charRole }, {
-                        useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, frameVariant: frameVariant, useChar: useCharacter, charImgObj: characterImg, charVariant: charVariant, useVideoOverlayBackdrop: useVideoOverlayBackdrop, overlayGuideOpacity: overlayGuideOpacity, sourceAlign: sourceAlign, textOrder: textOrder, motion: motionStyle, bg: bgColorChoice, palette: paletteChoice, bgType: bgType, animateLogo: animateLogo, animateSource: animateSource
+                    drawFrame(ctx, 5000, { 
+                        t1: text1, t2: text2, t3: text3, 
+                        quoteParagraph, quoteAuthorName, quoteAuthorRole,
+                        logo: logoText, source: sourceText, photoCaption, charName, charRole 
+                    }, {
+                        isQuoteMode,
+                        useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, frameVariant: frameVariant, 
+                        useChar: useCharacter, charImgObj: characterImg, charVariant: charVariant, 
+                        useVideoOverlayBackdrop: useVideoOverlayBackdrop, overlayGuideOpacity: overlayGuideOpacity, 
+                        sourceAlign: sourceAlign, textOrder: textOrder, motion: motionStyle, 
+                        bg: bgColorChoice, palette: paletteChoice, bgType: bgType, 
+                        animateLogo: animateLogo, animateSource: animateSource
                     });
                 });
-            }, [text1, text2, text3, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource, drawFrame]);
+            }, [isQuoteMode, text1, text2, text3, quoteParagraph, quoteAuthorName, quoteAuthorRole, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource, drawFrame]);
 
             return (
                 <div className="flex-1 flex flex-col h-screen overflow-hidden">
@@ -1215,33 +1295,70 @@
                             </h1>
                         </div>
                         <div className="text-xs text-slate-400 font-medium bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                            Studio Motion Engine v5.0 (Video Overlay Mode)
+                            Studio Motion Engine v5.0 (Quote Mode & Visuals)
                         </div>
                     </header>
 
                     <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
                         <div className="w-full lg:w-[440px] bg-[#0d0e12]/95 backdrop-blur-2xl border-r border-white/10 p-6 flex flex-col justify-between z-20 shrink-0 overflow-y-auto">
                             <div className="space-y-6">
-                                <div>
-                                    <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Textos Principales</h2>
-                                    <div className="space-y-3">
-                                        <div className="space-y-1">
-                                            <label className="text-[11px] font-medium text-slate-400">Línea 1 (Bloque Negro)</label>
-                                            <input type="text" value={text1} onChange={e => setText1(e.target.value)} disabled={isRecording}
-                                                className="w-full bg-[#13151c] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+                                
+                                {/* Quote Mode Switcher */}
+                                <div className="bg-[#13151c] p-4 rounded-xl border border-blue-500/30 space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <span className="text-xs font-bold text-white flex items-center gap-2">
+                                                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                                                Modo Cita (Párrafo con Comillas)
+                                            </span>
+                                            <p className="text-[10px] text-slate-400 mt-0.5">Transforma los textos en una cita formal con comillas gigantes</p>
                                         </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[11px] font-medium text-slate-400">Línea 2 (Subtítulo)</label>
-                                            <input type="text" value={text2} onChange={e => setText2(e.target.value)} disabled={isRecording}
-                                                className="w-full bg-[#13151c] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[11px] font-medium text-slate-400">Línea 3 (Destacado)</label>
-                                            <input type="text" value={text3} onChange={e => setText3(e.target.value)} disabled={isRecording}
-                                                className="w-full bg-[#13151c] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
-                                        </div>
+                                        <input type="checkbox" checked={isQuoteMode} onChange={e => setIsQuoteMode(e.target.checked)}
+                                            className="w-4 h-4 rounded accent-blue-500 cursor-pointer" />
                                     </div>
                                 </div>
+
+                                {isQuoteMode ? (
+                                    <div className="space-y-3 bg-[#13151c]/60 p-4 rounded-xl border border-white/10">
+                                        <h2 className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Contenido de la Cita</h2>
+                                        <div className="space-y-1">
+                                            <label className="text-[11px] font-medium text-slate-400">Párrafo de la Cita</label>
+                                            <textarea rows="4" value={quoteParagraph} onChange={e => setQuoteParagraph(e.target.value)} disabled={isRecording}
+                                                className="w-full bg-[#0a0b0e] border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500 resize-none" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-[11px] font-medium text-slate-400">Autor / Personaje</label>
+                                            <input type="text" value={quoteAuthorName} onChange={e => setQuoteAuthorName(e.target.value)} disabled={isRecording}
+                                                className="w-full bg-[#0a0b0e] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-[11px] font-medium text-slate-400">Cargo / Descripción</label>
+                                            <input type="text" value={quoteAuthorRole} onChange={e => setQuoteAuthorRole(e.target.value)} disabled={isRecording}
+                                                className="w-full bg-[#0a0b0e] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Textos Principales</h2>
+                                        <div className="space-y-3">
+                                            <div className="space-y-1">
+                                                <label className="text-[11px] font-medium text-slate-400">Línea 1 (Bloque Negro)</label>
+                                                <input type="text" value={text1} onChange={e => setText1(e.target.value)} disabled={isRecording}
+                                                    className="w-full bg-[#13151c] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[11px] font-medium text-slate-400">Línea 2 (Subtítulo)</label>
+                                                <input type="text" value={text2} onChange={e => setText2(e.target.value)} disabled={isRecording}
+                                                    className="w-full bg-[#13151c] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[11px] font-medium text-slate-400">Línea 3 (Destacado)</label>
+                                                <input type="text" value={text3} onChange={e => setText3(e.target.value)} disabled={isRecording}
+                                                    className="w-full bg-[#13151c] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="pt-4 border-t border-white/10 space-y-3">
                                     <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Detalles & Créditos</h2>
@@ -1280,21 +1397,6 @@
                                 <div className="pt-4 border-t border-white/10 space-y-4">
                                     <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Elementos Visuales (Izquierda)</h2>
                                     
-                                    {/* Video Overlay Backdrop Mode Control */}
-                                    <div className="bg-[#13151c] p-4 rounded-xl border border-blue-500/30 shadow-lg shadow-blue-500/5 space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <span className="text-xs font-bold text-white flex items-center gap-2">
-                                                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                                                    Fondo Limpio para Video Overlay
-                                                </span>
-                                                <p className="text-[10px] text-slate-400 mt-0.5">Deja el lado izquierdo totalmente libre y limpio para superponer video</p>
-                                            </div>
-                                            <input type="checkbox" checked={useVideoOverlayBackdrop} onChange={e => { setUseVideoOverlayBackdrop(e.target.checked); if(e.target.checked) { setUseFramedPhoto(false); setUseCharacter(false); } }}
-                                                className="w-4 h-4 rounded accent-blue-500 cursor-pointer" />
-                                        </div>
-                                    </div>
-
                                     <div className="bg-[#13151c] p-4 rounded-xl border border-white/10 space-y-3">
                                         <div className="flex items-center justify-between">
                                             <span className="text-xs font-bold text-white">Foto con Marco</span>
