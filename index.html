@@ -56,11 +56,6 @@
             const [logoText, setLogoText] = useState("ReelMatic.Pro");
             const [sourceText, setSourceText] = useState("Fuente: Organización Mundial del Turismo");
             
-            const [isQuoteMode, setIsQuoteMode] = useState(false);
-            const [quoteParagraph, setQuoteParagraph] = useState("La innovación distingue a los líderes de los seguidores. El diseño no es solo lo que parece, es cómo funciona.");
-            const [quoteAuthorName, setQuoteAuthorName] = useState("Steve Jobs");
-            const [quoteAuthorRole, setQuoteAuthorRole] = useState("Fundador de Apple");
-
             const [animateLogo, setAnimateLogo] = useState(true);
             const [animateSource, setAnimateSource] = useState(true);
 
@@ -77,6 +72,11 @@
             const [charName, setCharName] = useState("Dra. Elena Ruiz");
             const [charRole, setCharRole] = useState("Directora de Turismo Global");
             const [charVariant, setCharVariant] = useState("standard_card");
+            
+            // Party / Organization Logo support for Candidates / Politicians
+            const [partyLogoImg, setPartyLogoImg] = useState(null);
+            const [isQuoteMode, setIsQuoteMode] = useState(false);
+            const [quoteParagraph, setQuoteParagraph] = useState("La innovación distingue a los líderes de los seguidores. El diseño no es solo lo que parece, es cómo funciona.");
 
             const [useVideoOverlayBackdrop, setUseVideoOverlayBackdrop] = useState(false);
             const [overlayGuideOpacity, setOverlayGuideOpacity] = useState(true);
@@ -291,6 +291,20 @@
                 
                 let startX = hasVisualLeft ? width * 0.52 : width * 0.22;
                 const startY = height * 0.35;
+
+                let baseY1 = startY;
+                let baseY2 = startY + 160;
+                let baseY3 = startY + 280;
+
+                if (cfg.textOrder === "subtitleTop") {
+                    baseY2 = startY - 60; 
+                    baseY1 = startY + 40; 
+                    baseY3 = startY + 200; 
+                } else if (cfg.textOrder === "blockBottom") {
+                    baseY2 = startY - 80; 
+                    baseY3 = startY + 20; 
+                    baseY1 = startY + 220; 
+                }
 
                 if (cfg.useFramed && !cfg.useVideoOverlayBackdrop) {
                     const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
@@ -734,6 +748,24 @@
                             ctx.font = '600 16px Montserrat';
                             ctx.fillText(texts.charRole || '', cardX + 24, cardY + 54);
                         }
+
+                        // Render Party Logo if uploaded
+                        if (cfg.partyLogoObj) {
+                            const logoSize = 75;
+                            const logoX = charX + charW - logoSize - 25;
+                            const logoY = charY + 25;
+                            ctx.save();
+                            ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                            ctx.shadowBlur = 15;
+                            ctx.fillStyle = '#ffffff';
+                            ctx.beginPath();
+                            ctx.roundRect(logoX - 6, logoY - 6, logoSize + 12, logoSize + 12, 14);
+                            ctx.fill();
+                            ctx.clip();
+                            ctx.drawImage(cfg.partyLogoObj, logoX, logoY, logoSize, logoSize);
+                            ctx.restore();
+                        }
+
                         ctx.restore();
                     } else if (cfg.charVariant === 'standard_circle') {
                         ctx.save();
@@ -779,6 +811,23 @@
                             ctx.fillText(texts.charRole || '', 70, 548);
                             ctx.restore();
                         }
+
+                        if (cfg.partyLogoObj) {
+                            ctx.save();
+                            ctx.translate(140 + slideX, 160);
+                            const lSize = 75;
+                            const lX = 420;
+                            const lY = 25;
+                            ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                            ctx.shadowBlur = 15;
+                            ctx.fillStyle = '#ffffff';
+                            ctx.beginPath();
+                            ctx.roundRect(lX - 6, lY - 6, lSize + 12, lSize + 12, 14);
+                            ctx.fill();
+                            ctx.clip();
+                            ctx.drawImage(cfg.partyLogoObj, lX, lY, lSize, lSize);
+                            ctx.restore();
+                        }
                     } else if (cfg.charVariant === 'standard_badge') {
                         ctx.save();
                         ctx.translate(150 + slideX, 140);
@@ -816,6 +865,23 @@
                             ctx.font = '600 16px Montserrat';
                             ctx.fillStyle = '#3b82f6';
                             ctx.fillText(texts.charRole || '', 210, 505);
+                            ctx.restore();
+                        }
+
+                        if (cfg.partyLogoObj) {
+                            ctx.save();
+                            ctx.translate(150 + slideX, 140);
+                            const lSize = 75;
+                            const lX = w - lSize - 35;
+                            const lY = 35;
+                            ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                            ctx.shadowBlur = 15;
+                            ctx.fillStyle = '#ffffff';
+                            ctx.beginPath();
+                            ctx.roundRect(lX - 6, lY - 6, lSize + 12, lSize + 12, 14);
+                            ctx.fill();
+                            ctx.clip();
+                            ctx.drawImage(cfg.partyLogoObj, lX, lY, lSize, lSize);
                             ctx.restore();
                         }
                     } else if (cfg.charVariant === 'invasive_full_bleed') {
@@ -861,6 +927,22 @@
                             ctx.fillText(texts.charRole || '', 110, height - 125);
                             ctx.restore();
                         }
+
+                        if (cfg.partyLogoObj) {
+                            ctx.save();
+                            const lSize = 85;
+                            const lX = 80;
+                            const lY = 80;
+                            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                            ctx.shadowBlur = 20;
+                            ctx.fillStyle = '#ffffff';
+                            ctx.beginPath();
+                            ctx.roundRect(lX - 6, lY - 6, lSize + 12, lSize + 12, 16);
+                            ctx.fill();
+                            ctx.clip();
+                            ctx.drawImage(cfg.partyLogoObj, lX, lY, lSize, lSize);
+                            ctx.restore();
+                        }
                     } else if (cfg.charVariant === 'invasive_diagonal_cut') {
                         ctx.save();
                         const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
@@ -899,6 +981,22 @@
                             ctx.fillText(texts.charName, 110, height - 138);
                             ctx.font = '600 15px Montserrat';
                             ctx.fillText(texts.charRole || '', 110, height - 108);
+                            ctx.restore();
+                        }
+
+                        if (cfg.partyLogoObj) {
+                            ctx.save();
+                            const lSize = 80;
+                            const lX = 80;
+                            const lY = 80;
+                            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                            ctx.shadowBlur = 20;
+                            ctx.fillStyle = '#ffffff';
+                            ctx.beginPath();
+                            ctx.roundRect(lX - 6, lY - 6, lSize + 12, lSize + 12, 16);
+                            ctx.fill();
+                            ctx.clip();
+                            ctx.drawImage(cfg.partyLogoObj, lX, lY, lSize, lSize);
                             ctx.restore();
                         }
                     } else if (cfg.charVariant === 'invasive_giant_portal') {
@@ -941,6 +1039,22 @@
                             ctx.fillStyle = '#60a5fa';
                             ctx.font = '600 16px Montserrat';
                             ctx.fillText(texts.charRole || '', 120, height - 108);
+                            ctx.restore();
+                        }
+
+                        if (cfg.partyLogoObj) {
+                            ctx.save();
+                            const lSize = 85;
+                            const lX = 80;
+                            const lY = 80;
+                            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                            ctx.shadowBlur = 20;
+                            ctx.fillStyle = '#ffffff';
+                            ctx.beginPath();
+                            ctx.roundRect(lX - 6, lY - 6, lSize + 12, lSize + 12, 16);
+                            ctx.fill();
+                            ctx.clip();
+                            ctx.drawImage(cfg.partyLogoObj, lX, lY, lSize, lSize);
                             ctx.restore();
                         }
                     }
@@ -1000,31 +1114,17 @@
                         ctx.font = '800 32px Montserrat';
                         ctx.fillStyle = accentColor;
                         ctx.textBaseline = 'top';
-                        ctx.fillText(`— ${texts.quoteAuthorName}`, startX, authorY);
+                        ctx.fillText(`— ${texts.charName}`, startX, authorY);
 
-                        if (texts.quoteAuthorRole) {
+                        if (texts.charRole) {
                             ctx.font = '500 18px Montserrat';
                             ctx.fillStyle = primaryColor;
                             ctx.globalAlpha = easeVal * 0.75;
-                            ctx.fillText(texts.quoteAuthorRole, startX, authorY + 42);
+                            ctx.fillText(texts.charRole, startX, authorY + 42);
                         }
                         ctx.restore();
                     }
                 } else {
-                    let baseY1 = startY;
-                    let baseY2 = startY + 160;
-                    let baseY3 = startY + 280;
-
-                    if (cfg.textOrder === "subtitleTop") {
-                        baseY2 = startY - 60; 
-                        baseY1 = startY + 40; 
-                        baseY3 = startY + 200; 
-                    } else if (cfg.textOrder === "blockBottom") {
-                        baseY2 = startY - 80; 
-                        baseY3 = startY + 20; 
-                        baseY1 = startY + 220; 
-                    }
-
                     if (t1 > 0) {
                         ctx.save();
                         const animP = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
@@ -1149,8 +1249,7 @@
                 
                 const currentTexts = { 
                     t1: text1, t2: text2, t3: text3, 
-                    quoteParagraph, quoteAuthorName, quoteAuthorRole,
-                    logo: logoText, source: sourceText, photoCaption, charName, charRole 
+                    quoteParagraph, logo: logoText, source: sourceText, photoCaption, charName, charRole 
                 };
                 const currentCfg = {
                     isQuoteMode,
@@ -1160,6 +1259,7 @@
                     useChar: useCharacter,
                     charImgObj: characterImg,
                     charVariant: charVariant,
+                    partyLogoObj: partyLogoImg,
                     useVideoOverlayBackdrop: useVideoOverlayBackdrop,
                     overlayGuideOpacity: overlayGuideOpacity,
                     sourceAlign: sourceAlign,
@@ -1228,7 +1328,7 @@
                 };
                 
                 animationRef.current = requestAnimationFrame(animate);
-            }, [drawFrame, isPlaying, isQuoteMode, text1, text2, text3, quoteParagraph, quoteAuthorName, quoteAuthorRole, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource]);
+            }, [drawFrame, isPlaying, isQuoteMode, text1, text2, text3, quoteParagraph, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, partyLogoImg, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource]);
 
             const handleFramedPhotoUpload = (e) => {
                 const file = e.target.files[0];
@@ -1254,6 +1354,18 @@
                 reader.readAsDataURL(file);
             };
 
+            const handlePartyLogoUpload = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => setPartyLogoImg(img);
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            };
+
             useEffect(() => {
                 return () => {
                     if (animationRef.current) cancelAnimationFrame(animationRef.current);
@@ -1267,19 +1379,18 @@
                     const ctx = canvas.getContext('2d');
                     drawFrame(ctx, 5000, { 
                         t1: text1, t2: text2, t3: text3, 
-                        quoteParagraph, quoteAuthorName, quoteAuthorRole,
-                        logo: logoText, source: sourceText, photoCaption, charName, charRole 
+                        quoteParagraph, logo: logoText, source: sourceText, photoCaption, charName, charRole 
                     }, {
                         isQuoteMode,
                         useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, frameVariant: frameVariant, 
-                        useChar: useCharacter, charImgObj: characterImg, charVariant: charVariant, 
+                        useChar: useCharacter, charImgObj: characterImg, charVariant: charVariant, partyLogoObj: partyLogoImg,
                         useVideoOverlayBackdrop: useVideoOverlayBackdrop, overlayGuideOpacity: overlayGuideOpacity, 
                         sourceAlign: sourceAlign, textOrder: textOrder, motion: motionStyle, 
                         bg: bgColorChoice, palette: paletteChoice, bgType: bgType, 
                         animateLogo: animateLogo, animateSource: animateSource
                     });
                 });
-            }, [isQuoteMode, text1, text2, text3, quoteParagraph, quoteAuthorName, quoteAuthorRole, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource, drawFrame]);
+            }, [isQuoteMode, text1, text2, text3, quoteParagraph, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, partyLogoImg, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource, drawFrame]);
 
             return (
                 <div className="flex-1 flex flex-col h-screen overflow-hidden">
@@ -1295,7 +1406,7 @@
                             </h1>
                         </div>
                         <div className="text-xs text-slate-400 font-medium bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                            Studio Motion Engine v5.0 (Quote Mode & Visuals)
+                            Studio Motion Engine v5.1 (Political & Party Logo Mode)
                         </div>
                     </header>
 
@@ -1303,7 +1414,6 @@
                         <div className="w-full lg:w-[440px] bg-[#0d0e12]/95 backdrop-blur-2xl border-r border-white/10 p-6 flex flex-col justify-between z-20 shrink-0 overflow-y-auto">
                             <div className="space-y-6">
                                 
-                                {/* Quote Mode Switcher */}
                                 <div className="bg-[#13151c] p-4 rounded-xl border border-blue-500/30 space-y-3">
                                     <div className="flex items-center justify-between">
                                         <div>
@@ -1311,33 +1421,21 @@
                                                 <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
                                                 Modo Cita (Párrafo con Comillas)
                                             </span>
-                                            <p className="text-[10px] text-slate-400 mt-0.5">Transforma los textos en una cita formal con comillas gigantes</p>
+                                            <p className="text-[10px] text-slate-400 mt-0.5">Convierte los datos del personaje en una cita formal destacada</p>
                                         </div>
                                         <input type="checkbox" checked={isQuoteMode} onChange={e => setIsQuoteMode(e.target.checked)}
                                             className="w-4 h-4 rounded accent-blue-500 cursor-pointer" />
                                     </div>
+                                    {isQuoteMode && (
+                                        <div className="pt-2 border-t border-white/10 space-y-1">
+                                            <label className="text-[10px] font-medium text-slate-400">Párrafo de la Cita</label>
+                                            <textarea rows="3" value={quoteParagraph} onChange={e => setQuoteParagraph(e.target.value)} disabled={isRecording}
+                                                className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-blue-500 resize-none" />
+                                        </div>
+                                    )}
                                 </div>
 
-                                {isQuoteMode ? (
-                                    <div className="space-y-3 bg-[#13151c]/60 p-4 rounded-xl border border-white/10">
-                                        <h2 className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Contenido de la Cita</h2>
-                                        <div className="space-y-1">
-                                            <label className="text-[11px] font-medium text-slate-400">Párrafo de la Cita</label>
-                                            <textarea rows="4" value={quoteParagraph} onChange={e => setQuoteParagraph(e.target.value)} disabled={isRecording}
-                                                className="w-full bg-[#0a0b0e] border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500 resize-none" />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[11px] font-medium text-slate-400">Autor / Personaje</label>
-                                            <input type="text" value={quoteAuthorName} onChange={e => setQuoteAuthorName(e.target.value)} disabled={isRecording}
-                                                className="w-full bg-[#0a0b0e] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[11px] font-medium text-slate-400">Cargo / Descripción</label>
-                                            <input type="text" value={quoteAuthorRole} onChange={e => setQuoteAuthorRole(e.target.value)} disabled={isRecording}
-                                                className="w-full bg-[#0a0b0e] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
-                                        </div>
-                                    </div>
-                                ) : (
+                                {!isQuoteMode && (
                                     <div>
                                         <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Textos Principales</h2>
                                         <div className="space-y-3">
@@ -1397,6 +1495,20 @@
                                 <div className="pt-4 border-t border-white/10 space-y-4">
                                     <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Elementos Visuales (Izquierda)</h2>
                                     
+                                    <div className="bg-[#13151c] p-4 rounded-xl border border-blue-500/30 shadow-lg space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <span className="text-xs font-bold text-white flex items-center gap-2">
+                                                    <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                                                    Fondo Limpio para Video Overlay
+                                                </span>
+                                                <p className="text-[10px] text-slate-400 mt-0.5">Deja el lado izquierdo libre para superponer video</p>
+                                            </div>
+                                            <input type="checkbox" checked={useVideoOverlayBackdrop} onChange={e => { setUseVideoOverlayBackdrop(e.target.checked); if(e.target.checked) { setUseFramedPhoto(false); setUseCharacter(false); } }}
+                                                className="w-4 h-4 rounded accent-blue-500 cursor-pointer" />
+                                        </div>
+                                    </div>
+
                                     <div className="bg-[#13151c] p-4 rounded-xl border border-white/10 space-y-3">
                                         <div className="flex items-center justify-between">
                                             <span className="text-xs font-bold text-white">Foto con Marco</span>
@@ -1462,6 +1574,11 @@
                                                     className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500" />
                                                 <input type="text" placeholder="Cargo o Puesto" value={charRole} onChange={e => setCharRole(e.target.value)}
                                                     className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500" />
+                                                
+                                                <div className="pt-2 border-t border-white/10 space-y-1">
+                                                    <label className="text-[10px] font-semibold text-amber-400 uppercase">Logotipo de Partido / Organización (.PNG)</label>
+                                                    <input type="file" accept="image/*" onChange={handlePartyLogoUpload} className="w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-600 file:text-white hover:file:bg-amber-500 cursor-pointer" />
+                                                </div>
                                             </div>
                                         )}
                                     </div>
