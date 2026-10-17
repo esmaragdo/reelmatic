@@ -50,40 +50,36 @@
         };
 
         const App = () => {
-            // Text inputs
             const [text1, setText1] = useState("2023 Top Ten");
             const [text2, setText2] = useState("de los Destinos Turísticos");
             const [text3, setText3] = useState("en el Mundo.");
             const [logoText, setLogoText] = useState("ReelMatic.Pro");
             const [sourceText, setSourceText] = useState("Fuente: Organización Mundial del Turismo");
             
-            // Animation Toggles for continuous video feeling
             const [animateLogo, setAnimateLogo] = useState(true);
             const [animateSource, setAnimateSource] = useState(true);
 
-            // 1. Source alignment
-            const [sourceAlign, setSourceAlign] = useState("left"); // "left" | "right"
+            const [sourceAlign, setSourceAlign] = useState("left");
+            const [textOrder, setTextOrder] = useState("standard");
 
-            // Text Order layout
-            const [textOrder, setTextOrder] = useState("standard"); // "standard" | "subtitleTop" | "blockBottom"
-
-            // 2. Framed Photo (Polaroid)
             const [useFramedPhoto, setUseFramedPhoto] = useState(false);
             const [framedPhotoImg, setFramedPhotoImg] = useState(null);
             const [photoCaption, setPhotoCaption] = useState("Playa Paraíso, México");
+            const [frameVariant, setFrameVariant] = useState("polaroid");
 
-            // 3. Transparent Character
             const [useCharacter, setUseCharacter] = useState(false);
             const [characterImg, setCharacterImg] = useState(null);
             const [charName, setCharName] = useState("Dra. Elena Ruiz");
             const [charRole, setCharRole] = useState("Directora de Turismo Global");
+            const [charVariant, setCharVariant] = useState("standard_card");
 
-            // 4. Motion Variants (3 styles)
-            const [motionStyle, setMotionStyle] = useState("dynamic"); // "classic" | "dynamic" | "spring"
+            const [useVideoOverlayBackdrop, setUseVideoOverlayBackdrop] = useState(false);
+            const [overlayGuideOpacity, setOverlayGuideOpacity] = useState(true);
 
-            // 5. Backgrounds & Color Palettes
-            const [bgColorChoice, setBgColorChoice] = useState("white"); // "white" | "grey" | "black"
-            const [paletteChoice, setPaletteChoice] = useState("minimal"); // "minimal" | "vibrant" | "neon"
+            const [motionStyle, setMotionStyle] = useState("dynamic");
+            const [bgColorChoice, setBgColorChoice] = useState("white");
+            const [paletteChoice, setPaletteChoice] = useState("minimal");
+            const [bgType, setBgType] = useState("gradient");
 
             const [isRecording, setIsRecording] = useState(false);
             const [isPlaying, setIsPlaying] = useState(false);
@@ -94,7 +90,6 @@
             const mediaRecorderRef = useRef(null);
             const chunksRef = useRef([]);
 
-            // Helper to draw cover image without distortion
             const drawImageCover = (ctx, img, x, y, w, h) => {
                 const imgRatio = img.width / img.height;
                 const targetRatio = w / h;
@@ -117,49 +112,153 @@
                 const width = 1920;
                 const height = 1080;
                 
-                // --- 5. Background Colors & Palettes ---
-                let bgHex = '#f8fafc'; // White default
+                let bgHex = '#f8fafc';
                 let isDark = false;
 
-                if (cfg.bg === 'grey') {
-                    bgHex = '#334155'; // Darker Slate 700
-                    isDark = true;
-                } else if (cfg.bg === 'black') {
-                    bgHex = '#0c0d12'; // Deep Black
-                    isDark = true;
-                }
+                if (cfg.bg === 'grey') { bgHex = '#334155'; isDark = true; }
+                else if (cfg.bg === 'black') { bgHex = '#0c0d12'; isDark = true; }
+                else if (cfg.bg === 'navy') { bgHex = '#191929'; isDark = true; }
+                else if (cfg.bg === 'light_navy') { bgHex = '#F0F0F5'; isDark = false; }
+                else if (cfg.bg === 'deep_navy') { bgHex = '#000033'; isDark = true; }
+                else if (cfg.bg === 'light_slate') { bgHex = '#EAEAF5'; isDark = false; }
+                else if (cfg.bg === 'ivory') { bgHex = '#FAFAF7'; isDark = false; }
+                else if (cfg.bg === 'crimson') { bgHex = '#A32929'; isDark = true; }
+                else if (cfg.bg === 'melocoton') { bgHex = '#F9E1DC'; isDark = false; }
+                else if (cfg.bg === 'caoba') { bgHex = '#692113'; isDark = true; }
+                else if (cfg.bg === 'rojo_claro') { bgHex = '#FFD6D6'; isDark = false; }
+                else if (cfg.bg === 'rojo_oscuro') { bgHex = '#3D0000'; isDark = true; }
+                else if (cfg.bg === 'oliva') { bgHex = '#869108'; isDark = true; }
+                else if (cfg.bg === 'rosa_coral') { bgHex = '#EF6C77'; isDark = false; }
+                else if (cfg.bg === 'durazno') { bgHex = '#EFA36C'; isDark = false; }
+                else if (cfg.bg === 'verde_bosque') { bgHex = '#419108'; isDark = true; }
+                else if (cfg.bg === 'amarillo_claro') { bgHex = '#FFE34C'; isDark = false; }
+                else if (cfg.bg === 'amarillo_oscuro') { bgHex = '#CCAC00'; isDark = false; }
 
                 ctx.fillStyle = bgHex;
                 ctx.fillRect(0, 0, width, height);
 
-                // Vignette / Gradient depth
+                if (cfg.bgType && cfg.bgType !== 'gradient') {
+                    ctx.save();
+                    const isDarkBg = ['grey', 'black', 'navy', 'deep_navy', 'crimson', 'caoba', 'rojo_oscuro', 'oliva', 'verde_bosque', 'amarillo_oscuro'].includes(cfg.bg);
+                    ctx.fillStyle = isDarkBg ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+                    ctx.strokeStyle = isDarkBg ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
+                    ctx.lineWidth = 1.5;
+
+                    if (cfg.bgType === 'pattern_dots') {
+                        const spacing = 40;
+                        for (let x = 0; x <= width; x += spacing) {
+                            for (let y = 0; y <= height; y += spacing) {
+                                ctx.beginPath();
+                                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                                ctx.fill();
+                            }
+                        }
+                    } else if (cfg.bgType === 'pattern_grid') {
+                        const spacing = 60;
+                        ctx.beginPath();
+                        for (let x = 0; x <= width; x += spacing) { ctx.moveTo(x, 0); ctx.lineTo(x, height); }
+                        for (let y = 0; y <= height; y += spacing) { ctx.moveTo(0, y); ctx.lineTo(width, y); }
+                        ctx.stroke();
+                    } else if (cfg.bgType === 'pattern_stripes') {
+                        const spacing = 40;
+                        ctx.beginPath();
+                        for (let i = -height; i <= width; i += spacing) {
+                            ctx.moveTo(i, 0); ctx.lineTo(i + height, height);
+                        }
+                        ctx.stroke();
+                    } else if (cfg.bgType === 'pattern_cross') {
+                        const spacing = 50;
+                        const size = 6;
+                        ctx.beginPath();
+                        for (let x = 0; x <= width; x += spacing) {
+                            for (let y = 0; y <= height; y += spacing) {
+                                ctx.moveTo(x - size, y); ctx.lineTo(x + size, y);
+                                ctx.moveTo(x, y - size); ctx.lineTo(x, y + size);
+                            }
+                        }
+                        ctx.stroke();
+                    } else if (cfg.bgType === 'pattern_hex') {
+                        const r = 35;
+                        const dx = r * 1.732;
+                        const dy = r * 1.5;
+                        ctx.beginPath();
+                        for (let y = 0; y <= height + r; y += dy) {
+                            let rowIdx = Math.round(y / dy);
+                            let xOffset = (rowIdx % 2 === 0) ? 0 : dx / 2;
+                            for (let x = -r; x <= width + r; x += dx) {
+                                for (let i = 0; i < 6; i++) {
+                                    const angle = (i * Math.PI) / 3;
+                                    const hx = x + xOffset + r * Math.cos(angle);
+                                    const hy = y + r * Math.sin(angle);
+                                    if (i === 0) ctx.moveTo(hx, hy);
+                                    else ctx.lineTo(hx, hy);
+                                }
+                                ctx.closePath();
+                            }
+                        }
+                        ctx.stroke();
+                    } else if (cfg.bgType === 'pattern_waves') {
+                        const cx = width / 2;
+                        const cy = height / 2;
+                        ctx.beginPath();
+                        for (let radius = 80; radius < Math.max(width, height); radius += 90) {
+                            ctx.moveTo(cx + radius, cy);
+                            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                        }
+                        ctx.stroke();
+                    } else if (cfg.bgType === 'pattern_circuit') {
+                        const spacing = 120;
+                        ctx.beginPath();
+                        for (let x = 60; x <= width; x += spacing) {
+                            for (let y = 60; y <= height; y += spacing) {
+                                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                                ctx.fill();
+                                ctx.moveTo(x, y);
+                                ctx.lineTo(x + (x % 240 === 0 ? spacing : 0), y + (y % 240 === 0 ? spacing : 0));
+                            }
+                        }
+                        ctx.stroke();
+                    }
+                    ctx.restore();
+                }
+
+                if (cfg.useVideoOverlayBackdrop) {
+                    ctx.save();
+                    // Left half clean placeholder for video overlay (representing 50% screen width) - Completely clean without borders or text
+                    const boxW = width * 0.48;
+                    const boxH = height * 0.88;
+                    const boxX = 60;
+                    const boxY = (height - boxH) / 2;
+
+                    ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.02)';
+                    ctx.beginPath();
+                    ctx.roundRect(boxX, boxY, boxW, boxH, 24);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
                 const gradient = ctx.createRadialGradient(width/2, height/2, height*0.4, width/2, height/2, width*0.8);
                 gradient.addColorStop(0, 'rgba(0,0,0,0)');
-                
-                if (cfg.bg === 'grey') {
-                    gradient.addColorStop(1, 'rgba(15, 23, 42, 0.95)'); // Deep cobalt edges
-                } else if (cfg.bg === 'black') {
-                    gradient.addColorStop(1, 'rgba(0,0,0,0.8)');
-                } else {
-                    gradient.addColorStop(1, 'rgba(0,0,0,0.15)');
-                }
-                
+                gradient.addColorStop(1, isDark ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.15)');
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, width, height);
 
-                // Colors based on palettes & bg
                 let primaryColor = isDark ? '#ffffff' : '#000000';
                 let accentColor = primaryColor;
                 let boxBgColor = primaryColor;
                 let boxTextColor = isDark ? '#000000' : '#ffffff';
 
-                if (cfg.palette === 'vibrant') {
-                    accentColor = '#3b82f6';
-                } else if (cfg.palette === 'neon') {
-                    accentColor = '#06b6d4';
-                }
+                if (cfg.palette === 'vibrant') { accentColor = '#3b82f6'; }
+                else if (cfg.palette === 'neon') { accentColor = '#06b6d4'; }
+                else if (cfg.palette === 'navy_palette') { primaryColor = '#ADADEB'; accentColor = '#B2B200'; boxBgColor = '#000080'; boxTextColor = '#F0F0F5'; }
+                else if (cfg.palette === 'navy_lime') { primaryColor = '#8C8CD9'; accentColor = '#8CE236'; boxBgColor = '#000080'; boxTextColor = '#EAEAF5'; }
+                else if (cfg.palette === 'rosa_navy') { primaryColor = '#000080'; accentColor = '#0F8A0F'; boxBgColor = '#A32929'; boxTextColor = '#F1B1B1'; }
+                else if (cfg.palette === 'terracota') { primaryColor = '#692113'; accentColor = '#E2725B'; boxBgColor = '#AE371F'; boxTextColor = '#F9E1DC'; }
+                else if (cfg.palette === 'rojo_intenso') { primaryColor = '#FFD6D6'; accentColor = '#FF0000'; boxBgColor = '#8F0000'; boxTextColor = '#FF8F8F'; }
+                else if (cfg.palette === 'otono') { primaryColor = '#869108'; accentColor = '#FF8000'; boxBgColor = '#EF6C77'; boxTextColor = '#FF4C1F'; }
+                else if (cfg.palette === 'citrico') { primaryColor = '#419108'; accentColor = '#FFFF00'; boxBgColor = '#EFA36C'; boxTextColor = '#FFBC1F'; }
+                else if (cfg.palette === 'amarillo_oro') { primaryColor = '#CCAC00'; accentColor = '#FFD700'; boxBgColor = '#FFE34C'; boxTextColor = '#000033'; }
 
-                // Animation Timings based on Motion Variant (4)
                 let t1, t2, t3, t4, tSource, tLogo;
                 if (cfg.motion === 'spring') {
                     t1 = Math.max(0, Math.min(1, timeMs / 700));
@@ -176,7 +275,6 @@
                     tSource = Math.max(0, Math.min(1, (timeMs - 2200) / 800));
                     tLogo = Math.max(0, Math.min(1, (timeMs - 2500) / 800));
                 } else {
-                    // Classic
                     t1 = Math.max(0, Math.min(1, (timeMs - 400) / 1000));
                     t2 = Math.max(0, Math.min(1, (timeMs - 1100) / 1000));
                     t3 = Math.max(0, Math.min(1, (timeMs - 1800) / 1000));
@@ -185,12 +283,11 @@
                     tLogo = Math.max(0, Math.min(1, (timeMs - 3000) / 1000));
                 }
 
-                // Layout Positioning: If framed photo or character is active, shift main text to the right (2 & 3)
-                const hasVisualLeft = cfg.useFramed || cfg.useChar;
-                const startX = hasVisualLeft ? width * 0.46 : width * 0.25;
+                const hasVisualLeft = cfg.useFramed || cfg.useChar || cfg.useVideoOverlayBackdrop;
+                
+                let startX = hasVisualLeft ? width * 0.52 : width * 0.22;
                 const startY = height * 0.35;
 
-                // --- TEXT ORDER CALCULATIONS ---
                 let baseY1 = startY;
                 let baseY2 = startY + 160;
                 let baseY3 = startY + 280;
@@ -205,127 +302,676 @@
                     baseY1 = startY + 220; 
                 }
 
-                // --- 2. FRAMED PHOTO (POLAROID) ---
-                if (cfg.useFramed) {
+                if (cfg.useFramed && !cfg.useVideoOverlayBackdrop) {
                     const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
                     const slideX = (1 - animProgress) * -500;
-                    const tiltAngle = -4 * (Math.PI / 180); // -4 degrees tilt
 
-                    ctx.save();
-                    ctx.translate(180 + slideX, 220);
-                    ctx.rotate(tiltAngle);
-
-                    // Polaroid container shadow & white frame
-                    ctx.shadowColor = 'rgba(0,0,0,0.35)';
-                    ctx.shadowBlur = 40;
-                    ctx.shadowOffsetX = 10;
-                    ctx.shadowOffsetY = 20;
-                    ctx.fillStyle = cfg.bg === 'black' ? '#1e2028' : '#ffffff';
-                    ctx.fillRect(0, 0, 520, 640);
-
-                    // Photo Image inside frame
-                    ctx.shadowColor = 'transparent';
-                    ctx.beginPath();
-                    ctx.rect(35, 35, 450, 480);
-                    ctx.clip();
-
-                    if (cfg.framedImgObj) {
-                        drawImageCover(ctx, cfg.framedImgObj, 35, 35, 450, 480);
-                    } else {
-                        ctx.fillStyle = '#cbd5e1';
-                        ctx.fillRect(35, 35, 450, 480);
-                        ctx.fillStyle = '#475569';
-                        ctx.font = '600 24px Montserrat';
-                        ctx.fillText("Sin Imagen", 185, 275);
-                    }
-                    ctx.restore();
-
-                    // Parallel Rotated Caption
-                    if (texts.photoCaption) {
+                    if (cfg.frameVariant === 'polaroid') {
+                        const tiltAngle = -4 * (Math.PI / 180);
                         ctx.save();
                         ctx.translate(180 + slideX, 220);
                         ctx.rotate(tiltAngle);
-                        ctx.font = '500 22px Montserrat';
-                        ctx.fillStyle = primaryColor;
-                        ctx.textBaseline = 'top';
-                        ctx.textAlign = 'center';
-                        ctx.fillText(texts.photoCaption, 260, 560);
-                        ctx.restore();
-                    }
-                }
 
-                // --- 3. TRANSPARENT CHARACTER ---
-                if (cfg.useChar) {
-                    const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
-                    const slideX = (1 - animProgress) * -400;
+                        ctx.shadowColor = 'rgba(0,0,0,0.35)';
+                        ctx.shadowBlur = 40;
+                        ctx.shadowOffsetX = 10;
+                        ctx.shadowOffsetY = 20;
+                        ctx.fillStyle = isDark ? '#1e2028' : '#ffffff';
+                        ctx.fillRect(0, 0, 520, 640);
 
-                    ctx.save();
-                    ctx.translate(120 + slideX, 0);
-
-                    // Elevated vertical positioning
-                    const charW = 460;
-                    const charH = 680;
-                    const charX = 80;
-                    const charY = 120;
-
-                    if (cfg.charImgObj) {
-                        ctx.save();
+                        ctx.shadowColor = 'transparent';
                         ctx.beginPath();
-                        ctx.roundRect(charX, charY, charW, charH, 24);
+                        ctx.rect(35, 35, 450, 480);
                         ctx.clip();
-                        drawImageCover(ctx, cfg.charImgObj, charX, charY, charW, charH);
-                        ctx.restore();
-                    } else {
-                        ctx.fillStyle = '#334155';
-                        ctx.beginPath();
-                        ctx.roundRect(charX, charY, charW, charH, 24);
-                        ctx.fill();
-                        ctx.fillStyle = '#ffffff';
-                        ctx.font = '600 22px Montserrat';
-                        ctx.fillText("Personaje Transparente", charX + 90, charY + 340);
-                    }
 
-                    // Name & Role Badge
-                    if (texts.charName) {
-                        const cardX = charX + 40;
-                        const cardY = charY + charH - 130;
-                        const cardW = charW - 80;
-                        const cardH = 95;
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, 35, 35, 450, 480);
+                        } else {
+                            ctx.fillStyle = '#cbd5e1';
+                            ctx.fillRect(35, 35, 450, 480);
+                            ctx.fillStyle = '#475569';
+                            ctx.font = '600 24px Montserrat';
+                            ctx.fillText("Sin Imagen", 185, 275);
+                        }
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.translate(180 + slideX, 220);
+                            ctx.rotate(tiltAngle);
+                            ctx.font = '500 22px Montserrat';
+                            ctx.fillStyle = primaryColor;
+                            ctx.textBaseline = 'top';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(texts.photoCaption, 260, 560);
+                            ctx.restore();
+                        }
+                    } else if (cfg.frameVariant === 'tech') {
+                        ctx.save();
+                        ctx.translate(140 + slideX, 200);
+                        ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                        ctx.shadowBlur = 30;
+                        ctx.shadowOffsetY = 15;
+                        
+                        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                        ctx.strokeStyle = accentColor;
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.roundRect(0, 0, 480, 560, 20);
+                        ctx.fill();
+                        ctx.stroke();
+
+                        ctx.shadowColor = 'transparent';
+                        ctx.beginPath();
+                        ctx.roundRect(30, 30, 420, 440, 12);
+                        ctx.clip();
+
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, 30, 30, 420, 440);
+                        } else {
+                            ctx.fillStyle = '#334155';
+                            ctx.fillRect(30, 30, 420, 440);
+                        }
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.translate(140 + slideX, 200);
+                            ctx.font = '600 20px Montserrat';
+                            ctx.fillStyle = primaryColor;
+                            ctx.textBaseline = 'top';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(texts.photoCaption, 240, 495);
+                            ctx.restore();
+                        }
+                    } else if (cfg.frameVariant === 'circle') {
+                        ctx.save();
+                        ctx.translate(180 + slideX, 240);
+                        ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                        ctx.shadowBlur = 40;
+                        
+                        const radius = 240;
+                        ctx.beginPath();
+                        ctx.arc(radius, radius, radius, 0, Math.PI * 2);
+                        ctx.fillStyle = accentColor;
+                        ctx.fill();
+                        ctx.clip();
+
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, 0, 0, radius * 2, radius * 2);
+                        } else {
+                            ctx.fillStyle = '#475569';
+                            ctx.fillRect(0, 0, radius * 2, radius * 2);
+                        }
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.translate(180 + slideX, 240);
+                            ctx.font = '700 22px Montserrat';
+                            ctx.fillStyle = primaryColor;
+                            ctx.textBaseline = 'top';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(texts.photoCaption, 240, 520);
+                            ctx.restore();
+                        }
+                    } else if (cfg.frameVariant === 'offset') {
+                        ctx.save();
+                        ctx.translate(160 + slideX, 200);
+                        
+                        ctx.fillStyle = accentColor;
+                        ctx.beginPath();
+                        ctx.roundRect(25, 25, 450, 520, 16);
+                        ctx.fill();
 
                         ctx.shadowColor = 'rgba(0,0,0,0.3)';
-                        ctx.shadowBlur = 20;
-                        ctx.shadowOffsetY = 10;
-                        ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                        ctx.shadowBlur = 25;
+                        ctx.fillStyle = isDark ? '#13151c' : '#ffffff';
                         ctx.beginPath();
-                        ctx.roundRect(cardX, cardY, cardW, cardH, 16);
+                        ctx.roundRect(0, 0, 450, 520, 16);
                         ctx.fill();
 
                         ctx.shadowColor = 'transparent';
-                        ctx.fillStyle = '#ffffff';
-                        ctx.font = '700 24px Montserrat';
-                        ctx.textBaseline = 'top';
-                        ctx.fillText(texts.charName, cardX + 24, cardY + 20);
+                        ctx.beginPath();
+                        ctx.roundRect(30, 30, 390, 400, 12);
+                        ctx.clip();
 
-                        ctx.fillStyle = '#60a5fa';
-                        ctx.font = '600 16px Montserrat';
-                        ctx.fillText(texts.charRole || '', cardX + 24, cardY + 54);
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, 30, 30, 390, 400);
+                        } else {
+                            ctx.fillStyle = '#cbd5e1';
+                            ctx.fillRect(30, 30, 390, 400);
+                        }
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.translate(160 + slideX, 200);
+                            ctx.font = '600 20px Montserrat';
+                            ctx.fillStyle = primaryColor;
+                            ctx.textBaseline = 'top';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(texts.photoCaption, 225, 460);
+                            ctx.restore();
+                        }
+                    } else if (cfg.frameVariant === 'magazine') {
+                        ctx.save();
+                        ctx.translate(140 + slideX, 180);
+                        
+                        ctx.shadowColor = 'rgba(0,0,0,0.35)';
+                        ctx.shadowBlur = 35;
+                        ctx.fillStyle = boxBgColor;
+                        ctx.beginPath();
+                        ctx.roundRect(0, 0, 480, 580, 12);
+                        ctx.fill();
+
+                        ctx.shadowColor = 'transparent';
+                        ctx.beginPath();
+                        ctx.roundRect(30, 30, 420, 420, 8);
+                        ctx.clip();
+
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, 30, 30, 420, 420);
+                        } else {
+                            ctx.fillStyle = '#475569';
+                            ctx.fillRect(30, 30, 420, 420);
+                        }
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.translate(140 + slideX, 180);
+                            ctx.font = '800 24px Montserrat';
+                            ctx.fillStyle = boxTextColor;
+                            ctx.textBaseline = 'top';
+                            ctx.textAlign = 'left';
+                            ctx.fillText(texts.photoCaption.toUpperCase(), 35, 485);
+                            ctx.restore();
+                        }
+                    } else if (cfg.frameVariant === 'invasive_bleed') {
+                        ctx.save();
+                        const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        const slideX = (1 - animProgress) * -600;
+
+                        ctx.translate(slideX, 0);
+                        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                        ctx.shadowBlur = 50;
+
+                        ctx.beginPath();
+                        ctx.rect(-100, 0, 780, height);
+                        ctx.clip();
+
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, -100, 0, 880, height);
+                        } else {
+                            ctx.fillStyle = '#334155';
+                            ctx.fillRect(-100, 0, 880, height);
+                        }
+
+                        const gradBleed = ctx.createLinearGradient(600, 0, 780, 0);
+                        gradBleed.addColorStop(0, 'rgba(0,0,0,0)');
+                        gradBleed.addColorStop(1, 'rgba(0,0,0,0.7)');
+                        ctx.fillStyle = gradBleed;
+                        ctx.fillRect(500, 0, 280, height);
+
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.font = '700 20px Montserrat';
+                            ctx.fillStyle = '#ffffff';
+                            ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                            ctx.shadowBlur = 10;
+                            ctx.fillText(texts.photoCaption.toUpperCase(), 80, height - 120);
+                            ctx.restore();
+                        }
+                    } else if (cfg.frameVariant === 'invasive_portal') {
+                        ctx.save();
+                        const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        const scaleP = animProgress;
+
+                        ctx.translate(0, height / 2);
+                        ctx.scale(scaleP, scaleP);
+
+                        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                        ctx.shadowBlur = 60;
+
+                        const radius = 550;
+                        ctx.beginPath();
+                        ctx.arc(0, 0, radius, -Math.PI / 2, Math.PI / 2, false);
+                        ctx.fillStyle = accentColor;
+                        ctx.fill();
+                        ctx.clip();
+
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, -100, -radius, radius * 2, radius * 2);
+                        } else {
+                            ctx.fillStyle = '#475569';
+                            ctx.fillRect(-100, -radius, radius * 2, radius * 2);
+                        }
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.font = '800 22px Montserrat';
+                            ctx.fillStyle = primaryColor;
+                            ctx.fillText(texts.photoCaption, 80, height - 120);
+                            ctx.restore();
+                        }
+                    } else if (cfg.frameVariant === 'invasive_asymmetric') {
+                        ctx.save();
+                        const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        const slideX = (1 - animProgress) * -500;
+
+                        ctx.translate(60 + slideX, 80);
+
+                        ctx.fillStyle = accentColor;
+                        ctx.fillRect(0, 0, 620, 920);
+
+                        ctx.beginPath();
+                        ctx.rect(30, 30, 560, 860);
+                        ctx.clip();
+
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, 30, 30, 560, 860);
+                        } else {
+                            ctx.fillStyle = '#1e293b';
+                            ctx.fillRect(30, 30, 560, 860);
+                        }
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.font = '700 20px Montserrat';
+                            ctx.fillStyle = primaryColor;
+                            ctx.fillText(texts.photoCaption, 90, height - 80);
+                            ctx.restore();
+                        }
+                    } else if (cfg.frameVariant === 'invasive_diagonal') {
+                        ctx.save();
+                        const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        const slideX = (1 - animProgress) * -600;
+
+                        ctx.translate(slideX, 0);
+                        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+                        ctx.shadowBlur = 50;
+
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(720, 0);
+                        ctx.lineTo(520, height);
+                        ctx.lineTo(0, height);
+                        ctx.closePath();
+                        ctx.clip();
+
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, 0, 0, 850, height);
+                        } else {
+                            ctx.fillStyle = '#0f172a';
+                            ctx.fillRect(0, 0, 850, height);
+                        }
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.font = '800 20px Montserrat';
+                            ctx.fillStyle = '#ffffff';
+                            ctx.shadowColor = 'rgba(0,0,0,0.9)';
+                            ctx.shadowBlur = 10;
+                            ctx.fillText(texts.photoCaption.toUpperCase(), 80, height - 100);
+                            ctx.restore();
+                        }
+                    } else if (cfg.frameVariant === 'invasive_floating_card') {
+                        ctx.save();
+                        const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        const slideX = (1 - animProgress) * -500;
+
+                        ctx.translate(80 + slideX, 60);
+
+                        ctx.shadowColor = 'rgba(0,0,0,0.45)';
+                        ctx.shadowBlur = 40;
+                        ctx.shadowOffsetY = 20;
+
+                        ctx.fillStyle = accentColor;
+                        ctx.beginPath();
+                        ctx.roundRect(0, 0, 560, 960, 24);
+                        ctx.fill();
+
+                        ctx.shadowColor = 'transparent';
+                        ctx.beginPath();
+                        ctx.roundRect(20, 20, 520, 920, 16);
+                        ctx.clip();
+
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, 20, 20, 520, 920);
+                        } else {
+                            ctx.fillStyle = '#1e293b';
+                            ctx.fillRect(20, 20, 520, 920);
+                        }
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.font = '700 20px Montserrat';
+                            ctx.fillStyle = primaryColor;
+                            ctx.fillText(texts.photoCaption, 100, height - 60);
+                            ctx.restore();
+                        }
+                    } else if (cfg.frameVariant === 'invasive_cinema_frame') {
+                        ctx.save();
+                        const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        const slideX = (1 - animProgress) * -600;
+
+                        ctx.translate(slideX, 0);
+
+                        ctx.fillStyle = '#000000';
+                        ctx.fillRect(0, 0, 760, height);
+
+                        ctx.beginPath();
+                        ctx.rect(0, 140, 760, height - 280);
+                        ctx.clip();
+
+                        if (cfg.framedImgObj) {
+                            drawImageCover(ctx, cfg.framedImgObj, 0, 140, 760, height - 280);
+                        } else {
+                            ctx.fillStyle = '#334155';
+                            ctx.fillRect(0, 140, 760, height - 280);
+                        }
+                        ctx.restore();
+
+                        if (texts.photoCaption) {
+                            ctx.save();
+                            ctx.font = '700 20px Montserrat';
+                            ctx.fillStyle = '#ffffff';
+                            ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                            ctx.shadowBlur = 8;
+                            ctx.fillText(texts.photoCaption.toUpperCase(), 80, height - 80);
+                            ctx.restore();
+                        }
                     }
-                    ctx.restore();
                 }
 
-                // --- LINEA 1 ---
+                if (cfg.useChar && !cfg.useVideoOverlayBackdrop) {
+                    const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                    const slideX = (1 - animProgress) * -400;
+
+                    if (cfg.charVariant === 'standard_card') {
+                        ctx.save();
+                        ctx.translate(120 + slideX, 0);
+                        const charW = 460;
+                        const charH = 680;
+                        const charX = 80;
+                        const charY = 120;
+
+                        if (cfg.charImgObj) {
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.roundRect(charX, charY, charW, charH, 24);
+                            ctx.clip();
+                            drawImageCover(ctx, cfg.charImgObj, charX, charY, charW, charH);
+                            ctx.restore();
+                        } else {
+                            ctx.fillStyle = '#334155';
+                            ctx.beginPath();
+                            ctx.roundRect(charX, charY, charW, charH, 24);
+                            ctx.fill();
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = '600 22px Montserrat';
+                            ctx.fillText("Personaje Transparente", charX + 90, charY + 340);
+                        }
+
+                        if (texts.charName) {
+                            const cardX = charX + 40;
+                            const cardY = charY + charH - 130;
+                            const cardW = charW - 80;
+                            const cardH = 95;
+
+                            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                            ctx.shadowBlur = 20;
+                            ctx.shadowOffsetY = 10;
+                            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                            ctx.beginPath();
+                            ctx.roundRect(cardX, cardY, cardW, cardH, 16);
+                            ctx.fill();
+
+                            ctx.shadowColor = 'transparent';
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = '700 24px Montserrat';
+                            ctx.textBaseline = 'top';
+                            ctx.fillText(texts.charName, cardX + 24, cardY + 20);
+
+                            ctx.fillStyle = '#60a5fa';
+                            ctx.font = '600 16px Montserrat';
+                            ctx.fillText(texts.charRole || '', cardX + 24, cardY + 54);
+                        }
+                        ctx.restore();
+                    } else if (cfg.charVariant === 'standard_circle') {
+                        ctx.save();
+                        ctx.translate(140 + slideX, 160);
+                        const radius = 220;
+                        const cx = radius + 40;
+                        const cy = radius + 40;
+
+                        ctx.shadowColor = 'rgba(0,0,0,0.35)';
+                        ctx.shadowBlur = 30;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, radius + 10, 0, Math.PI * 2);
+                        ctx.fillStyle = accentColor;
+                        ctx.fill();
+
+                        ctx.shadowColor = 'transparent';
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                        ctx.clip();
+
+                        if (cfg.charImgObj) {
+                            drawImageCover(ctx, cfg.charImgObj, cx - radius, cy - radius, radius * 2, radius * 2);
+                        } else {
+                            ctx.fillStyle = '#334155';
+                            ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+                        }
+                        ctx.restore();
+
+                        if (texts.charName) {
+                            ctx.save();
+                            ctx.translate(140 + slideX, 160);
+                            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                            ctx.beginPath();
+                            ctx.roundRect(40, 500, 440, 90, 16);
+                            ctx.fill();
+
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = '700 22px Montserrat';
+                            ctx.textBaseline = 'top';
+                            ctx.fillText(texts.charName, 70, 518);
+                            ctx.fillStyle = '#60a5fa';
+                            ctx.font = '600 15px Montserrat';
+                            ctx.fillText(texts.charRole || '', 70, 548);
+                            ctx.restore();
+                        }
+                    } else if (cfg.charVariant === 'standard_badge') {
+                        ctx.save();
+                        ctx.translate(150 + slideX, 140);
+                        const w = 420;
+                        const h = 580;
+
+                        ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                        ctx.shadowBlur = 35;
+                        ctx.fillStyle = isDark ? '#1e293b' : '#ffffff';
+                        ctx.beginPath();
+                        ctx.roundRect(0, 0, w, h, 20);
+                        ctx.fill();
+
+                        ctx.shadowColor = 'transparent';
+                        ctx.beginPath();
+                        ctx.roundRect(25, 25, w - 50, h - 140, 14);
+                        ctx.clip();
+
+                        if (cfg.charImgObj) {
+                            drawImageCover(ctx, cfg.charImgObj, 25, 25, w - 50, h - 140);
+                        } else {
+                            ctx.fillStyle = '#cbd5e1';
+                            ctx.fillRect(25, 25, w - 50, h - 140);
+                        }
+                        ctx.restore();
+
+                        if (texts.charName) {
+                            ctx.save();
+                            ctx.translate(150 + slideX, 140);
+                            ctx.font = '800 22px Montserrat';
+                            ctx.fillStyle = primaryColor;
+                            ctx.textBaseline = 'top';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(texts.charName.toUpperCase(), 210, 475);
+                            ctx.font = '600 16px Montserrat';
+                            ctx.fillStyle = '#3b82f6';
+                            ctx.fillText(texts.charRole || '', 210, 505);
+                            ctx.restore();
+                        }
+                    } else if (cfg.charVariant === 'invasive_full_bleed') {
+                        ctx.save();
+                        const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        const slideX = (1 - animProgress) * -600;
+
+                        ctx.translate(slideX, 0);
+                        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                        ctx.shadowBlur = 50;
+
+                        ctx.beginPath();
+                        ctx.rect(0, 0, 750, height);
+                        ctx.clip();
+
+                        if (cfg.charImgObj) {
+                            drawImageCover(ctx, cfg.charImgObj, 0, 0, 750, height);
+                        } else {
+                            ctx.fillStyle = '#1e293b';
+                            ctx.fillRect(0, 0, 750, height);
+                        }
+
+                        const gradChar = ctx.createLinearGradient(550, 0, 750, 0);
+                        gradChar.addColorStop(0, 'rgba(0,0,0,0)');
+                        gradChar.addColorStop(1, 'rgba(0,0,0,0.85)');
+                        ctx.fillStyle = gradChar;
+                        ctx.fillRect(450, 0, 300, height);
+                        ctx.restore();
+
+                        if (texts.charName) {
+                            ctx.save();
+                            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                            ctx.beginPath();
+                            ctx.roundRect(80, height - 180, 420, 100, 16);
+                            ctx.fill();
+
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = '700 24px Montserrat';
+                            ctx.textBaseline = 'top';
+                            ctx.fillText(texts.charName, 110, height - 155);
+                            ctx.fillStyle = '#60a5fa';
+                            ctx.font = '600 16px Montserrat';
+                            ctx.fillText(texts.charRole || '', 110, height - 125);
+                            ctx.restore();
+                        }
+                    } else if (cfg.charVariant === 'invasive_diagonal_cut') {
+                        ctx.save();
+                        const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        const slideX = (1 - animProgress) * -600;
+
+                        ctx.translate(slideX, 0);
+                        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+                        ctx.shadowBlur = 50;
+
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(780, 0);
+                        ctx.lineTo(580, height);
+                        ctx.lineTo(0, height);
+                        ctx.closePath();
+                        ctx.clip();
+
+                        if (cfg.charImgObj) {
+                            drawImageCover(ctx, cfg.charImgObj, 0, 0, 850, height);
+                        } else {
+                            ctx.fillStyle = '#0f172a';
+                            ctx.fillRect(0, 0, 850, height);
+                        }
+                        ctx.restore();
+
+                        if (texts.charName) {
+                            ctx.save();
+                            ctx.fillStyle = accentColor;
+                            ctx.beginPath();
+                            ctx.roundRect(80, height - 160, 400, 90, 14);
+                            ctx.fill();
+
+                            ctx.fillStyle = boxTextColor;
+                            ctx.font = '800 22px Montserrat';
+                            ctx.textBaseline = 'top';
+                            ctx.fillText(texts.charName, 110, height - 138);
+                            ctx.font = '600 15px Montserrat';
+                            ctx.fillText(texts.charRole || '', 110, height - 108);
+                            ctx.restore();
+                        }
+                    } else if (cfg.charVariant === 'invasive_giant_portal') {
+                        ctx.save();
+                        const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
+                        const scaleP = animProgress;
+
+                        ctx.translate(0, height / 2);
+                        ctx.scale(scaleP, scaleP);
+
+                        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+                        ctx.shadowBlur = 60;
+
+                        const radius = 580;
+                        ctx.beginPath();
+                        ctx.arc(0, 0, radius, -Math.PI / 2, Math.PI / 2, false);
+                        ctx.fillStyle = accentColor;
+                        ctx.fill();
+                        ctx.clip();
+
+                        if (cfg.charImgObj) {
+                            drawImageCover(ctx, cfg.charImgObj, -50, -radius, radius * 1.8, radius * 2);
+                        } else {
+                            ctx.fillStyle = '#334155';
+                            ctx.fillRect(-50, -radius, radius * 1.8, radius * 2);
+                        }
+                        ctx.restore();
+
+                        if (texts.charName) {
+                            ctx.save();
+                            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                            ctx.beginPath();
+                            ctx.roundRect(90, height - 160, 420, 95, 16);
+                            ctx.fill();
+
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = '700 24px Montserrat';
+                            ctx.textBaseline = 'top';
+                            ctx.fillText(texts.charName, 120, height - 138);
+                            ctx.fillStyle = '#60a5fa';
+                            ctx.font = '600 16px Montserrat';
+                            ctx.fillText(texts.charRole || '', 120, height - 108);
+                            ctx.restore();
+                        }
+                    }
+                }
+
                 if (t1 > 0) {
                     ctx.save();
                     const animP = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
-                    ctx.font = '800 100px Montserrat';
-                    const textMetrics = ctx.measureText(texts.t1);
-                    const padX = 35;
-                    const padY = 25;
-                    const boxW = textMetrics.width + (padX * 2);
-                    const boxH = 130;
+                    ctx.font = '800 85Montserrat'; // Perfectly scaled down to eliminate any overflow
+                    const maxAllowedWidth = width - startX - 80;
+                    const padX = 30;
+                    const padY = 22;
+                    const boxH = 110;
+
+                    ctx.save();
+                    ctx.font = '800 85px Montserrat';
+                    const measuredW = ctx.measureText(texts.t1).width;
+                    const boxW = Math.min(measuredW + (padX * 2), maxAllowedWidth);
 
                     ctx.beginPath();
-                    ctx.rect(startX, baseY1, boxW, boxH);
+                    ctx.rect(startX, baseY1, maxAllowedWidth, boxH + 10);
                     ctx.clip();
 
                     const slideOffset = (1 - animP) * boxW;
@@ -335,7 +981,9 @@
                     
                     ctx.fillStyle = boxTextColor;
                     ctx.textBaseline = 'top';
+                    ctx.font = '800 85px Montserrat';
                     ctx.fillText(texts.t1, startX + padX - slideOffset, baseY1 + padY);
+                    ctx.restore();
                     ctx.restore();
                 }
 
@@ -343,15 +991,14 @@
                     return cfg.palette !== 'minimal' ? acc : def;
                 }
 
-                // --- LINEA 2 ---
                 if (t2 > 0) {
                     ctx.save();
                     const easeVal = cfg.motion === 'spring' ? elasticOut(t2) : easeOutExpo(t2);
                     ctx.globalAlpha = easeVal;
-                    ctx.font = '300 80px Montserrat';
+                    ctx.font = '300 64px Montserrat'; // Perfectly balanced font size for second line
                     
                     const yOffset = (1 - easeVal) * 50;
-                    const line2X = startX + 20;
+                    const line2X = startX + 10;
 
                     ctx.fillStyle = primaryColor;
                     ctx.textBaseline = 'top';
@@ -359,15 +1006,14 @@
                     ctx.restore();
                 }
 
-                // --- LINEA 3 ---
                 if (t3 > 0) {
                     ctx.save();
                     const easeVal = cfg.motion === 'spring' ? elasticOut(t3) : easeOutExpo(t3);
                     ctx.globalAlpha = easeVal;
-                    ctx.font = '800 110px Montserrat';
+                    ctx.font = '800 85px Montserrat'; // Scaled for safety and zero overflow
                     
                     const textMetrics = ctx.measureText(texts.t3);
-                    const line3X = startX + 150;
+                    const line3X = startX + 80;
                     const yOffset = (1 - easeVal) * 30;
 
                     ctx.fillStyle = primaryColor;
@@ -375,20 +1021,19 @@
                     ctx.fillText(texts.t3, line3X, baseY3 + yOffset);
 
                     if (t4 > 0) {
-                        const lineW = textMetrics.width * (cfg.motion === 'spring' ? elasticOut(t4) : easeOutExpo(t4));
+                        const lineW = Math.min(textMetrics.width * (cfg.motion === 'spring' ? elasticOut(t4) : easeOutExpo(t4)), width - line3X - 80);
                         ctx.fillStyle = accentColor;
-                        ctx.fillRect(line3X, baseY3 + yOffset + 130, lineW, 8);
+                        ctx.fillRect(line3X, baseY3 + yOffset + 105, lineW, 8);
                     }
 
                     ctx.restore();
                 }
 
-                // --- 1. FUENTE (Con Switch de Animación y Alineación) ---
                 if ((tSource > 0 || !cfg.animateSource) && texts.source) {
                     ctx.save();
                     const easeVal = cfg.animateSource ? easeOutQuart(Math.min(1, tSource)) : 1;
                     ctx.globalAlpha = easeVal * 0.75;
-                    ctx.font = '500 26px Montserrat';
+                    ctx.font = '500 24px Montserrat';
                     ctx.fillStyle = primaryColor;
                     ctx.textBaseline = 'bottom';
                     
@@ -403,17 +1048,16 @@
                     ctx.restore();
                 }
 
-                // --- LOGO (Con Switch de Animación) ---
                 if ((tLogo > 0 || !cfg.animateLogo) && texts.logo) {
                     ctx.save();
                     const easeVal = cfg.animateLogo ? easeOutBack(Math.min(1, tLogo)) : 1;
                     ctx.globalAlpha = cfg.animateLogo ? Math.min(1, tLogo * 2) : 1;
-                    ctx.font = '700 30px Montserrat';
+                    ctx.font = '700 28px Montserrat';
                     const logoMetrics = ctx.measureText(texts.logo);
                     const padX = 20;
                     const padY = 15;
                     const boxW = logoMetrics.width + (padX * 2);
-                    const boxH = 60;
+                    const boxH = 55;
                     
                     const logoX = width - boxW - 80;
                     const logoY = 80;
@@ -442,13 +1086,18 @@
                 const currentCfg = {
                     useFramed: useFramedPhoto,
                     framedImgObj: framedPhotoImg,
+                    frameVariant: frameVariant,
                     useChar: useCharacter,
                     charImgObj: characterImg,
+                    charVariant: charVariant,
+                    useVideoOverlayBackdrop: useVideoOverlayBackdrop,
+                    overlayGuideOpacity: overlayGuideOpacity,
                     sourceAlign: sourceAlign,
                     textOrder: textOrder,
                     motion: motionStyle,
                     bg: bgColorChoice,
                     palette: paletteChoice,
+                    bgType: bgType,
                     animateLogo: animateLogo,
                     animateSource: animateSource
                 };
@@ -509,9 +1158,8 @@
                 };
                 
                 animationRef.current = requestAnimationFrame(animate);
-            }, [drawFrame, isPlaying, text1, text2, text3, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, useCharacter, characterImg, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, animateLogo, animateSource]);
+            }, [drawFrame, isPlaying, text1, text2, text3, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource]);
 
-            // File upload handlers
             const handleFramedPhotoUpload = (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -548,14 +1196,13 @@
                     if (!canvas) return;
                     const ctx = canvas.getContext('2d');
                     drawFrame(ctx, 5000, { t1: text1, t2: text2, t3: text3, logo: logoText, source: sourceText, photoCaption, charName, charRole }, {
-                        useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, useChar: useCharacter, charImgObj: characterImg, sourceAlign: sourceAlign, textOrder: textOrder, motion: motionStyle, bg: bgColorChoice, palette: paletteChoice, animateLogo: animateLogo, animateSource: animateSource
+                        useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, frameVariant: frameVariant, useChar: useCharacter, charImgObj: characterImg, charVariant: charVariant, useVideoOverlayBackdrop: useVideoOverlayBackdrop, overlayGuideOpacity: overlayGuideOpacity, sourceAlign: sourceAlign, textOrder: textOrder, motion: motionStyle, bg: bgColorChoice, palette: paletteChoice, bgType: bgType, animateLogo: animateLogo, animateSource: animateSource
                     });
                 });
-            }, [text1, text2, text3, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, useCharacter, characterImg, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, animateLogo, animateSource, drawFrame]);
+            }, [text1, text2, text3, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource, drawFrame]);
 
             return (
                 <div className="flex-1 flex flex-col h-screen overflow-hidden">
-                    {/* Header (6. ReelMatic.Pro branding) */}
                     <header className="h-16 bg-[#0d0e12] border-b border-white/10 px-6 flex items-center justify-between shrink-0 z-30">
                         <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-cyan-400 p-[1px] shadow-lg shadow-blue-500/20 flex items-center justify-center">
@@ -568,12 +1215,11 @@
                             </h1>
                         </div>
                         <div className="text-xs text-slate-400 font-medium bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                            Studio Motion Engine v3.5
+                            Studio Motion Engine v5.0 (Video Overlay Mode)
                         </div>
                     </header>
 
                     <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-                        {/* Apple-grade Sidebar Controls */}
                         <div className="w-full lg:w-[440px] bg-[#0d0e12]/95 backdrop-blur-2xl border-r border-white/10 p-6 flex flex-col justify-between z-20 shrink-0 overflow-y-auto">
                             <div className="space-y-6">
                                 <div>
@@ -621,7 +1267,6 @@
                                         <input type="text" value={sourceText} onChange={e => setSourceText(e.target.value)} disabled={isRecording}
                                             className="w-full bg-[#13151c] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" />
                                     </div>
-                                    {/* 1. Fuente a la izquierda o derecha */}
                                     <div className="space-y-1">
                                         <label className="text-[11px] font-medium text-slate-400">Alineación de la Fuente</label>
                                         <select value={sourceAlign} onChange={e => setSourceAlign(e.target.value)}
@@ -635,15 +1280,50 @@
                                 <div className="pt-4 border-t border-white/10 space-y-4">
                                     <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Elementos Visuales (Izquierda)</h2>
                                     
-                                    {/* 2. Framed Photo Control */}
+                                    {/* Video Overlay Backdrop Mode Control */}
+                                    <div className="bg-[#13151c] p-4 rounded-xl border border-blue-500/30 shadow-lg shadow-blue-500/5 space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <span className="text-xs font-bold text-white flex items-center gap-2">
+                                                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                                                    Fondo Limpio para Video Overlay
+                                                </span>
+                                                <p className="text-[10px] text-slate-400 mt-0.5">Deja el lado izquierdo totalmente libre y limpio para superponer video</p>
+                                            </div>
+                                            <input type="checkbox" checked={useVideoOverlayBackdrop} onChange={e => { setUseVideoOverlayBackdrop(e.target.checked); if(e.target.checked) { setUseFramedPhoto(false); setUseCharacter(false); } }}
+                                                className="w-4 h-4 rounded accent-blue-500 cursor-pointer" />
+                                        </div>
+                                    </div>
+
                                     <div className="bg-[#13151c] p-4 rounded-xl border border-white/10 space-y-3">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-xs font-bold text-white">Foto con Marco (Polaroid)</span>
-                                            <input type="checkbox" checked={useFramedPhoto} onChange={e => { setUseFramedPhoto(e.target.checked); if(e.target.checked) setUseCharacter(false); }}
+                                            <span className="text-xs font-bold text-white">Foto con Marco</span>
+                                            <input type="checkbox" checked={useFramedPhoto} onChange={e => { setUseFramedPhoto(e.target.checked); if(e.target.checked) { setUseCharacter(false); setUseVideoOverlayBackdrop(false); } }}
                                                 className="w-4 h-4 rounded accent-blue-500 cursor-pointer" />
                                         </div>
                                         {useFramedPhoto && (
-                                            <div className="space-y-2 pt-2 border-t border-white/10">
+                                            <div className="space-y-3 pt-2 border-t border-white/10">
+                                                <div className="space-y-1">
+                                                    <label className="text-[10px] font-medium text-slate-400 uppercase">Estilo de Marco</label>
+                                                    <select value={frameVariant} onChange={e => setFrameVariant(e.target.value)}
+                                                        className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                                                        <optgroup label="Marcos Estándar">
+                                                            <option value="polaroid">Polaroid Clásica (Inclinada)</option>
+                                                            <option value="tech">Minimalista Tech (HUD)</option>
+                                                            <option value="circle">Círculo Circular (Viñeta)</option>
+                                                            <option value="offset">Tarjeta Dinámica (Offset)</option>
+                                                            <option value="magazine">Estilo Revista (Split)</option>
+                                                        </optgroup>
+                                                        <optgroup label="Diseños Invasivos Gigantes">
+                                                            <option value="invasive_bleed">Invasión Desbordada (Bleed Left)</option>
+                                                            <option value="invasive_portal">Círculo Gigante (Portal Left)</option>
+                                                            <option value="invasive_asymmetric">Bloque Asimétrico Editorial</option>
+                                                            <option value="invasive_diagonal">Corte Diagonal Cinemático</option>
+                                                            <option value="invasive_floating_card">Tarjeta Vertical Brillante</option>
+                                                            <option value="invasive_cinema_frame">Fotograma de Cine Panorámico</option>
+                                                        </optgroup>
+                                                    </select>
+                                                </div>
                                                 <input type="file" accept="image/*" onChange={handleFramedPhotoUpload} className="w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer" />
                                                 <input type="text" placeholder="Pie de foto (ej. Playa Paraíso)" value={photoCaption} onChange={e => setPhotoCaption(e.target.value)}
                                                     className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500" />
@@ -651,15 +1331,30 @@
                                         )}
                                     </div>
 
-                                    {/* 3. Transparent Character Control */}
                                     <div className="bg-[#13151c] p-4 rounded-xl border border-white/10 space-y-3">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-xs font-bold text-white">Personaje Transparente</span>
-                                            <input type="checkbox" checked={useCharacter} onChange={e => { setUseCharacter(e.target.checked); if(e.target.checked) setUseFramedPhoto(false); }}
+                                            <span className="text-xs font-bold text-white">Personaje Transparente (.PNG)</span>
+                                            <input type="checkbox" checked={useCharacter} onChange={e => { setUseCharacter(e.target.checked); if(e.target.checked) { setUseFramedPhoto(false); setUseVideoOverlayBackdrop(false); } }}
                                                 className="w-4 h-4 rounded accent-blue-500 cursor-pointer" />
                                         </div>
                                         {useCharacter && (
-                                            <div className="space-y-2 pt-2 border-t border-white/10">
+                                            <div className="space-y-3 pt-2 border-t border-white/10">
+                                                <div className="space-y-1">
+                                                    <label className="text-[10px] font-medium text-slate-400 uppercase">Diseño de Personaje</label>
+                                                    <select value={charVariant} onChange={e => setCharVariant(e.target.value)}
+                                                        className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                                                        <optgroup label="Estándar (3 Diseños)">
+                                                            <option value="standard_card">Tarjeta Vertical con Sombra</option>
+                                                            <option value="standard_circle">Viñeta Circular Flotante</option>
+                                                            <option value="standard_badge">Insignia Editorial Limpia</option>
+                                                        </optgroup>
+                                                        <optgroup label="Invasivos (3 Diseños)">
+                                                            <option value="invasive_full_bleed">Invasión Total con Degradado</option>
+                                                            <option value="invasive_diagonal_cut">Corte Diagonal Dinámico</option>
+                                                            <option value="invasive_giant_portal">Portal Circular Gigante</option>
+                                                        </optgroup>
+                                                    </select>
+                                                </div>
                                                 <input type="file" accept="image/*" onChange={handleCharacterUpload} className="w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer" />
                                                 <input type="text" placeholder="Nombre del personaje" value={charName} onChange={e => setCharName(e.target.value)}
                                                     className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500" />
@@ -671,7 +1366,6 @@
                                 </div>
 
                                 <div className="pt-4 border-t border-white/10 grid grid-cols-2 gap-3">
-                                    {/* 4. Motion Variants */}
                                     <div className="space-y-1">
                                         <label className="text-[10px] font-semibold text-slate-400 uppercase">Movimiento</label>
                                         <select value={motionStyle} onChange={e => setMotionStyle(e.target.value)}
@@ -681,7 +1375,6 @@
                                             <option value="spring">Spring</option>
                                         </select>
                                     </div>
-                                    {/* Orden Textos */}
                                     <div className="space-y-1">
                                         <label className="text-[10px] font-semibold text-slate-400 uppercase">Orden Textos</label>
                                         <select value={textOrder} onChange={e => setTextOrder(e.target.value)}
@@ -691,7 +1384,6 @@
                                             <option value="blockBottom">Bloque Abajo</option>
                                         </select>
                                     </div>
-                                    {/* 5. Background Color */}
                                     <div className="space-y-1">
                                         <label className="text-[10px] font-semibold text-slate-400 uppercase">Fondo</label>
                                         <select value={bgColorChoice} onChange={e => setBgColorChoice(e.target.value)}
@@ -699,9 +1391,24 @@
                                             <option value="white">Blanco</option>
                                             <option value="grey">Gris</option>
                                             <option value="black">Negro</option>
+                                            <option value="navy">Marino (#191929)</option>
+                                            <option value="light_navy">Claro Marino (#F0F0F5)</option>
+                                            <option value="deep_navy">Marino Profundo (#000033)</option>
+                                            <option value="light_slate">Pizarra Claro (#EAEAF5)</option>
+                                            <option value="ivory">Marfil (#FAFAF7)</option>
+                                            <option value="crimson">Carmesí (#A32929)</option>
+                                            <option value="melocoton">Melocotón (#F9E1DC)</option>
+                                            <option value="caoba">Caoba (#692113)</option>
+                                            <option value="rojo_claro">Rojo Claro (#FFD6D6)</option>
+                                            <option value="rojo_oscuro">Rojo Oscuro (#3D0000)</option>
+                                            <option value="oliva">Oliva (#869108)</option>
+                                            <option value="rosa_coral">Rosa Coral (#EF6C77)</option>
+                                            <option value="durazno">Durazno (#EFA36C)</option>
+                                            <option value="verde_bosque">Verde Bosque (#419108)</option>
+                                            <option value="amarillo_claro">Amarillo Claro (#FFE34C)</option>
+                                            <option value="amarillo_oscuro">Amarillo Oscuro (#CCAC00)</option>
                                         </select>
                                     </div>
-                                    {/* 5. Color Palettes */}
                                     <div className="space-y-1">
                                         <label className="text-[10px] font-semibold text-slate-400 uppercase">Paleta</label>
                                         <select value={paletteChoice} onChange={e => setPaletteChoice(e.target.value)}
@@ -709,6 +1416,28 @@
                                             <option value="minimal">Monocromo</option>
                                             <option value="vibrant">Azul Pro</option>
                                             <option value="neon">Neón Cyan</option>
+                                            <option value="navy_palette">Marino & Oro</option>
+                                            <option value="navy_lime">Marino & Lima</option>
+                                            <option value="rosa_navy">Rosa & Carmesí</option>
+                                            <option value="terracota">Terracota</option>
+                                            <option value="rojo_intenso">Rojo Intenso</option>
+                                            <option value="otono">Otoño</option>
+                                            <option value="citrico">Cítrico</option>
+                                            <option value="amarillo_oro">Amarillo & Oro</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-1 col-span-2">
+                                        <label className="text-[10px] font-semibold text-slate-400 uppercase">Textura (Patrón)</label>
+                                        <select value={bgType} onChange={e => setBgType(e.target.value)}
+                                            className="w-full bg-[#13151c] border border-white/10 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                                            <option value="gradient">Ninguno (Degradado Limpio)</option>
+                                            <option value="pattern_dots">Puntos Clásicos</option>
+                                            <option value="pattern_grid">Cuadrícula Tech</option>
+                                            <option value="pattern_stripes">Líneas Diagonales</option>
+                                            <option value="pattern_cross">Cruces Minimalistas</option>
+                                            <option value="pattern_hex">Panal Hexagonal</option>
+                                            <option value="pattern_waves">Ondas Topográficas</option>
+                                            <option value="pattern_circuit">Circuitos / Nodos</option>
                                         </select>
                                     </div>
                                 </div>
@@ -727,7 +1456,6 @@
                             </div>
                         </div>
 
-                        {/* Main Preview Canvas Area */}
                         <div className="flex-1 p-6 lg:p-12 flex flex-col items-center justify-center bg-[#050608] relative overflow-hidden">
                             <div className="absolute w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none"></div>
 
