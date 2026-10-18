@@ -16,8 +16,8 @@
 
     <style>
         body { font-family: 'Montserrat', sans-serif; background-color: #0b0c10; color: #f1f5f9; overflow-x: hidden; }
-        .canvas-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 1rem; overflow: hidden; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08); }
-        canvas { width: 100%; height: 100%; display: block; }
+        .canvas-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 1rem; overflow: hidden; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: center; }
+        canvas { display: block; width: 100% !important; height: 100% !important; object-fit: contain; }
         
         .recording-overlay {
             position: absolute; inset: 0; border: 3px solid #3b82f6; z-index: 50; pointer-events: none;
@@ -73,7 +73,6 @@
             const [charRole, setCharRole] = useState("Directora de Turismo Global");
             const [charVariant, setCharVariant] = useState("standard_card");
             
-            // Party / Organization Logo support for Candidates / Politicians
             const [partyLogoImg, setPartyLogoImg] = useState(null);
             const [isQuoteMode, setIsQuoteMode] = useState(false);
             const [quoteParagraph, setQuoteParagraph] = useState("La innovación distingue a los líderes de los seguidores. El diseño no es solo lo que parece, es cómo funciona.");
@@ -749,7 +748,6 @@
                             ctx.fillText(texts.charRole || '', cardX + 24, cardY + 54);
                         }
 
-                        // Render Party Logo if uploaded
                         if (cfg.partyLogoObj) {
                             const logoSize = 75;
                             const logoX = charX + charW - logoSize - 25;
@@ -1277,6 +1275,11 @@
                     setIsRecording(true);
                     setProgress(0);
                     chunksRef.current = [];
+                    
+                    // CRITICAL FIX: Explicitly lock canvas buffer size to 1920x1080 during recording
+                    canvas.width = 1920;
+                    canvas.height = 1080;
+
                     const stream = canvas.captureStream(60); 
                     
                     let mimeType = 'video/webm; codecs=vp9';
@@ -1376,6 +1379,8 @@
                 document.fonts.ready.then(() => {
                     const canvas = canvasRef.current;
                     if (!canvas) return;
+                    canvas.width = 1920;
+                    canvas.height = 1080;
                     const ctx = canvas.getContext('2d');
                     drawFrame(ctx, 5000, { 
                         t1: text1, t2: text2, t3: text3, 
@@ -1406,7 +1411,7 @@
                             </h1>
                         </div>
                         <div className="text-xs text-slate-400 font-medium bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                            Studio Motion Engine v5.1 (Political & Party Logo Mode)
+                            Studio Motion Engine v5.2 (1920x1080 Strict Resolution)
                         </div>
                     </header>
 
@@ -1711,7 +1716,7 @@
             );
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root') || document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
