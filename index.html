@@ -1237,6 +1237,50 @@
 
             }, []);
 
+            const exportImage = () => {
+                const canvas = canvasRef.current;
+                if (!canvas) return;
+                
+                // Force canvas resolution to exact 1920x1080 for high-res static design export
+                canvas.width = 1920;
+                canvas.height = 1080;
+                const ctx = canvas.getContext('2d');
+
+                const currentTexts = { 
+                    t1: text1, t2: text2, t3: text3, 
+                    quoteParagraph, logo: logoText, source: sourceText, photoCaption, charName, charRole 
+                };
+                const currentCfg = {
+                    isQuoteMode,
+                    useFramed: useFramedPhoto,
+                    framedImgObj: framedPhotoImg,
+                    frameVariant: frameVariant,
+                    useChar: useCharacter,
+                    charImgObj: characterImg,
+                    charVariant: charVariant,
+                    partyLogoObj: partyLogoImg,
+                    useVideoOverlayBackdrop: useVideoOverlayBackdrop,
+                    overlayGuideOpacity: overlayGuideOpacity,
+                    sourceAlign: sourceAlign,
+                    textOrder: textOrder,
+                    motion: motionStyle,
+                    bg: bgColorChoice,
+                    palette: paletteChoice,
+                    bgType: bgType,
+                    animateLogo: false,
+                    animateSource: false
+                };
+
+                // Render final complete frame statically
+                drawFrame(ctx, 5000, currentTexts, currentCfg);
+
+                const dataUrl = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = dataUrl;
+                a.download = `ReelMatic_Design_${Date.now()}.png`;
+                a.click();
+            };
+
             const playAnimation = useCallback((record = false) => {
                 if (isPlaying) return;
                 
@@ -1276,7 +1320,6 @@
                     setProgress(0);
                     chunksRef.current = [];
                     
-                    // CRITICAL FIX: Explicitly lock canvas buffer size to 1920x1080 during recording
                     canvas.width = 1920;
                     canvas.height = 1080;
 
@@ -1411,7 +1454,7 @@
                             </h1>
                         </div>
                         <div className="text-xs text-slate-400 font-medium bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                            Studio Motion Engine v5.2 (1920x1080 Strict Resolution)
+                            Studio Motion Engine v5.2 (1920x1080 HD & Static Design Export)
                         </div>
                     </header>
 
@@ -1668,6 +1711,10 @@
                             </div>
 
                             <div className="mt-8 space-y-3 pt-4 border-t border-white/10 shrink-0">
+                                <button onClick={exportImage}
+                                    className="w-full py-3 rounded-xl font-semibold text-sm transition-all flex justify-center items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20">
+                                    Descargar Imagen PNG (1920x1080)
+                                </button>
                                 <button onClick={() => playAnimation(false)} disabled={isPlaying}
                                     className={`w-full py-3 rounded-xl font-semibold text-sm transition-all flex justify-center items-center gap-2 border ${isPlaying ? 'bg-white/5 border-white/5 text-slate-500 cursor-not-allowed' : 'bg-white/10 hover:bg-white/15 border-white/15 text-white shadow-lg'}`}>
                                     Previsualizar Animación
@@ -1706,7 +1753,7 @@
                                         <span>Motor Canvas HD Activo</span>
                                     </div>
                                     <div className="bg-white/5 border border-white/10 px-3 py-1 rounded-full text-slate-300">
-                                        Resolución: 1920x1080 • Formato WebM VP9
+                                        Resolución: 1920x1080 • Formato WebM VP9 & PNG
                                     </div>
                                 </div>
                             </div>
@@ -1716,7 +1763,7 @@
             );
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root') || document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
