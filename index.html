@@ -288,7 +288,8 @@
 
                 const hasVisualLeft = cfg.useFramed || cfg.useChar || cfg.useVideoOverlayBackdrop;
                 
-                let startX = hasVisualLeft ? width * 0.52 : width * 0.22;
+                // Adjusted startX to bring typography slightly closer when framed photos are used, closing the gap
+                let startX = hasVisualLeft ? (cfg.useFramed ? width * 0.48 : width * 0.52) : width * 0.22;
                 const startY = height * 0.35;
 
                 let baseY1 = startY;
@@ -312,7 +313,7 @@
                     if (cfg.frameVariant === 'polaroid') {
                         const tiltAngle = -4 * (Math.PI / 180);
                         ctx.save();
-                        ctx.translate(180 + slideX, 220);
+                        ctx.translate(120 + slideX, 140); // Enlarged & repositioned
                         ctx.rotate(tiltAngle);
 
                         ctx.shadowColor = 'rgba(0,0,0,0.35)';
@@ -320,38 +321,38 @@
                         ctx.shadowOffsetX = 10;
                         ctx.shadowOffsetY = 20;
                         ctx.fillStyle = isDark ? '#1e2028' : '#ffffff';
-                        ctx.fillRect(0, 0, 520, 640);
+                        ctx.fillRect(0, 0, 620, 760); // Larger dimensions
 
                         ctx.shadowColor = 'transparent';
                         ctx.beginPath();
-                        ctx.rect(35, 35, 450, 480);
+                        ctx.rect(40, 40, 540, 580);
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 35, 35, 450, 480);
+                            drawImageCover(ctx, cfg.framedImgObj, 40, 40, 540, 580);
                         } else {
                             ctx.fillStyle = '#cbd5e1';
-                            ctx.fillRect(35, 35, 450, 480);
+                            ctx.fillRect(40, 40, 540, 580);
                             ctx.fillStyle = '#475569';
                             ctx.font = '600 24px Montserrat';
-                            ctx.fillText("Sin Imagen", 185, 275);
+                            ctx.fillText("Sin Imagen", 230, 310);
                         }
                         ctx.restore();
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.translate(180 + slideX, 220);
+                            ctx.translate(120 + slideX, 140);
                             ctx.rotate(tiltAngle);
-                            ctx.font = '500 22px Montserrat';
+                            ctx.font = '500 24px Montserrat';
                             ctx.fillStyle = primaryColor;
                             ctx.textBaseline = 'top';
                             ctx.textAlign = 'center';
-                            ctx.fillText(texts.photoCaption, 260, 560);
+                            ctx.fillText(texts.photoCaption, 310, 670);
                             ctx.restore();
                         }
                     } else if (cfg.frameVariant === 'tech') {
                         ctx.save();
-                        ctx.translate(140 + slideX, 200);
+                        ctx.translate(100 + slideX, 120);
                         ctx.shadowColor = 'rgba(0,0,0,0.3)';
                         ctx.shadowBlur = 30;
                         ctx.shadowOffsetY = 15;
@@ -360,40 +361,40 @@
                         ctx.strokeStyle = accentColor;
                         ctx.lineWidth = 3;
                         ctx.beginPath();
-                        ctx.roundRect(0, 0, 480, 560, 20);
+                        ctx.roundRect(0, 0, 580, 680, 20); // Enlarged
                         ctx.fill();
                         ctx.stroke();
 
                         ctx.shadowColor = 'transparent';
                         ctx.beginPath();
-                        ctx.roundRect(30, 30, 420, 440, 12);
+                        ctx.roundRect(35, 35, 510, 530, 12);
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 30, 30, 420, 440);
+                            drawImageCover(ctx, cfg.framedImgObj, 35, 35, 510, 530);
                         } else {
                             ctx.fillStyle = '#334155';
-                            ctx.fillRect(30, 30, 420, 440);
+                            ctx.fillRect(35, 35, 510, 530);
                         }
                         ctx.restore();
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.translate(140 + slideX, 200);
-                            ctx.font = '600 20px Montserrat';
+                            ctx.translate(100 + slideX, 120);
+                            ctx.font = '600 22px Montserrat';
                             ctx.fillStyle = primaryColor;
                             ctx.textBaseline = 'top';
                             ctx.textAlign = 'center';
-                            ctx.fillText(texts.photoCaption, 240, 495);
+                            ctx.fillText(texts.photoCaption, 290, 595);
                             ctx.restore();
                         }
                     } else if (cfg.frameVariant === 'circle') {
                         ctx.save();
-                        ctx.translate(180 + slideX, 240);
+                        ctx.translate(140 + slideX, 160);
                         ctx.shadowColor = 'rgba(0,0,0,0.4)';
                         ctx.shadowBlur = 40;
                         
-                        const radius = 240;
+                        const radius = 280; // Enlarged radius
                         ctx.beginPath();
                         ctx.arc(radius, radius, radius, 0, Math.PI * 2);
                         ctx.fillStyle = accentColor;
@@ -410,85 +411,85 @@
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.translate(180 + slideX, 240);
-                            ctx.font = '700 22px Montserrat';
+                            ctx.translate(140 + slideX, 160);
+                            ctx.font = '700 24px Montserrat';
                             ctx.fillStyle = primaryColor;
                             ctx.textBaseline = 'top';
                             ctx.textAlign = 'center';
-                            ctx.fillText(texts.photoCaption, 240, 520);
+                            ctx.fillText(texts.photoCaption, 280, 600);
                             ctx.restore();
                         }
                     } else if (cfg.frameVariant === 'offset') {
                         ctx.save();
-                        ctx.translate(160 + slideX, 200);
+                        ctx.translate(120 + slideX, 120);
                         
                         ctx.fillStyle = accentColor;
                         ctx.beginPath();
-                        ctx.roundRect(25, 25, 450, 520, 16);
+                        ctx.roundRect(30, 30, 540, 620, 16);
                         ctx.fill();
 
                         ctx.shadowColor = 'rgba(0,0,0,0.3)';
                         ctx.shadowBlur = 25;
                         ctx.fillStyle = isDark ? '#13151c' : '#ffffff';
                         ctx.beginPath();
-                        ctx.roundRect(0, 0, 450, 520, 16);
+                        ctx.roundRect(0, 0, 540, 620, 16);
                         ctx.fill();
 
                         ctx.shadowColor = 'transparent';
                         ctx.beginPath();
-                        ctx.roundRect(30, 30, 390, 400, 12);
+                        ctx.roundRect(35, 35, 470, 480, 12);
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 30, 30, 390, 400);
+                            drawImageCover(ctx, cfg.framedImgObj, 35, 35, 470, 480);
                         } else {
                             ctx.fillStyle = '#cbd5e1';
-                            ctx.fillRect(30, 30, 390, 400);
+                            ctx.fillRect(35, 35, 470, 480);
                         }
                         ctx.restore();
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.translate(160 + slideX, 200);
-                            ctx.font = '600 20px Montserrat';
+                            ctx.translate(120 + slideX, 120);
+                            ctx.font = '600 22px Montserrat';
                             ctx.fillStyle = primaryColor;
                             ctx.textBaseline = 'top';
                             ctx.textAlign = 'center';
-                            ctx.fillText(texts.photoCaption, 225, 460);
+                            ctx.fillText(texts.photoCaption, 270, 550);
                             ctx.restore();
                         }
                     } else if (cfg.frameVariant === 'magazine') {
                         ctx.save();
-                        ctx.translate(140 + slideX, 180);
+                        ctx.translate(100 + slideX, 100);
                         
                         ctx.shadowColor = 'rgba(0,0,0,0.35)';
                         ctx.shadowBlur = 35;
                         ctx.fillStyle = boxBgColor;
                         ctx.beginPath();
-                        ctx.roundRect(0, 0, 480, 580, 12);
+                        ctx.roundRect(0, 0, 580, 700, 12); // Enlarged magazine box
                         ctx.fill();
 
                         ctx.shadowColor = 'transparent';
                         ctx.beginPath();
-                        ctx.roundRect(30, 30, 420, 420, 8);
+                        ctx.roundRect(35, 35, 510, 510, 8);
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 30, 30, 420, 420);
+                            drawImageCover(ctx, cfg.framedImgObj, 35, 35, 510, 510);
                         } else {
                             ctx.fillStyle = '#475569';
-                            ctx.fillRect(30, 30, 420, 420);
+                            ctx.fillRect(35, 35, 510, 510);
                         }
                         ctx.restore();
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.translate(140 + slideX, 180);
-                            ctx.font = '800 24px Montserrat';
+                            ctx.translate(100 + slideX, 100);
+                            ctx.font = '800 26px Montserrat';
                             ctx.fillStyle = boxTextColor;
                             ctx.textBaseline = 'top';
                             ctx.textAlign = 'left';
-                            ctx.fillText(texts.photoCaption.toUpperCase(), 35, 485);
+                            ctx.fillText(texts.photoCaption.toUpperCase(), 40, 585);
                             ctx.restore();
                         }
                     } else if (cfg.frameVariant === 'invasive_bleed') {
@@ -501,27 +502,27 @@
                         ctx.shadowBlur = 50;
 
                         ctx.beginPath();
-                        ctx.rect(-100, 0, 780, height);
+                        ctx.rect(-100, 0, 850, height);
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, -100, 0, 880, height);
+                            drawImageCover(ctx, cfg.framedImgObj, -100, 0, 950, height);
                         } else {
                             ctx.fillStyle = '#334155';
-                            ctx.fillRect(-100, 0, 880, height);
+                            ctx.fillRect(-100, 0, 950, height);
                         }
 
-                        const gradBleed = ctx.createLinearGradient(600, 0, 780, 0);
+                        const gradBleed = ctx.createLinearGradient(650, 0, 850, 0);
                         gradBleed.addColorStop(0, 'rgba(0,0,0,0)');
                         gradBleed.addColorStop(1, 'rgba(0,0,0,0.7)');
                         ctx.fillStyle = gradBleed;
-                        ctx.fillRect(500, 0, 280, height);
+                        ctx.fillRect(550, 0, 300, height);
 
                         ctx.restore();
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.font = '700 20px Montserrat';
+                            ctx.font = '700 22px Montserrat';
                             ctx.fillStyle = '#ffffff';
                             ctx.shadowColor = 'rgba(0,0,0,0.8)';
                             ctx.shadowBlur = 10;
@@ -539,7 +540,7 @@
                         ctx.shadowColor = 'rgba(0,0,0,0.5)';
                         ctx.shadowBlur = 60;
 
-                        const radius = 550;
+                        const radius = 640; // Larger portal
                         ctx.beginPath();
                         ctx.arc(0, 0, radius, -Math.PI / 2, Math.PI / 2, false);
                         ctx.fillStyle = accentColor;
@@ -547,16 +548,16 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, -100, -radius, radius * 2, radius * 2);
+                            drawImageCover(ctx, cfg.framedImgObj, -100, -radius, radius * 2.2, radius * 2);
                         } else {
                             ctx.fillStyle = '#475569';
-                            ctx.fillRect(-100, -radius, radius * 2, radius * 2);
+                            ctx.fillRect(-100, -radius, radius * 2.2, radius * 2);
                         }
                         ctx.restore();
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.font = '800 22px Montserrat';
+                            ctx.font = '800 24px Montserrat';
                             ctx.fillStyle = primaryColor;
                             ctx.fillText(texts.photoCaption, 80, height - 120);
                             ctx.restore();
@@ -566,26 +567,26 @@
                         const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
                         const slideX = (1 - animProgress) * -500;
 
-                        ctx.translate(60 + slideX, 80);
+                        ctx.translate(40 + slideX, 50);
 
                         ctx.fillStyle = accentColor;
-                        ctx.fillRect(0, 0, 620, 920);
+                        ctx.fillRect(0, 0, 700, 980); // Enlarged block
 
                         ctx.beginPath();
-                        ctx.rect(30, 30, 560, 860);
+                        ctx.rect(35, 35, 630, 910);
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 30, 30, 560, 860);
+                            drawImageCover(ctx, cfg.framedImgObj, 35, 35, 630, 910);
                         } else {
                             ctx.fillStyle = '#1e293b';
-                            ctx.fillRect(30, 30, 560, 860);
+                            ctx.fillRect(35, 35, 630, 910);
                         }
                         ctx.restore();
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.font = '700 20px Montserrat';
+                            ctx.font = '700 22px Montserrat';
                             ctx.fillStyle = primaryColor;
                             ctx.fillText(texts.photoCaption, 90, height - 80);
                             ctx.restore();
@@ -601,23 +602,23 @@
 
                         ctx.beginPath();
                         ctx.moveTo(0, 0);
-                        ctx.lineTo(720, 0);
-                        ctx.lineTo(520, height);
+                        ctx.lineTo(820, 0);
+                        ctx.lineTo(600, height);
                         ctx.lineTo(0, height);
                         ctx.closePath();
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 0, 0, 850, height);
+                            drawImageCover(ctx, cfg.framedImgObj, 0, 0, 950, height);
                         } else {
                             ctx.fillStyle = '#0f172a';
-                            ctx.fillRect(0, 0, 850, height);
+                            ctx.fillRect(0, 0, 950, height);
                         }
                         ctx.restore();
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.font = '800 20px Montserrat';
+                            ctx.font = '800 22px Montserrat';
                             ctx.fillStyle = '#ffffff';
                             ctx.shadowColor = 'rgba(0,0,0,0.9)';
                             ctx.shadowBlur = 10;
@@ -629,7 +630,7 @@
                         const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
                         const slideX = (1 - animProgress) * -500;
 
-                        ctx.translate(80 + slideX, 60);
+                        ctx.translate(50 + slideX, 40);
 
                         ctx.shadowColor = 'rgba(0,0,0,0.45)';
                         ctx.shadowBlur = 40;
@@ -637,27 +638,27 @@
 
                         ctx.fillStyle = accentColor;
                         ctx.beginPath();
-                        ctx.roundRect(0, 0, 560, 960, 24);
+                        ctx.roundRect(0, 0, 640, 1000, 24);
                         ctx.fill();
 
                         ctx.shadowColor = 'transparent';
                         ctx.beginPath();
-                        ctx.roundRect(20, 20, 520, 920, 16);
+                        ctx.roundRect(25, 25, 590, 950, 16);
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 20, 20, 520, 920);
+                            drawImageCover(ctx, cfg.framedImgObj, 25, 25, 590, 950);
                         } else {
                             ctx.fillStyle = '#1e293b';
-                            ctx.fillRect(20, 20, 520, 920);
+                            ctx.fillRect(25, 25, 590, 950);
                         }
                         ctx.restore();
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.font = '700 20px Montserrat';
+                            ctx.font = '700 22px Montserrat';
                             ctx.fillStyle = primaryColor;
-                            ctx.fillText(texts.photoCaption, 100, height - 60);
+                            ctx.fillText(texts.photoCaption, 100, height - 50);
                             ctx.restore();
                         }
                     } else if (cfg.frameVariant === 'invasive_cinema_frame') {
@@ -668,27 +669,27 @@
                         ctx.translate(slideX, 0);
 
                         ctx.fillStyle = '#000000';
-                        ctx.fillRect(0, 0, 760, height);
+                        ctx.fillRect(0, 0, 850, height);
 
                         ctx.beginPath();
-                        ctx.rect(0, 140, 760, height - 280);
+                        ctx.rect(0, 100, 850, height - 200);
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 0, 140, 760, height - 280);
+                            drawImageCover(ctx, cfg.framedImgObj, 0, 100, 850, height - 200);
                         } else {
                             ctx.fillStyle = '#334155';
-                            ctx.fillRect(0, 140, 760, height - 280);
+                            ctx.fillRect(0, 100, 850, height - 200);
                         }
                         ctx.restore();
 
                         if (texts.photoCaption) {
                             ctx.save();
-                            ctx.font = '700 20px Montserrat';
+                            ctx.font = '700 22px Montserrat';
                             ctx.fillStyle = '#ffffff';
                             ctx.shadowColor = 'rgba(0,0,0,0.8)';
                             ctx.shadowBlur = 8;
-                            ctx.fillText(texts.photoCaption.toUpperCase(), 80, height - 80);
+                            ctx.fillText(texts.photoCaption.toUpperCase(), 80, height - 60);
                             ctx.restore();
                         }
                     }
@@ -942,7 +943,7 @@
                             ctx.restore();
                         }
                     } else if (cfg.charVariant === 'invasive_diagonal_cut') {
-                        // FIX: SCALE CHARACTER PROPORTIONALLY TO OCCUPY FULL CANVAS HEIGHT (1080P) NATURALLY
+                        // 100% INTACT: FULL HEIGHT NATURAL TRANSPARENT CHARACTER
                         ctx.save();
                         const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
                         const slideX = (1 - animProgress) * -600;
@@ -950,11 +951,11 @@
                         ctx.translate(slideX, 0);
 
                         if (cfg.charImgObj) {
-                            const targetHeight = height; // Occupy full 1080p height!
+                            const targetHeight = height; 
                             const imgRatio = cfg.charImgObj.width / cfg.charImgObj.height;
                             const targetWidth = targetHeight * imgRatio;
-                            const pX = 60; // Left margin placement
-                            const pY = 0;   // Top aligned to fill entire height
+                            const pX = 60; 
+                            const pY = 0;   
                             ctx.drawImage(cfg.charImgObj, pX, pY, targetWidth, targetHeight);
                         } else {
                             ctx.fillStyle = '#0f172a';
@@ -1448,7 +1449,7 @@
                             </h1>
                         </div>
                         <div className="text-xs text-slate-400 font-medium bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                            Studio Motion Engine v5.3 (Full Height Natural PNG Fix)
+                            Studio Motion Engine v5.4 (Enlarged Framed Photos & Protected Transparent PNG)
                         </div>
                     </header>
 
@@ -1606,7 +1607,7 @@
                                                         </optgroup>
                                                         <optgroup label="Invasivos (3 Diseños)">
                                                             <option value="invasive_full_bleed">Invasión Total con Degradado</option>
-                                                            <option value="invasive_diagonal_cut">Foto Completa Natural (Full Height)</option>
+                                                            <option value="invasive_diagonal_cut">Corte Diagonal Dinámico (Protegido)</option>
                                                             <option value="invasive_giant_portal">Portal Circular Gigante</option>
                                                         </optgroup>
                                                     </select>
@@ -1743,7 +1744,7 @@
                                 </div>
                                 <div className="mt-4 flex items-center justify-between w-full text-xs text-slate-400 px-2 font-medium">
                                     <div className="flex items-center gap-2">
-                                        <span className="w-2 h-0.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                                         <span>Motor Canvas HD Activo</span>
                                     </div>
                                     <div className="bg-white/5 border border-white/10 px-3 py-1 rounded-full text-slate-300">
