@@ -66,16 +66,20 @@
             const [framedPhotoImg, setFramedPhotoImg] = useState(null);
             const [photoCaption, setPhotoCaption] = useState("Playa Paraíso, México");
             const [frameVariant, setFrameVariant] = useState("polaroid");
+            const [framedOffsetX, setFramedOffsetX] = useState(0);
+            const [framedOffsetY, setFramedOffsetY] = useState(0);
 
             const [useCharacter, setUseCharacter] = useState(false);
             const [characterImg, setCharacterImg] = useState(null);
             const [charName, setCharName] = useState("Dra. Elena Ruiz");
             const [charRole, setCharRole] = useState("Directora de Turismo Global");
             const [charVariant, setCharVariant] = useState("standard_card");
+            const [charOffsetX, setCharOffsetX] = useState(0);
+            const [charOffsetY, setCharOffsetY] = useState(0);
             
             const [partyLogoImg, setPartyLogoImg] = useState(null);
             const [isQuoteMode, setIsQuoteMode] = useState(false);
-            const [quoteType, setQuoteType] = useState("classic"); // "classic" (con comillas/firma) | "free_text" (nuevo: sin comillas/firma)
+            const [quoteType, setQuoteType] = useState("classic"); 
             const [quoteParagraph, setQuoteParagraph] = useState("La innovación distingue a los líderes de los seguidores. El diseño no es solo lo que parece, es cómo funciona.");
 
             const [useVideoOverlayBackdrop, setUseVideoOverlayBackdrop] = useState(false);
@@ -95,7 +99,8 @@
             const mediaRecorderRef = useRef(null);
             const chunksRef = useRef([]);
 
-            const drawImageCover = (ctx, img, x, y, w, h) => {
+            // Adjusted drawImageCover with internal offset support (offsetX, offsetY)
+            const drawImageCoverWithOffset = (ctx, img, x, y, w, h, offsetX = 0, offsetY = 0) => {
                 const imgRatio = img.width / img.height;
                 const targetRatio = w / h;
                 let sWidth = img.width;
@@ -110,6 +115,11 @@
                     sHeight = img.width / targetRatio;
                     sY = (img.height - sHeight) / 2;
                 }
+
+                // Apply user fine-tuning offset inside the fixed frame container
+                sX -= offsetX * (sWidth / w);
+                sY -= offsetY * (sHeight / h);
+
                 ctx.drawImage(img, sX, sY, sWidth, sHeight, x, y, w, h);
             };
 
@@ -329,7 +339,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 40, 40, 540, 580);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, 40, 40, 540, 580, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#cbd5e1';
                             ctx.fillRect(40, 40, 540, 580);
@@ -371,7 +381,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 35, 35, 510, 530);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, 35, 35, 510, 530, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#334155';
                             ctx.fillRect(35, 35, 510, 530);
@@ -402,7 +412,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 0, 0, radius * 2, radius * 2);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, 0, 0, radius * 2, radius * 2, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#475569';
                             ctx.fillRect(0, 0, radius * 2, radius * 2);
@@ -441,7 +451,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 35, 35, 470, 480);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, 35, 35, 470, 480, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#cbd5e1';
                             ctx.fillRect(35, 35, 470, 480);
@@ -475,7 +485,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 35, 35, 510, 510);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, 35, 35, 510, 510, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#475569';
                             ctx.fillRect(35, 35, 510, 510);
@@ -506,7 +516,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, -100, 0, 950, height);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, -100, 0, 950, height, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#334155';
                             ctx.fillRect(-100, 0, 950, height);
@@ -534,7 +544,7 @@
                         const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
                         const scaleP = animProgress;
 
-                        ctx.translate(0, height / 2);
+                        ctx.translate(0, (height / 2));
                         ctx.scale(scaleP, scaleP);
 
                         ctx.shadowColor = 'rgba(0,0,0,0.5)';
@@ -548,7 +558,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, -100, -radius, radius * 2.2, radius * 2);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, -100, -radius, radius * 2.2, radius * 2, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#475569';
                             ctx.fillRect(-100, -radius, radius * 2.2, radius * 2);
@@ -577,7 +587,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 35, 35, 630, 910);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, 35, 35, 630, 910, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#1e293b';
                             ctx.fillRect(35, 35, 630, 910);
@@ -609,7 +619,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 0, 0, 950, height);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, 0, 0, 950, height, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#0f172a';
                             ctx.fillRect(0, 0, 950, height);
@@ -647,7 +657,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 25, 25, 590, 950);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, 25, 25, 590, 950, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#1e293b';
                             ctx.fillRect(25, 25, 590, 950);
@@ -676,7 +686,7 @@
                         ctx.clip();
 
                         if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, 0, 100, 850, height - 200);
+                            drawImageCoverWithOffset(ctx, cfg.framedImgObj, 0, 100, 850, height - 200, cfg.framedOffsetX, cfg.framedOffsetY);
                         } else {
                             ctx.fillStyle = '#334155';
                             ctx.fillRect(0, 100, 850, height - 200);
@@ -712,7 +722,7 @@
                             ctx.beginPath();
                             ctx.roundRect(charX, charY, charW, charH, 24);
                             ctx.clip();
-                            drawImageCover(ctx, cfg.charImgObj, charX, charY, charW, charH);
+                            drawImageCoverWithOffset(ctx, cfg.charImgObj, charX, charY, charW, charH, cfg.charOffsetX, cfg.charOffsetY);
                             ctx.restore();
                         } else {
                             ctx.fillStyle = '#334155';
@@ -786,7 +796,7 @@
                         ctx.clip();
 
                         if (cfg.charImgObj) {
-                            drawImageCover(ctx, cfg.charImgObj, cx - radius, cy - radius, radius * 2, radius * 2);
+                            drawImageCoverWithOffset(ctx, cfg.charImgObj, cx - radius, cy - radius, radius * 2, radius * 2, cfg.charOffsetX, cfg.charOffsetY);
                         } else {
                             ctx.fillStyle = '#334155';
                             ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
@@ -846,7 +856,7 @@
                         ctx.clip();
 
                         if (cfg.charImgObj) {
-                            drawImageCover(ctx, cfg.charImgObj, 25, 25, w - 50, h - 140);
+                            drawImageCoverWithOffset(ctx, cfg.charImgObj, 25, 25, w - 50, h - 140, cfg.charOffsetX, cfg.charOffsetY);
                         } else {
                             ctx.fillStyle = '#cbd5e1';
                             ctx.fillRect(25, 25, w - 50, h - 140);
@@ -897,7 +907,7 @@
                         ctx.clip();
 
                         if (cfg.charImgObj) {
-                            drawImageCover(ctx, cfg.charImgObj, 0, 0, 750, height);
+                            drawImageCoverWithOffset(ctx, cfg.charImgObj, 0, 0, 750, height, cfg.charOffsetX, cfg.charOffsetY);
                         } else {
                             ctx.fillStyle = '#1e293b';
                             ctx.fillRect(0, 0, 750, height);
@@ -943,7 +953,7 @@
                             ctx.restore();
                         }
                     } else if (cfg.charVariant === 'invasive_diagonal_cut') {
-                        // 100% INTACT: FULL HEIGHT NATURAL TRANSPARENT CHARACTER
+                        // FULL HEIGHT NATURAL TRANSPARENT CHARACTER WITH INTERNAL OFFSET SUPPORT
                         ctx.save();
                         const animProgress = cfg.motion === 'spring' ? elasticOut(t1) : easeOutExpo(t1);
                         const slideX = (1 - animProgress) * -600;
@@ -954,8 +964,8 @@
                             const targetHeight = height; 
                             const imgRatio = cfg.charImgObj.width / cfg.charImgObj.height;
                             const targetWidth = targetHeight * imgRatio;
-                            const pX = 60; 
-                            const pY = 0;   
+                            const pX = 60 + cfg.charOffsetX; 
+                            const pY = 0 + cfg.charOffsetY;   
                             ctx.drawImage(cfg.charImgObj, pX, pY, targetWidth, targetHeight);
                         } else {
                             ctx.fillStyle = '#0f172a';
@@ -1012,8 +1022,8 @@
                         ctx.fill();
                         ctx.clip();
 
-                        if (cfg.framedImgObj) {
-                            drawImageCover(ctx, cfg.framedImgObj, -50, -radius, radius * 1.8, radius * 2);
+                        if (cfg.charImgObj) {
+                            drawImageCoverWithOffset(ctx, cfg.charImgObj, -50, -radius, radius * 1.8, radius * 2, cfg.charOffsetX, cfg.charOffsetY);
                         } else {
                             ctx.fillStyle = '#334155';
                             ctx.fillRect(-50, -radius, radius * 1.8, radius * 2);
@@ -1121,7 +1131,6 @@
                             ctx.restore();
                         }
                     } else if (cfg.quoteType === 'free_text') {
-                        // NEW VARIANT: Free text in the middle-right, no quotes, no signature
                         if (t2 > 0) {
                             ctx.save();
                             const easeVal = cfg.motion === 'spring' ? elasticOut(t2) : easeOutExpo(t2);
@@ -1290,9 +1299,13 @@
                     useFramed: useFramedPhoto,
                     framedImgObj: framedPhotoImg,
                     frameVariant: frameVariant,
+                    framedOffsetX: framedOffsetX,
+                    framedOffsetY: framedOffsetY,
                     useChar: useCharacter,
                     charImgObj: characterImg,
                     charVariant: charVariant,
+                    charOffsetX: charOffsetX,
+                    charOffsetY: charOffsetY,
                     partyLogoObj: partyLogoImg,
                     useVideoOverlayBackdrop: useVideoOverlayBackdrop,
                     overlayGuideOpacity: overlayGuideOpacity,
@@ -1333,9 +1346,13 @@
                     useFramed: useFramedPhoto,
                     framedImgObj: framedPhotoImg,
                     frameVariant: frameVariant,
+                    framedOffsetX: framedOffsetX,
+                    framedOffsetY: framedOffsetY,
                     useChar: useCharacter,
                     charImgObj: characterImg,
                     charVariant: charVariant,
+                    charOffsetX: charOffsetX,
+                    charOffsetY: charOffsetY,
                     partyLogoObj: partyLogoImg,
                     useVideoOverlayBackdrop: useVideoOverlayBackdrop,
                     overlayGuideOpacity: overlayGuideOpacity,
@@ -1409,7 +1426,7 @@
                 };
                 
                 animationRef.current = requestAnimationFrame(animate);
-            }, [drawFrame, isPlaying, isQuoteMode, quoteType, text1, text2, text3, quoteParagraph, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, partyLogoImg, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource]);
+            }, [drawFrame, isPlaying, isQuoteMode, quoteType, text1, text2, text3, quoteParagraph, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, framedOffsetX, framedOffsetY, useCharacter, characterImg, charVariant, charOffsetX, charOffsetY, partyLogoImg, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource]);
 
             const handleFramedPhotoUpload = (e) => {
                 const file = e.target.files[0];
@@ -1467,14 +1484,16 @@
                         isQuoteMode,
                         quoteType,
                         useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, frameVariant: frameVariant, 
-                        useChar: useCharacter, charImgObj: characterImg, charVariant: charVariant, partyLogoObj: partyLogoImg,
+                        framedOffsetX: framedOffsetX, framedOffsetY: framedOffsetY,
+                        useChar: useCharacter, charImgObj: characterImg, charVariant: charVariant, 
+                        charOffsetX: charOffsetX, charOffsetY: charOffsetY, partyLogoObj: partyLogoImg,
                         useVideoOverlayBackdrop: useVideoOverlayBackdrop, overlayGuideOpacity: overlayGuideOpacity, 
                         sourceAlign: sourceAlign, textOrder: textOrder, motion: motionStyle, 
                         bg: bgColorChoice, palette: paletteChoice, bgType: bgType, 
                         animateLogo: animateLogo, animateSource: animateSource
                     });
                 });
-            }, [isQuoteMode, quoteType, text1, text2, text3, quoteParagraph, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, useCharacter, characterImg, charVariant, partyLogoImg, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource, drawFrame]);
+            }, [isQuoteMode, quoteType, text1, text2, text3, quoteParagraph, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, framedOffsetX, framedOffsetY, useCharacter, characterImg, charVariant, charOffsetX, charOffsetY, partyLogoImg, useVideoOverlayBackdrop, overlayGuideOpacity, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateLogo, animateSource, drawFrame]);
 
             return (
                 <div className="flex-1 flex flex-col h-screen overflow-hidden">
@@ -1490,7 +1509,7 @@
                             </h1>
                         </div>
                         <div className="text-xs text-slate-400 font-medium bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                            Studio Motion Engine v5.5 (New Free Text Variant Added)
+                            Studio Motion Engine v5.6 (Positioning Sliders Added)
                         </div>
                     </header>
 
@@ -1633,6 +1652,28 @@
                                                     </select>
                                                 </div>
                                                 <input type="file" accept="image/*" onChange={handleFramedPhotoUpload} className="w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer" />
+                                                
+                                                {/* Positioning Sliders (Offset X and Offset Y for Framed Photo) */}
+                                                <div className="bg-[#0a0b0e] p-3 rounded-lg border border-white/10 space-y-2">
+                                                    <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">Ajuste Fino de Posición (Foto Interna)</span>
+                                                    <div className="space-y-1">
+                                                        <div className="flex justify-between text-[10px] text-slate-400">
+                                                            <span>Horizontal (X): {framedOffsetX}px</span>
+                                                            <button onClick={() => setFramedOffsetX(0)} className="text-blue-400 hover:underline">Reset</button>
+                                                        </div>
+                                                        <input type="range" min="-400" max="400" value={framedOffsetX} onChange={e => setFramedOffsetX(parseInt(e.target.value))}
+                                                            className="w-full accent-blue-500 cursor-pointer" />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <div className="flex justify-between text-[10px] text-slate-400">
+                                                            <span>Vertical (Y): {framedOffsetY}px</span>
+                                                            <button onClick={() => setFramedOffsetY(0)} className="text-blue-400 hover:underline">Reset</button>
+                                                        </div>
+                                                        <input type="range" min="-400" max="400" value={framedOffsetY} onChange={e => setFramedOffsetY(parseInt(e.target.value))}
+                                                            className="w-full accent-blue-500 cursor-pointer" />
+                                                    </div>
+                                                </div>
+
                                                 <input type="text" placeholder="Pie de foto (ej. Playa Paraíso)" value={photoCaption} onChange={e => setPhotoCaption(e.target.value)}
                                                     className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500" />
                                             </div>
@@ -1658,12 +1699,34 @@
                                                         </optgroup>
                                                         <optgroup label="Invasivos (3 Diseños)">
                                                             <option value="invasive_full_bleed">Invasión Total con Degradado</option>
-                                                            <option value="invasive_diagonal_cut">Corte Diagonal Dinámico (Protegido)</option>
+                                                            <option value="invasive_diagonal_cut">Corte Diagonal Dinámico</option>
                                                             <option value="invasive_giant_portal">Portal Circular Gigante</option>
                                                         </optgroup>
                                                     </select>
                                                 </div>
                                                 <input type="file" accept="image/*" onChange={handleCharacterUpload} className="w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer" />
+                                                
+                                                {/* Positioning Sliders (Offset X and Offset Y for Character) */}
+                                                <div className="bg-[#0a0b0e] p-3 rounded-lg border border-white/10 space-y-2">
+                                                    <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">Ajuste Fino de Posición (Foto Interna)</span>
+                                                    <div className="space-y-1">
+                                                        <div className="flex justify-between text-[10px] text-slate-400">
+                                                            <span>Posición Horizontal (X): {charOffsetX}px</span>
+                                                            <button onClick={() => setCharOffsetX(0)} className="text-blue-400 hover:underline">Reset</button>
+                                                        </div>
+                                                        <input type="range" min="-400" max="400" value={charOffsetX} onChange={e => setCharOffsetX(parseInt(e.target.value))}
+                                                            className="w-full accent-blue-500 cursor-pointer" />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <div className="flex justify-between text-[10px] text-slate-400">
+                                                            <span>Posición Vertical (Y): {charOffsetY}px</span>
+                                                            <button onClick={() => setCharOffsetY(0)} className="text-blue-400 hover:underline">Reset</button>
+                                                        </div>
+                                                        <input type="range" min="-400" max="400" value={charOffsetY} onChange={e => setCharOffsetY(parseInt(e.target.value))}
+                                                            className="w-full accent-blue-500 cursor-pointer" />
+                                                    </div>
+                                                </div>
+
                                                 <input type="text" placeholder="Nombre del personaje" value={charName} onChange={e => setCharName(e.target.value)}
                                                     className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500" />
                                                 <input type="text" placeholder="Cargo o Puesto" value={charRole} onChange={e => setCharRole(e.target.value)}
