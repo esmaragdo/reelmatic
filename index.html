@@ -1184,14 +1184,14 @@
                             </h1>
                         </div>
                         <div className="text-xs text-slate-400 font-medium bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                            Full Features & Voice Sync v9.0
+                            Sticky Preview Workspace v10.0
                         </div>
                     </header>
 
                     <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-                        {/* Sidebar Controls */}
-                        <div className="w-full lg:w-[440px] bg-[#0d0e12]/95 backdrop-blur-2xl border-r border-white/10 p-6 flex flex-col justify-between z-20 shrink-0 overflow-y-auto">
-                            <div className="space-y-6">
+                        {/* Sidebar Controls - Scrollable */}
+                        <div className="w-full lg:w-[440px] bg-[#0d0e12]/95 backdrop-blur-2xl border-r border-white/10 p-6 flex flex-col z-20 shrink-0 overflow-y-auto max-h-[calc(100vh-4rem)]">
+                            <div className="space-y-6 pb-12">
                                 
                                 {/* Layout Mode Selector */}
                                 <div className="bg-[#13151c] p-4 rounded-xl border border-blue-500/30 space-y-3">
@@ -1570,26 +1570,10 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="mt-8 space-y-3 pt-4 border-t border-white/10 shrink-0">
-                                <button onClick={exportImage}
-                                    className="w-full py-3 rounded-xl font-semibold text-sm transition-all flex justify-center items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20">
-                                    Descargar Imagen PNG (1920x1080)
-                                </button>
-                                <button onClick={() => playAnimation(false)} disabled={isPlaying}
-                                    className={`w-full py-3 rounded-xl font-semibold text-sm transition-all flex justify-center items-center gap-2 border ${isPlaying ? 'bg-white/5 border-white/5 text-slate-500 cursor-not-allowed' : 'bg-white/10 hover:bg-white/15 border-white/15 text-white shadow-lg'}`}>
-                                    Previsualizar Animación
-                                </button>
-                                <button onClick={recordTimelineVideo} disabled={isRecording || isPlaying}
-                                    className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all flex justify-center items-center gap-2 shadow-xl ${isRecording || isPlaying ? 'bg-blue-600/50 text-slate-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-blue-500/25'}`}>
-                                    <div className={`w-3 h-3 rounded-full bg-white ${isRecording ? 'animate-ping' : 'animate-pulse'}`}></div>
-                                    {isRecording ? 'Renderizando Video con Audio...' : '🎥 Exportar Video Largo Completo con Audio (.webm)'}
-                                </button>
-                            </div>
                         </div>
 
-                        {/* Canvas & Timeline Studio */}
-                        <div className="flex-1 p-6 lg:p-8 flex flex-col items-center justify-between bg-[#050608] relative overflow-hidden">
+                        {/* Canvas & Sticky Preview Workspace (Fixed Right Side) */}
+                        <div className="flex-1 p-6 lg:p-8 flex flex-col items-center justify-between bg-[#050608] relative overflow-hidden h-[calc(100vh-4rem)]">
                             <div className="absolute w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none"></div>
 
                             {/* Canvas Stage */}
@@ -1609,6 +1593,21 @@
                                             <span className="text-xs font-mono text-blue-400 font-bold">{Math.round(progress)}% Completo</span>
                                         </div>
                                     )}
+                                </div>
+                                <div className="mt-3 flex gap-3 w-full">
+                                    <button onClick={exportImage}
+                                        className="flex-1 py-2.5 rounded-xl font-semibold text-xs transition-all flex justify-center items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20">
+                                        Descargar Imagen PNG
+                                    </button>
+                                    <button onClick={() => playAnimation(false)} disabled={isPlaying}
+                                        className={`flex-1 py-2.5 rounded-xl font-semibold text-xs transition-all flex justify-center items-center gap-2 border ${isPlaying ? 'bg-white/5 border-white/5 text-slate-500 cursor-not-allowed' : 'bg-white/10 hover:bg-white/15 border-white/15 text-white shadow-lg'}`}>
+                                        Previsualizar Animación
+                                    </button>
+                                    <button onClick={recordTimelineVideo} disabled={isRecording || isPlaying}
+                                        className={`flex-1 py-2.5 rounded-xl font-bold text-xs transition-all flex justify-center items-center gap-2 shadow-xl ${isRecording || isPlaying ? 'bg-blue-600/50 text-slate-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-blue-500/25'}`}>
+                                        <div className={`w-2.5 h-2.5 rounded-full bg-white ${isRecording ? 'animate-ping' : 'animate-pulse'}`}></div>
+                                        {isRecording ? 'Renderizando...' : '🎥 Exportar Video Largo (.webm)'}
+                                    </button>
                                 </div>
                             </div>
 
@@ -1641,34 +1640,34 @@
                                     <div className="flex items-center gap-2">
                                         {/* Audio Upload */}
                                         <label className="px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-semibold text-slate-300 cursor-pointer flex items-center gap-2 transition-all">
-                                            <span>🎵 {audioName ? `Audio: ${audioName.substring(0,12)}... (${audioDuration}s)` : 'Subir Voz Off (MP3/WAV)'}</span>
+                                            <span>🎵 {audioName ? `Audio: ${audioName.substring(0,10)}... (${audioDuration}s)` : 'Subir Voz Off'}</span>
                                             <input type="file" accept="audio/*" onChange={handleAudioUpload} className="hidden" />
                                         </label>
 
                                         {/* Add Scene Button */}
                                         <button onClick={addSceneToTimeline}
                                             className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-emerald-600/20 flex items-center gap-1.5 transition-all">
-                                            <span>➕ Añadir Escena Actual</span>
+                                            <span>➕ Añadir Escena</span>
                                         </button>
 
                                         {/* Preview Timeline Button */}
                                         <button onClick={playTimelinePreview} disabled={isPreviewingTimeline || scenes.length === 0}
                                             className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${isPreviewingTimeline || scenes.length === 0 ? 'bg-white/5 text-slate-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25'}`}>
-                                            <span>▶ Reproducir Previo con Audio</span>
+                                            <span>▶ Reproducir</span>
                                         </button>
                                     </div>
                                 </div>
 
                                 {/* Visual Timeline Track */}
-                                <div className="flex items-center gap-3 overflow-x-auto py-2 min-h-[120px] px-1">
+                                <div className="flex items-center gap-3 overflow-x-auto py-2 min-h-[110px] px-1">
                                     {scenes.length === 0 ? (
-                                        <div className="w-full text-center py-6 text-xs text-slate-500 font-medium border border-dashed border-white/10 rounded-xl">
-                                            No hay escenas en la línea de tiempo. Diseña arriba y haz clic en "➕ Añadir Escena Actual".
+                                        <div className="w-full text-center py-4 text-xs text-slate-500 font-medium border border-dashed border-white/10 rounded-xl">
+                                            No hay escenas en la línea de tiempo. Diseña arriba y haz clic en "➕ Añadir Escena".
                                         </div>
                                     ) : (
                                         scenes.map((scene, idx) => (
                                             <div key={scene.id} 
-                                                className={`relative w-44 h-28 bg-[#13151c] rounded-xl border-2 overflow-hidden flex flex-col justify-between p-2 shrink-0 transition-all ${activeSceneIdx === idx ? 'border-amber-400 shadow-lg shadow-amber-500/20 scale-105' : 'border-white/10 hover:border-white/30'}`}>
+                                                className={`relative w-40 h-24 bg-[#13151c] rounded-xl border-2 overflow-hidden flex flex-col justify-between p-2 shrink-0 transition-all ${activeSceneIdx === idx ? 'border-amber-400 shadow-lg shadow-amber-500/20 scale-105' : 'border-white/10 hover:border-white/30'}`}>
                                                 
                                                 {/* Thumbnail Image */}
                                                 <div className="absolute inset-0 z-0 opacity-30">
