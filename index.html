@@ -7,7 +7,9 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Importación de múltiples familias tipográficas para la libertad de diseño -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -56,6 +58,17 @@
             const [logoText, setLogoText] = useState("ReelMatic.Pro");
             const [sourceText, setSourceText] = useState("Fuente: Organización Mundial del Turismo");
             
+            // --- CONTROLES DE TIPOGRAFÍA CONFIGURABLE ---
+            const [fontFamily, setFontFamily] = useState("Montserrat");
+            const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
+            const [fontWeight, setFontWeight] = useState("800");
+            const [customTextColor, setCustomTextColor] = useState("");
+            const [textOpacity, setTextOpacity] = useState(1);
+            // Posicionamiento Libre del Bloque de Texto
+            const [textOffsetX, setTextOffsetX] = useState(0);
+            const [textOffsetY, setTextOffsetY] = useState(0);
+            // ---------------------------------------------
+            
             // Element Visibility Switches
             const [showMainTexts, setShowMainTexts] = useState(true);
             const [showLogo, setShowLogo] = useState(true);
@@ -82,10 +95,9 @@
 
             // Fullscreen Photo State & Ken Burns
             const [fullscreenImg, setFullscreenImg] = useState(null);
-            const [kenBurnsMotion, setKenBurnsMotion] = useState("zoom_in"); // "none" | "zoom_in" | "zoom_out"
+            const [kenBurnsMotion, setKenBurnsMotion] = useState("zoom_in"); 
             const [fullOverlayOpacity, setFullOverlayOpacity] = useState(0.45);
 
-            // Free Text Vertical Alignment ("top" | "center" | "bottom")
             const [freeTextVerticalAlign, setFreeTextVerticalAlign] = useState("center");
 
             const [useCharacter, setUseCharacter] = useState(false);
@@ -332,6 +344,13 @@
                     else if (cfg.palette === 'amarillo_oro') { primaryColor = '#CCAC00'; accentColor = '#FFD700'; boxBgColor = '#FFE34C'; boxTextColor = '#000033'; }
                 }
 
+                // Parámetros de Tipografía y Posición
+                const fFamily = cfg.fontFamily || 'Montserrat';
+                const fWeight = cfg.fontWeight || '800';
+                const fScale = cfg.fontSizeMultiplier || 1;
+                const fColor = cfg.customTextColor || null; 
+                const fAlpha = cfg.textOpacity !== undefined ? cfg.textOpacity : 1;
+
                 const visualT = cfg.animateVisualLeft ? (cfg.motion === 'spring' ? elasticOut(Math.min(1, timeMs / 700)) : easeOutExpo(Math.min(1, timeMs / 700))) : 1;
                 const visualSlideX = (1 - visualT) * -500;
                 const visualSlideXFar = (1 - visualT) * -600;
@@ -360,23 +379,28 @@
                 tLogo = cfg.animateLogo ? Math.max(0, Math.min(1, (timeMs - 1700) / 600)) : 1;
 
                 const hasVisualLeft = cfg.useFramed || cfg.useChar || cfg.useVideoOverlayBackdrop;
-                let startX = hasVisualLeft ? (cfg.useFramed ? width * 0.48 : width * 0.52) : width * 0.22;
-                if (cfg.layoutMode === 'fullscreen_photo') startX = width * 0.12;
+                
+                // Aplicar Posicionamiento Libre
+                const blockOffsetX = cfg.textOffsetX || 0;
+                const blockOffsetY = cfg.textOffsetY || 0;
 
-                const startY = height * 0.35;
+                let startX = (hasVisualLeft ? (cfg.useFramed ? width * 0.48 : width * 0.52) : width * 0.22) + blockOffsetX;
+                if (cfg.layoutMode === 'fullscreen_photo') startX = (width * 0.12) + blockOffsetX;
+
+                const startY = (height * 0.35) + blockOffsetY;
 
                 let baseY1 = startY;
-                let baseY2 = startY + 160;
-                let baseY3 = startY + 280;
+                let baseY2 = startY + (160 * fScale);
+                let baseY3 = startY + (280 * fScale);
 
                 if (cfg.textOrder === "subtitleTop") {
-                    baseY2 = startY - 60; 
-                    baseY1 = startY + 40; 
-                    baseY3 = startY + 200; 
+                    baseY2 = startY - (60 * fScale); 
+                    baseY1 = startY + (40 * fScale); 
+                    baseY3 = startY + (200 * fScale); 
                 } else if (cfg.textOrder === "blockBottom") {
-                    baseY2 = startY - 80; 
-                    baseY3 = startY + 20; 
-                    baseY1 = startY + 220; 
+                    baseY2 = startY - (80 * fScale); 
+                    baseY3 = startY + (20 * fScale); 
+                    baseY1 = startY + (220 * fScale); 
                 }
 
                 // Framed Photo Rendering (11 Variants)
@@ -919,7 +943,6 @@
                             ctx.restore();
                         }
                     } else if (cfg.charVariant === 'invasive_diagonal_cut') {
-                        // Respetando comportamiento original de altura completa solicitada
                         ctx.save();
                         ctx.translate(visualSlideXFar, 0);
                         if (cfg.charImgObj) {
@@ -1015,13 +1038,13 @@
                     }
                 }
 
-                // Text Rendering block
+                // Text Rendering block (Typography controls integrated)
                 if (cfg.isQuoteMode) {
                     if (cfg.quoteType === 'classic') {
                         if (t1 > 0) {
                             ctx.save();
                             ctx.globalAlpha = t1 * 0.25;
-                            ctx.font = '900 220px Montserrat';
+                            ctx.font = `900 ${Math.round(220 * fScale)}px '${fFamily}', sans-serif`;
                             ctx.fillStyle = accentColor;
                             ctx.textBaseline = 'top';
                             ctx.fillText("“", startX - 50, height * 0.22);
@@ -1029,14 +1052,14 @@
                         }
                         if (t2 > 0) {
                             ctx.save();
-                            ctx.globalAlpha = t2;
-                            ctx.font = 'italic 500 36px Montserrat';
-                            ctx.fillStyle = primaryColor;
+                            ctx.globalAlpha = t2 * fAlpha;
+                            ctx.font = `italic 500 ${Math.round(36 * fScale)}px '${fFamily}', sans-serif`;
+                            ctx.fillStyle = fColor || primaryColor;
                             ctx.textBaseline = 'top';
                             const maxTextW = width - startX - 120;
                             const words = (texts.quoteParagraph || "").split(" ");
                             let line = "", lines = [];
-                            const lineHeight = 52;
+                            const lineHeight = Math.round(52 * fScale);
                             for (let n = 0; n < words.length; n++) {
                                 const testLine = line + words[n] + " ";
                                 const metrics = ctx.measureText(testLine);
@@ -1056,31 +1079,31 @@
                         }
                         if (t3 > 0) {
                             ctx.save();
-                            ctx.globalAlpha = t3;
+                            ctx.globalAlpha = t3 * fAlpha;
                             let authorY = height * 0.70;
-                            ctx.font = '800 32px Montserrat';
+                            ctx.font = `${fWeight} ${Math.round(32 * fScale)}px '${fFamily}', sans-serif`;
                             ctx.fillStyle = accentColor;
                             ctx.textBaseline = 'top';
                             ctx.fillText(`— ${texts.charName}`, startX, authorY);
                             if (texts.charRole) {
-                                ctx.font = '500 18px Montserrat';
-                                ctx.fillStyle = primaryColor;
-                                ctx.globalAlpha = t3 * 0.75;
-                                ctx.fillText(texts.charRole, startX, authorY + 42);
+                                ctx.font = `500 ${Math.round(18 * fScale)}px '${fFamily}', sans-serif`;
+                                ctx.fillStyle = fColor || primaryColor;
+                                ctx.globalAlpha = t3 * 0.75 * fAlpha;
+                                ctx.fillText(texts.charRole, startX, authorY + (42 * fScale));
                             }
                             ctx.restore();
                         }
                     } else if (cfg.quoteType === 'free_text') {
                         if (t2 > 0) {
                             ctx.save();
-                            ctx.globalAlpha = t2;
-                            ctx.font = '600 42px Montserrat';
-                            ctx.fillStyle = primaryColor;
+                            ctx.globalAlpha = t2 * fAlpha;
+                            ctx.font = `600 ${Math.round(42 * fScale)}px '${fFamily}', sans-serif`;
+                            ctx.fillStyle = fColor || primaryColor;
                             
                             const maxTextW = width - startX - 120;
                             const words = (texts.quoteParagraph || "").split(" ");
                             let line = "", lines = [];
-                            const lineHeight = 60;
+                            const lineHeight = Math.round(60 * fScale);
                             for (let n = 0; n < words.length; n++) {
                                 const testLine = line + words[n] + " ";
                                 const metrics = ctx.measureText(testLine);
@@ -1109,12 +1132,13 @@
                 } else {
                     if (t1 > 0 && cfg.showMainTexts) {
                         ctx.save();
+                        ctx.globalAlpha = fAlpha;
                         const maxAllowedWidth = width - startX - 80;
-                        const padX = 30;
-                        const padY = 22;
-                        const boxH = 110;
+                        const padX = 30 * fScale;
+                        const padY = 22 * fScale;
+                        const boxH = Math.round(110 * fScale);
                         ctx.save();
-                        ctx.font = '800 85px Montserrat';
+                        ctx.font = `${fWeight} ${Math.round(85 * fScale)}px '${fFamily}', sans-serif`;
                         const measuredW = ctx.measureText(texts.t1).width;
                         const boxW = Math.min(measuredW + (padX * 2), maxAllowedWidth);
                         ctx.beginPath();
@@ -1123,38 +1147,38 @@
                         const slideOffset = cfg.animateMainText ? (1 - t1) * boxW : 0;
                         ctx.fillStyle = cfg.palette !== 'minimal' ? accentColor : boxBgColor;
                         ctx.fillRect(startX - slideOffset, baseY1, boxW, boxH);
-                        ctx.fillStyle = boxTextColor;
+                        ctx.fillStyle = fColor || boxTextColor;
                         ctx.textBaseline = 'top';
-                        ctx.font = '800 85px Montserrat';
+                        ctx.font = `${fWeight} ${Math.round(85 * fScale)}px '${fFamily}', sans-serif`;
                         ctx.fillText(texts.t1, startX + padX - slideOffset, baseY1 + padY);
                         ctx.restore();
                         ctx.restore();
                     }
                     if (t2 > 0 && cfg.showMainTexts) {
                         ctx.save();
-                        ctx.globalAlpha = t2;
-                        ctx.font = '300 64px Montserrat';
+                        ctx.globalAlpha = t2 * fAlpha;
+                        ctx.font = `300 ${Math.round(64 * fScale)}px '${fFamily}', sans-serif`;
                         const yOffset = cfg.animateMainText ? (1 - t2) * 50 : 0;
                         const line2X = startX + 10;
-                        ctx.fillStyle = primaryColor;
+                        ctx.fillStyle = fColor || primaryColor;
                         ctx.textBaseline = 'top';
                         ctx.fillText(texts.t2, line2X, baseY2 + yOffset);
                         ctx.restore();
                     }
                     if (t3 > 0 && cfg.showMainTexts) {
                         ctx.save();
-                        ctx.globalAlpha = t3;
-                        ctx.font = '800 85px Montserrat';
+                        ctx.globalAlpha = t3 * fAlpha;
+                        ctx.font = `${fWeight} ${Math.round(85 * fScale)}px '${fFamily}', sans-serif`;
                         const textMetrics = ctx.measureText(texts.t3);
                         const line3X = startX + 80;
                         const yOffset = cfg.animateMainText ? (1 - t3) * 30 : 0;
-                        ctx.fillStyle = primaryColor;
+                        ctx.fillStyle = fColor || primaryColor;
                         ctx.textBaseline = 'top';
                         ctx.fillText(texts.t3, line3X, baseY3 + yOffset);
                         if (t4 > 0 && cfg.animateMainText) {
                             const lineW = Math.min(textMetrics.width * t4, width - line3X - 80);
                             ctx.fillStyle = accentColor;
-                            ctx.fillRect(line3X, baseY3 + yOffset + 105, lineW, 8);
+                            ctx.fillRect(line3X, baseY3 + yOffset + Math.round(105 * fScale), lineW, 8);
                         }
                         ctx.restore();
                     }
@@ -1239,7 +1263,8 @@
                     animateMainText: false,
                     animateLogo: false,
                     animateSource: false,
-                    animateVisualLeft: false
+                    animateVisualLeft: false,
+                    fontFamily, fontSizeMultiplier, fontWeight, customTextColor, textOpacity, textOffsetX, textOffsetY
                 };
 
                 drawFrame(ctx, 5000, currentTexts, currentCfg);
@@ -1405,7 +1430,8 @@
                     useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, frameVariant: frameVariant, framedOffsetX: framedOffsetX, framedOffsetY: framedOffsetY,
                     useChar: useCharacter, charImgObj: characterImg, charVariant: charVariant, charOffsetX: charOffsetX, charOffsetY: charOffsetY, partyLogoObj: partyLogoImg,
                     useVideoOverlayBackdrop: useVideoOverlayBackdrop, sourceAlign: sourceAlign, textOrder: textOrder, motion: motionStyle,
-                    bg: bgColorChoice, palette: paletteChoice, bgType: bgType, animateMainText: animateMainText, animateLogo: animateLogo, animateSource: animateSource, animateVisualLeft: animateVisualLeft
+                    bg: bgColorChoice, palette: paletteChoice, bgType: bgType, animateMainText: animateMainText, animateLogo: animateLogo, animateSource: animateSource, animateVisualLeft: animateVisualLeft,
+                    fontFamily, fontSizeMultiplier, fontWeight, customTextColor, textOpacity, textOffsetX, textOffsetY
                 };
 
                 setIsPlaying(true);
@@ -1453,7 +1479,7 @@
                     }
                 };
                 animationRef.current = requestAnimationFrame(animate);
-            }, [drawFrame, isPlaying, layoutMode, fullscreenImg, kenBurnsMotion, fullOverlayOpacity, freeTextVerticalAlign, showMainTexts, showLogo, showSource, isQuoteMode, quoteType, text1, text2, text3, quoteParagraph, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, framedOffsetX, framedOffsetY, useCharacter, characterImg, charVariant, charOffsetX, charOffsetY, partyLogoImg, useVideoOverlayBackdrop, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateMainText, animateLogo, animateSource, animateVisualLeft]);
+            }, [drawFrame, isPlaying, layoutMode, fullscreenImg, kenBurnsMotion, fullOverlayOpacity, freeTextVerticalAlign, showMainTexts, showLogo, showSource, isQuoteMode, quoteType, text1, text2, text3, quoteParagraph, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, framedOffsetX, framedOffsetY, useCharacter, characterImg, charVariant, charOffsetX, charOffsetY, partyLogoImg, useVideoOverlayBackdrop, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateMainText, animateLogo, animateSource, animateVisualLeft, fontFamily, fontSizeMultiplier, fontWeight, customTextColor, textOpacity, textOffsetX, textOffsetY]);
 
             const generateSceneThumbnail = () => {
                 const canvas = document.createElement('canvas');
@@ -1468,7 +1494,8 @@
                     useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, frameVariant, framedOffsetX, framedOffsetY,
                     useChar: useCharacter, charImgObj: characterImg, charVariant, charOffsetX, charOffsetY, partyLogoObj: partyLogoImg,
                     useVideoOverlayBackdrop, sourceAlign, textOrder, motion: motionStyle, bg: bgColorChoice, palette: paletteChoice, bgType,
-                    animateMainText: animateMainText, animateLogo: false, animateSource: false, animateVisualLeft: false
+                    animateMainText: animateMainText, animateLogo: false, animateSource: false, animateVisualLeft: false,
+                    fontFamily, fontSizeMultiplier, fontWeight, customTextColor, textOpacity, textOffsetX, textOffsetY
                 };
                 
                 ctx.save();
@@ -1489,7 +1516,8 @@
                         useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, photoCaption, frameVariant, framedOffsetX, framedOffsetY,
                         useChar: useCharacter, charImgObj: characterImg, charName, charRole, charVariant, charOffsetX, charOffsetY, partyLogoObj: partyLogoImg,
                         isQuoteMode, quoteType, quoteParagraph, useVideoOverlayBackdrop,
-                        motion: motionStyle, bg: bgColorChoice, palette: paletteChoice, bgType
+                        motion: motionStyle, bg: bgColorChoice, palette: paletteChoice, bgType,
+                        fontFamily, fontSizeMultiplier, fontWeight, customTextColor, textOpacity, textOffsetX, textOffsetY
                     }
                 };
                 setScenes([...scenes, newScene]);
@@ -1587,13 +1615,14 @@
                     }, {
                         layoutMode, fullscreenImgObj: fullscreenImg, kenBurns: kenBurnsMotion, fullOpacity: fullOverlayOpacity, freeTextAlign: freeTextVerticalAlign,
                         showMainTexts, showLogo, showSource, isQuoteMode, quoteType,
-                        useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, frameVariant, framedOffsetX, framedOffsetY,
-                        useChar: useCharacter, charImgObj: characterImg, charVariant, charOffsetX, charOffsetY, partyLogoObj: partyLogoImg,
+                        useFramed: useFramedPhoto, framedImgObj: framedPhotoImg, frameVariant: frameVariant, framedOffsetX: framedOffsetX, framedOffsetY: framedOffsetY,
+                        useChar: useCharacter, charImgObj: characterImg, charVariant: charVariant, charOffsetX: charOffsetX, charOffsetY: charOffsetY, partyLogoObj: partyLogoImg,
                         useVideoOverlayBackdrop, sourceAlign, textOrder, motion: motionStyle, bg: bgColorChoice, palette: paletteChoice, bgType, 
-                        animateMainText, animateLogo, animateSource, animateVisualLeft
+                        animateMainText, animateLogo, animateSource, animateVisualLeft,
+                        fontFamily, fontSizeMultiplier, fontWeight, customTextColor, textOpacity, textOffsetX, textOffsetY
                     });
                 });
-            }, [layoutMode, fullscreenImg, kenBurnsMotion, fullOverlayOpacity, freeTextVerticalAlign, showMainTexts, showLogo, showSource, isQuoteMode, quoteType, text1, text2, text3, quoteParagraph, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, framedOffsetX, framedOffsetY, useCharacter, characterImg, charVariant, charOffsetX, charOffsetY, partyLogoImg, useVideoOverlayBackdrop, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateMainText, animateLogo, animateSource, animateVisualLeft, drawFrame]);
+            }, [layoutMode, fullscreenImg, kenBurnsMotion, fullOverlayOpacity, freeTextVerticalAlign, showMainTexts, showLogo, showSource, isQuoteMode, quoteType, text1, text2, text3, quoteParagraph, logoText, sourceText, photoCaption, charName, charRole, useFramedPhoto, framedPhotoImg, frameVariant, framedOffsetX, framedOffsetY, useCharacter, characterImg, charVariant, charOffsetX, charOffsetY, partyLogoImg, useVideoOverlayBackdrop, sourceAlign, textOrder, motionStyle, bgColorChoice, paletteChoice, bgType, animateMainText, animateLogo, animateSource, animateVisualLeft, fontFamily, fontSizeMultiplier, fontWeight, customTextColor, textOpacity, textOffsetX, textOffsetY, drawFrame]);
 
             const totalVideoSeconds = scenes.reduce((acc, s) => acc + (parseFloat(s.duration) || 0), 0);
 
@@ -1613,7 +1642,7 @@
                             </h1>
                         </div>
                         <div className="text-xs text-slate-400 font-medium bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                            Sticky Preview Workspace v11.0 (Full Elements Restored)
+                            Workspace Pro v12.0 (Full Elements Restored)
                         </div>
                     </header>
 
@@ -1622,7 +1651,7 @@
                         {/* Sidebar Controls - Scrollable */}
                         <div className="w-full lg:w-[440px] bg-[#0d0e12]/95 backdrop-blur-2xl border-r border-white/10 p-6 flex flex-col z-20 shrink-0 overflow-y-auto max-h-[calc(100vh-4rem)]">
                             <div className="space-y-6 pb-12">
-                                
+
                                 {/* Layout Mode Selector */}
                                 <div className="bg-[#13151c] p-4 rounded-xl border border-blue-500/30 space-y-3">
                                     <span className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-2">
@@ -1782,6 +1811,82 @@
                                         </div>
                                     </div>
                                 )}
+
+                                {/* --- PANEL DE TIPOGRAFÍA CONFIGURABLE --- */}
+                                <div className="bg-[#13151c] p-4 rounded-xl border border-blue-500/30 space-y-3 mt-4 shadow-lg shadow-blue-900/10">
+                                    <span className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                                        Tipografía y Posición Libre
+                                    </span>
+                                    
+                                    <div className="grid grid-cols-2 gap-2 text-xs">
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] text-slate-400 uppercase">Familia</label>
+                                            <select value={fontFamily} onChange={e => setFontFamily(e.target.value)}
+                                                className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg px-2 py-2 text-xs text-white">
+                                                <option value="Montserrat">Montserrat</option>
+                                                <option value="Inter">Inter</option>
+                                                <option value="Roboto">Roboto</option>
+                                                <option value="Oswald">Oswald</option>
+                                                <option value="Playfair Display">Playfair (Serif)</option>
+                                            </select>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] text-slate-400 uppercase">Peso</label>
+                                            <select value={fontWeight} onChange={e => setFontWeight(e.target.value)}
+                                                className="w-full bg-[#0a0b0e] border border-white/10 rounded-lg px-2 py-2 text-xs text-white">
+                                                <option value="400">Normal (400)</option>
+                                                <option value="600">Semibold (600)</option>
+                                                <option value="800">Bold (800)</option>
+                                                <option value="900">Black (900)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-2 pt-1 text-xs">
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between">
+                                                <label className="text-[10px] text-slate-400 uppercase">Escala</label>
+                                                <span className="text-[10px] text-blue-400 font-bold">{Math.round(fontSizeMultiplier * 100)}%</span>
+                                            </div>
+                                            <input type="range" min="0.5" max="2.0" step="0.05" value={fontSizeMultiplier} onChange={e => setFontSizeMultiplier(parseFloat(e.target.value))}
+                                                className="w-full accent-blue-500 cursor-pointer" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between">
+                                                <label className="text-[10px] text-slate-400 uppercase">Opacidad</label>
+                                                <span className="text-[10px] text-blue-400 font-bold">{Math.round(textOpacity * 100)}%</span>
+                                            </div>
+                                            <input type="range" min="0.1" max="1" step="0.05" value={textOpacity} onChange={e => setTextOpacity(parseFloat(e.target.value))}
+                                                className="w-full accent-blue-500 cursor-pointer" />
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-2 border-t border-white/10 space-y-2">
+                                        <label className="text-[10px] text-slate-400 uppercase">Ajuste Libre de Posición</label>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="flex items-center gap-2 bg-[#0a0b0e] border border-white/10 rounded-lg px-2 py-1.5 focus-within:border-blue-500 transition-colors">
+                                                <span className="text-[10px] text-slate-500 font-bold">X</span>
+                                                <input type="number" value={textOffsetX} onChange={e => setTextOffsetX(parseInt(e.target.value) || 0)} className="w-full bg-transparent text-xs text-white outline-none" />
+                                            </div>
+                                            <div className="flex items-center gap-2 bg-[#0a0b0e] border border-white/10 rounded-lg px-2 py-1.5 focus-within:border-blue-500 transition-colors">
+                                                <span className="text-[10px] text-slate-500 font-bold">Y</span>
+                                                <input type="number" value={textOffsetY} onChange={e => setTextOffsetY(parseInt(e.target.value) || 0)} className="w-full bg-transparent text-xs text-white outline-none" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs">
+                                        <span className="text-[10px] text-slate-400 uppercase">Color Personalizado</span>
+                                        <div className="flex items-center gap-2">
+                                            <input type="color" value={customTextColor || '#ffffff'} onChange={e => setCustomTextColor(e.target.value)} className="w-8 h-7 bg-transparent rounded cursor-pointer" />
+                                            {customTextColor && (
+                                                <button onClick={() => setCustomTextColor("")} className="text-[10px] text-red-400 hover:text-red-300 font-bold hover:underline">Quitar</button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* --------------------------------------- */}
 
                                 <div className="pt-4 border-t border-white/10 space-y-3">
                                     <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Detalles & Créditos</h2>
